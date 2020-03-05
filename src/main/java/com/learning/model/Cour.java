@@ -81,6 +81,8 @@ public class Cour extends Historized {
 	public void setQuizs(List<Quiz> quizs) {
 		this.quizs = quizs;
 	}
+	
+	
 
 	@Override
 	public String toString() {

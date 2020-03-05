@@ -118,6 +118,8 @@ public class Question extends Historized {
 	public void setSuggestions(List<Suggestion> suggestions) {
 		this.suggestions = suggestions;
 	}
+	
+	
 
 	@Override
 	public String toString() {

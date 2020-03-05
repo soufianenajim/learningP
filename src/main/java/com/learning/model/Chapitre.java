@@ -12,7 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "cour")
+@Table(name = "chapitre")
 public class Chapitre extends Historized {
 
 	private static final long serialVersionUID = -8858004000210805400L;

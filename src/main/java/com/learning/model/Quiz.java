@@ -58,6 +58,16 @@ public class Quiz extends Historized {
 	public void setCour(Cour cour) {
 		this.cour = cour;
 	}
+	
+	
+
+	public List<Question> getQuestions() {
+		return questions;
+	}
+
+	public void setQuestions(List<Question> questions) {
+		this.questions = questions;
+	}
 
 	@Override
 	public String toString() {
