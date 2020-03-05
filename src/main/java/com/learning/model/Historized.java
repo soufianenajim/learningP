@@ -11,6 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 	
 @MappedSuperclass
 public abstract class Historized implements Serializable  {
@@ -42,12 +45,14 @@ public abstract class Historized implements Serializable  {
 	
 
 
-	@Column(name = "CREATED_AT", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false, insertable = false, updatable = false)
+	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "created_at")
 	protected Date createdAt;
 
-	@Column(name = "UPDATED_AT", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", nullable = false, insertable = false, updatable = false)
+	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "updated_at")
 	protected Date updatedAt;
 
 	public Date getCreatedAt() {
