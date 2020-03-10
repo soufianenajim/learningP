@@ -10,7 +10,7 @@ public final class PartialList<T> implements Serializable {
 	 */
 	private static final long serialVersionUID = 8245327832879376587L;
 
-	private Long count;
+	private int count;
 
 	private transient Collection<T> lignes;
 
@@ -18,7 +18,7 @@ public final class PartialList<T> implements Serializable {
 	 * @param count
 	 * @param lignes
 	 */
-	public PartialList(Long count, Collection<T> lignes) {
+	public PartialList(int count, Collection<T> lignes) {
 		this.count = count;
 		this.lignes = lignes;
 	}
@@ -26,7 +26,7 @@ public final class PartialList<T> implements Serializable {
 	/**
 	 * @return Renvoie count.
 	 */
-	public Long getCount() {
+	public int getCount() {
 		return count;
 	}
 
@@ -34,7 +34,7 @@ public final class PartialList<T> implements Serializable {
 	 * @param count
 	 *            count à définir.
 	 */
-	public void setCount(Long count) {
+	public void setCount(int count) {
 		this.count = count;
 	}
 

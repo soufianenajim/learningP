@@ -8,12 +8,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "cour")
+@Table(name = "suggestion")
 public class Suggestion extends Historized {
 
 	private static final long serialVersionUID = -8858004000210805400L;
 
-	@Column(name = "name", length = 100)
+	@Column(name = "name", length = 512)
 	private String name;
 
 	@Column(name = "correct", nullable = false, columnDefinition = "TINYINT(1)")

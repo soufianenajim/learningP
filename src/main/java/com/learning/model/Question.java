@@ -23,6 +23,7 @@ public class Question extends Historized {
 	
 	@Column(name = "code", length = 100)
 	private String code;
+	
 	@Lob
 	private String correctComment;
 	
