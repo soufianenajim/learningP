@@ -19,9 +19,9 @@ public interface CrudService<T, U> {
 	U convertModelToDTO(final T t);
 
 	PartialList<U> convertToListDTO(PartialList<T> list);
-	
 
 	List<U> convertEntitiesToDtos(List<T> list);
+
 	List<T> convertDtosToEntities(List<U> list);
 
 }
