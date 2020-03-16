@@ -17,4 +17,9 @@ public final class ConstantBase {
 	//Suscces delete msg
 	public static final String SUCCES_DELETE = "delete success";
 	
+	//Server error
+	public final static String SERVER_ERROR = "Server Error";
+	//Server done success
+	public final static String DONE = "DONE";
+	
 }

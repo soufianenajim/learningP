@@ -14,7 +14,7 @@ import com.learning.service.QuestionService;
 public class QuestionServiceImpl implements QuestionService {
 
 	@Override
-	public Question save(QuestionDTO t) {
+	public QuestionDTO save(QuestionDTO t) {
 		// TODO Auto-generated method stub
 		return null;
 	}

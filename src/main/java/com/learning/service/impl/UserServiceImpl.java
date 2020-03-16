@@ -19,10 +19,10 @@ public class UserServiceImpl implements UserService {
 	UserRepository userRepository;
 
 	@Override
-	public User save(UserDTO userDTO) {
+	public UserDTO save(UserDTO userDTO) {
 		User user = convertDTOtoModel(userDTO);
-
-		return userRepository.saveAndFlush(user);
+		user = userRepository.saveAndFlush(user);
+		return convertModelToDTO(user);
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void deleteById(Long id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

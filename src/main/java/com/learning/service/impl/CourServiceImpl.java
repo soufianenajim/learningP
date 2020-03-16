@@ -14,7 +14,7 @@ import com.learning.service.CourService;
 public class CourServiceImpl implements CourService {
 
 	@Override
-	public Cour save(CourDTO courDTO) {
+	public CourDTO save(CourDTO courDTO) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -14,7 +14,7 @@ import com.learning.service.NoteExamService;
 public class NoteExamServiceImpl implements NoteExamService {
 
 	@Override
-	public NoteExam save(NoteExamDTO t) {
+	public NoteExamDTO save(NoteExamDTO t) {
 		// TODO Auto-generated method stub
 		return null;
 	}

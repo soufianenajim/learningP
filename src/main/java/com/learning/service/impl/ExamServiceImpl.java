@@ -14,7 +14,7 @@ import com.learning.service.ExamService;
 public class ExamServiceImpl implements ExamService {
 
 	@Override
-	public Exam save(ExamDTO t) {
+	public ExamDTO save(ExamDTO t) {
 		// TODO Auto-generated method stub
 		return null;
 	}

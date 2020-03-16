@@ -14,7 +14,7 @@ import com.learning.service.TdService;
 public class TdServiceImpl implements TdService {
 
 	@Override
-	public Td save(TdDTO t) {
+	public TdDTO save(TdDTO t) {
 		// TODO Auto-generated method stub
 		return null;
 	}

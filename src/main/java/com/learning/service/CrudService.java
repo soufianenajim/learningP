@@ -7,7 +7,7 @@ import com.learning.model.base.PartialList;
 
 public interface CrudService<Model, ModelDTO> {
 	
-	Model save(ModelDTO dto);
+	ModelDTO save(ModelDTO dto);
 
 	ModelDTO findById(long id);
 

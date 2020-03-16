@@ -14,7 +14,7 @@ import com.learning.service.SuggestionService;
 public class SuggestionServiceImpl implements SuggestionService {
 
 	@Override
-	public Suggestion save(SuggestionDTO t) {
+	public SuggestionDTO save(SuggestionDTO t) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -28,11 +28,11 @@ public class ChapitreServiceImpl implements ChapitreService {
 
 	// save or update
 	@Override
-	public Chapitre save(ChapitreDTO chapitreDTO) {
+	public ChapitreDTO save(ChapitreDTO chapitreDTO) {
 		Chapitre chapitre = convertDTOtoModel(chapitreDTO);
-		return chapitreRepository.save(chapitre);
+		chapitre = chapitreRepository.save(chapitre);
+		return convertModelToDTO(chapitre);
 	}
-
 
 	@Override
 	public ChapitreDTO findById(long idOut) {
@@ -69,7 +69,7 @@ public class ChapitreServiceImpl implements ChapitreService {
 		Chapitre chapitre = new Chapitre();
 		chapitre.setId(chapitreDTO.getId());
 		chapitre.setName(chapitreDTO.getName());
-		
+
 		if (chapitreDTO.getCour() != null) {
 			chapitre.setCour(courService.convertDTOtoModel(chapitreDTO.getCour()));
 		}

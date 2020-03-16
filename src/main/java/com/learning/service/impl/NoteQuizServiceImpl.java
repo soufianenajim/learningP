@@ -14,7 +14,7 @@ import com.learning.service.NoteQuizService;
 public class NoteQuizServiceImpl implements NoteQuizService {
 
 	@Override
-	public NoteQuiz save(NoteQuizDTO t) {
+	public NoteQuizDTO save(NoteQuizDTO t) {
 		// TODO Auto-generated method stub
 		return null;
 	}

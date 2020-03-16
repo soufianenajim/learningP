@@ -14,7 +14,7 @@ import com.learning.service.RoleService;
 public class RoleServiceImpl implements RoleService{
 
 	@Override
-	public Role save(RoleDTO t) {
+	public RoleDTO save(RoleDTO t) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -14,7 +14,7 @@ import com.learning.service.ModuleService;
 public class ModuleServiceImpl implements ModuleService{
 
 	@Override
-	public Module save(ModuleDTO t) {
+	public ModuleDTO save(ModuleDTO t) {
 		// TODO Auto-generated method stub
 		return null;
 	}

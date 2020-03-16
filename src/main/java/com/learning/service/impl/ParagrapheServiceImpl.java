@@ -14,7 +14,7 @@ import com.learning.service.ParagrapheService;
 public class ParagrapheServiceImpl implements ParagrapheService {
 
 	@Override
-	public Paragraphe save(ParagrapheDTO t) {
+	public ParagrapheDTO save(ParagrapheDTO t) {
 		// TODO Auto-generated method stub
 		return null;
 	}
