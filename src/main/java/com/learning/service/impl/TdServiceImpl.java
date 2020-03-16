@@ -20,7 +20,7 @@ public class TdServiceImpl implements TdService {
 	}
 
 	@Override
-	public Td findById(long idOut) {
+	public TdDTO findById(long idOut) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -65,6 +65,12 @@ public class TdServiceImpl implements TdService {
 	public List<Td> convertDtosToEntities(List<TdDTO> list) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

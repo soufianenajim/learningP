@@ -20,7 +20,7 @@ public class NoteExamServiceImpl implements NoteExamService {
 	}
 
 	@Override
-	public NoteExam findById(long idOut) {
+	public NoteExamDTO findById(long idOut) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -65,6 +65,12 @@ public class NoteExamServiceImpl implements NoteExamService {
 	public List<NoteExam> convertDtosToEntities(List<NoteExamDTO> list) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

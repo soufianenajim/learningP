@@ -20,7 +20,7 @@ public class RoleServiceImpl implements RoleService{
 	}
 
 	@Override
-	public Role findById(long idOut) {
+	public RoleDTO findById(long idOut) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -65,6 +65,12 @@ public class RoleServiceImpl implements RoleService{
 	public List<Role> convertDtosToEntities(List<RoleDTO> list) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -20,7 +20,7 @@ public class ExamServiceImpl implements ExamService {
 	}
 
 	@Override
-	public Exam findById(long idOut) {
+	public ExamDTO findById(long idOut) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -65,6 +65,12 @@ public class ExamServiceImpl implements ExamService {
 	public List<Exam> convertDtosToEntities(List<ExamDTO> list) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

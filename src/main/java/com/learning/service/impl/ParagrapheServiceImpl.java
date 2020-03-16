@@ -20,7 +20,7 @@ public class ParagrapheServiceImpl implements ParagrapheService {
 	}
 
 	@Override
-	public Paragraphe findById(long idOut) {
+	public ParagrapheDTO findById(long idOut) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -65,6 +65,12 @@ public class ParagrapheServiceImpl implements ParagrapheService {
 	public List<Paragraphe> convertDtosToEntities(List<ParagrapheDTO> list) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

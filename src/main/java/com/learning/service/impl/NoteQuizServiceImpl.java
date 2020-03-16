@@ -20,7 +20,7 @@ public class NoteQuizServiceImpl implements NoteQuizService {
 	}
 
 	@Override
-	public NoteQuiz findById(long idOut) {
+	public NoteQuizDTO findById(long idOut) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -65,6 +65,12 @@ public class NoteQuizServiceImpl implements NoteQuizService {
 	public List<NoteQuiz> convertDtosToEntities(List<NoteQuizDTO> list) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

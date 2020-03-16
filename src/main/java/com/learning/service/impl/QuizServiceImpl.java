@@ -20,7 +20,7 @@ public class QuizServiceImpl implements QuizService {
 	}
 
 	@Override
-	public Quiz findById(long idOut) {
+	public QuizDTO findById(long idOut) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -65,6 +65,12 @@ public class QuizServiceImpl implements QuizService {
 	public List<Quiz> convertDtosToEntities(List<QuizDTO> list) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

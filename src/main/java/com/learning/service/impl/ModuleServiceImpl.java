@@ -20,7 +20,7 @@ public class ModuleServiceImpl implements ModuleService{
 	}
 
 	@Override
-	public Module findById(long idOut) {
+	public ModuleDTO findById(long idOut) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -65,6 +65,12 @@ public class ModuleServiceImpl implements ModuleService{
 	public List<Module> convertDtosToEntities(List<ModuleDTO> list) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -5,23 +5,26 @@ import java.util.List;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 
-public interface CrudService<T, U> {
-	T save(U u);
+public interface CrudService<Model, ModelDTO> {
+	
+	Model save(ModelDTO dto);
 
-	T findById(long idOut);
+	ModelDTO findById(long id);
 
-	void delete(T t);
+	void delete(Model model);
 
-	PartialList<U> findByCriteres(Demande<U> demande);
+	void deleteById(Long id);
 
-	T convertDTOtoModel(U u);
+	PartialList<ModelDTO> findByCriteres(Demande<ModelDTO> demande);
 
-	U convertModelToDTO(final T t);
+	Model convertDTOtoModel(ModelDTO dto);
 
-	PartialList<U> convertToListDTO(PartialList<T> list);
+	ModelDTO convertModelToDTO(final Model model);
 
-	List<U> convertEntitiesToDtos(List<T> list);
+	PartialList<ModelDTO> convertToListDTO(PartialList<Model> list);
 
-	List<T> convertDtosToEntities(List<U> list);
+	List<ModelDTO> convertEntitiesToDtos(List<Model> list);
+
+	List<Model> convertDtosToEntities(List<ModelDTO> list);
 
 }

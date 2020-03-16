@@ -4,9 +4,9 @@ public class Demande<T> {
 	private T model;
 	private int page;
 	private int size;
-   private String sortField;
-   private String sortFieldSecond;
-   private SortOrder sortOrder;
+	private String sortField;
+	private String sortFieldSecond;
+	private SortOrder sortOrder;
 
 	public Demande() {
 		super();
@@ -67,11 +67,5 @@ public class Demande<T> {
 	public void setSortFieldSecond(String sortFieldSecond) {
 		this.sortFieldSecond = sortFieldSecond;
 	}
-
-
-
-	
-	
-	
 
 }

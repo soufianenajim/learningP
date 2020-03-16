@@ -14,13 +14,13 @@ import com.learning.service.CourService;
 public class CourServiceImpl implements CourService {
 
 	@Override
-	public Cour save(CourDTO t) {
+	public Cour save(CourDTO courDTO) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Cour findById(long idOut) {
+	public CourDTO findById(long idOut) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -65,6 +65,12 @@ public class CourServiceImpl implements CourService {
 	public List<Cour> convertDtosToEntities(List<CourDTO> list) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

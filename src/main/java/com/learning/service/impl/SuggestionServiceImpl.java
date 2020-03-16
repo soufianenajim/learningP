@@ -20,7 +20,7 @@ public class SuggestionServiceImpl implements SuggestionService {
 	}
 
 	@Override
-	public Suggestion findById(long idOut) {
+	public SuggestionDTO findById(long idOut) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -65,6 +65,12 @@ public class SuggestionServiceImpl implements SuggestionService {
 	public List<Suggestion> convertDtosToEntities(List<SuggestionDTO> list) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

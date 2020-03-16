@@ -20,7 +20,7 @@ public class QuestionServiceImpl implements QuestionService {
 	}
 
 	@Override
-	public Question findById(long idOut) {
+	public QuestionDTO findById(long idOut) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -65,6 +65,12 @@ public class QuestionServiceImpl implements QuestionService {
 	public List<Question> convertDtosToEntities(List<QuestionDTO> list) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

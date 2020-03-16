@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User findById(long idOut) {
+	public UserDTO findById(long idOut) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -75,6 +75,12 @@ public class UserServiceImpl implements UserService {
 	public List<User> convertDtosToEntities(List<UserDTO> list) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
