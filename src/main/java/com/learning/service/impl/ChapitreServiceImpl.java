@@ -22,9 +22,9 @@ import com.learning.service.CourService;
 public class ChapitreServiceImpl implements ChapitreService {
 
 	@Autowired
-	ChapitreRepository chapitreRepository;
+	private ChapitreRepository chapitreRepository;
 	@Autowired
-	CourService courService;
+	private CourService courService;
 
 	// save or update
 	@Override
@@ -84,7 +84,9 @@ public class ChapitreServiceImpl implements ChapitreService {
 		Cour cour = chapitre.getCour();
 		if (cour != null) {
 			chapitreDTO.setCour(courService.convertModelToDTO(chapitre.getCour()));
+			
 		}
+		
 		chapitreDTO.setCreatedAt(chapitre.getCreatedAt());
 		chapitreDTO.setUpdatedAt(chapitre.getUpdatedAt());
 		return chapitreDTO;

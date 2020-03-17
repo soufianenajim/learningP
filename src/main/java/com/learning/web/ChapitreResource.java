@@ -19,10 +19,10 @@ import com.learning.model.base.Demande;
 import com.learning.service.ChapitreService;
 
 @RestController
-@RequestMapping("/chapitre")
+@RequestMapping("/cheapitre")
 public class ChapitreResource {
 
-	private static Logger LOGGER = LogManager.getLogger("BulletinController");
+	private static Logger LOGGER = LogManager.getLogger("ChapitreResource");
 	@Autowired
 	ChapitreService chapitreService;
 

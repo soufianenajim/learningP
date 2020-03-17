@@ -11,11 +11,17 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.learning.service.ModuleService;
+
 @Entity
 @Table(name = "exam")
 public class Exam extends Historized {
 
 	private static final long serialVersionUID = -8858004000210805400L;
+	
+	
 
 	@Column(name = "name", length = 100)
 	private String name;

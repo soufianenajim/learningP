@@ -1,76 +1,125 @@
 package com.learning.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.learning.dao.ModuleRepository;
 import com.learning.dto.ModuleDTO;
 import com.learning.model.Module;
+import com.learning.model.User;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.ModuleService;
+import com.learning.service.UserService;
 
 @Service
-public class ModuleServiceImpl implements ModuleService{
+public class ModuleServiceImpl implements ModuleService {
+	
+	@Autowired
+	private ModuleRepository moduleRepository;
+	@Autowired
+	private UserService userService;
 
 	@Override
-	public ModuleDTO save(ModuleDTO t) {
-		// TODO Auto-generated method stub
-		return null;
+	public ModuleDTO save(ModuleDTO moduleDTO) {
+		Module module = convertDTOtoModel(moduleDTO);
+		module = moduleRepository.save(module);
+		return convertModelToDTO(module);
 	}
 
 	@Override
 	public ModuleDTO findById(long idOut) {
-		// TODO Auto-generated method stub
+		Optional<Module> optional = moduleRepository.findById(idOut);
+
+		if (optional.isPresent()) {
+			Module moduleFromDb = optional.get();
+			return convertModelToDTO(moduleFromDb);
+		}
 		return null;
 	}
 
 	@Override
-	public void delete(Module t) {
-		// TODO Auto-generated method stub
-		
+	public void delete(Module module) {
+		moduleRepository.delete(module);
 	}
 
 	@Override
 	public PartialList<ModuleDTO> findByCriteres(Demande<ModuleDTO> demande) {
-		// TODO Auto-generated method stub
-		return null;
+
+		ModuleDTO module = demande.getModel();
+		int page = demande.getPage();
+		int size = demande.getSize();
+		Page<Module> pageModule = moduleRepository.findByName(module.getName(), PageRequest.of(page, size));
+
+		List<ModuleDTO> list = convertEntitiesToDtos(pageModule.getContent());
+		int totalElement = pageModule.getNumberOfElements();
+
+		return new PartialList<ModuleDTO>(totalElement, list);
 	}
 
 	@Override
-	public Module convertDTOtoModel(ModuleDTO u) {
-		// TODO Auto-generated method stub
-		return null;
+	public Module convertDTOtoModel(ModuleDTO moduleDTO) {
+		Module module = new Module();
+		module.setId(moduleDTO.getId());
+		module.setName(moduleDTO.getName());
+
+		if (moduleDTO.getUser() != null) {
+			module.setUser(userService.convertDTOtoModel(moduleDTO.getUser()));
+		}
+		return module;
 	}
 
 	@Override
-	public ModuleDTO convertModelToDTO(Module t) {
-		// TODO Auto-generated method stub
-		return null;
+	public ModuleDTO convertModelToDTO(Module module) {
+		ModuleDTO moduleDTO = new ModuleDTO();
+		moduleDTO.setId(module.getId());
+		moduleDTO.setName(module.getName());
+		User user = module.getUser();
+		if (user != null) {
+			moduleDTO.setUser(userService.convertModelToDTO(module.getUser()));
+
+		}
+
+		moduleDTO.setCreatedAt(module.getCreatedAt());
+		moduleDTO.setUpdatedAt(module.getUpdatedAt());
+		return moduleDTO;
 	}
 
 	@Override
 	public PartialList<ModuleDTO> convertToListDTO(PartialList<Module> list) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public List<ModuleDTO> convertEntitiesToDtos(List<Module> list) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Module> convertDtosToEntities(List<ModuleDTO> list) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void deleteById(Long id) {
-		// TODO Auto-generated method stub
-		
+		moduleRepository.deleteById(id);
+
+	}
+
+	@Override
+	public List<ModuleDTO> convertEntitiesToDtos(List<Module> modules) {
+		// basic methode
+		List<ModuleDTO> list = new ArrayList<ModuleDTO>();
+		for (Module module : modules) {
+			list.add(convertModelToDTO(module));
+		}
+		return list;
+	}
+
+	@Override
+	public List<Module> convertDtosToEntities(List<ModuleDTO> modulesDTO) {
+		List<Module> list = new ArrayList<Module>();
+		for (ModuleDTO moduleDTO : modulesDTO) {
+			list.add(convertDTOtoModel(moduleDTO));
+		}
+		return list;
 	}
 
 }
