@@ -20,7 +20,7 @@ import com.learning.service.ExamService;
 
 @RestController
 @RequestMapping("/exam")
-public class Exam {
+public class ExamResource {
 	
 	private static Logger LOGGER = LogManager.getLogger("ExamResource");
 	@Autowired
