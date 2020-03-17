@@ -59,7 +59,8 @@ public class NoteQuizServiceImpl implements NoteQuizService {
 		NoteQuizDTO noteQuiz = demande.getModel();
 		int page = demande.getPage();
 		int size = demande.getSize();
-		Page<NoteQuiz> pageNoteQuiz = noteQuizRepository.findByScore(noteQuiz.getScore(), PageRequest.of(page, size));
+		Page<NoteQuiz> pageNoteQuiz = noteQuizRepository.findByUserAndQuiz(noteQuiz.getUser().getId(),
+				noteQuiz.getQuiz().getId(), PageRequest.of(page, size));
 
 		List<NoteQuizDTO> list = convertEntitiesToDtos(pageNoteQuiz.getContent());
 		int totalElement = pageNoteQuiz.getNumberOfElements();
