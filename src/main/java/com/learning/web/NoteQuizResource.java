@@ -13,25 +13,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.learning.dto.ChapitreDTO;
+import com.learning.dto.NoteQuizDTO;
 import com.learning.model.base.ConstantBase;
 import com.learning.model.base.Demande;
-import com.learning.service.ChapitreService;
+import com.learning.service.NoteQuizService;
 
 @RestController
-@RequestMapping("/chapitre")
-public class ChapitreResource {
+@RequestMapping("/noteQuiz")
+public class NoteQuizResource {
 
-	private static Logger LOGGER = LogManager.getLogger("ChapitreResource");
+	private static Logger LOGGER = LogManager.getLogger("NoteQuizResource");
 	@Autowired
-	ChapitreService chapitreService;
+	NoteQuizService noteQuizService;
 
 	@PostMapping(ConstantBase.CRUD_REST_FIND_BY_CRITERE)
-	public ResponseEntity<?> findByCriteres(Demande<ChapitreDTO> demande) {
+	public ResponseEntity<?> findByCriteres(Demande<NoteQuizDTO> demande) {
 		try {
-			return new ResponseEntity<>(chapitreService.findByCriteres(demande), HttpStatus.OK);
+			return new ResponseEntity<>(noteQuizService.findByCriteres(demande), HttpStatus.OK);
 		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/chapitre" + ConstantBase.CRUD_REST_FIND_BY_CRITERE + " : {} ", e);
+			LOGGER.error("Problem occored in api/noteQuiz" + ConstantBase.CRUD_REST_FIND_BY_CRITERE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -39,9 +39,9 @@ public class ChapitreResource {
 	@GetMapping(ConstantBase.CRUD_REST_FIND_BY_ID + "/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id) {
 		try {
-			return new ResponseEntity<>(chapitreService.findById(id), HttpStatus.OK);
+			return new ResponseEntity<>(noteQuizService.findById(id), HttpStatus.OK);
 		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/chapitre" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			LOGGER.error("Problem occored in api/noteQuiz" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
@@ -50,21 +50,21 @@ public class ChapitreResource {
 	@DeleteMapping(ConstantBase.CRUD_REST_DELETE + "/{id}")
 	public ResponseEntity<?> deleteById(@PathVariable Long id) {
 		try {
-			chapitreService.deleteById(id);
+			noteQuizService.deleteById(id);
 			return new ResponseEntity<>(ConstantBase.DONE, HttpStatus.OK);
 		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/chapitre" + ConstantBase.CRUD_REST_DELETE + " : {} ", e);
+			LOGGER.error("Problem occored in api/noteQuiz" + ConstantBase.CRUD_REST_DELETE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@PostMapping(ConstantBase.CRUD_REST_SAVE_OR_UPDATE)
-	public ResponseEntity<?> save(@RequestBody ChapitreDTO chapitreDTO) {
+	public ResponseEntity<?> save(@RequestBody NoteQuizDTO noteQuizDTO) {
 		try {
 
-			return new ResponseEntity<>(chapitreService.save(chapitreDTO), HttpStatus.OK);
+			return new ResponseEntity<>(noteQuizService.save(noteQuizDTO), HttpStatus.OK);
 		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/chapitre" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
+			LOGGER.error("Problem occored in api/noteQuiz" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
