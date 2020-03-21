@@ -56,7 +56,8 @@ public class SuggestionServiceImpl implements SuggestionService {
 		int size = demande.getSize();
 		Page<Suggestion> pageSuggestion = null;
 
-		pageSuggestion = suggestionRepository.findByNameAndQuestion(suggestion.getName(), suggestion.getQuestion().getId(), PageRequest.of(page, size));
+		pageSuggestion = suggestionRepository.findByNameAndQuestion(suggestion.getName(),
+				suggestion.getQuestion().getId(), PageRequest.of(page, size));
 
 		List<SuggestionDTO> list = convertEntitiesToDtos(pageSuggestion.getContent());
 		int totalElement = pageSuggestion.getNumberOfElements();
@@ -83,11 +84,11 @@ public class SuggestionServiceImpl implements SuggestionService {
 		suggestionDTO.setName(suggestion.getName());
 		suggestionDTO.setCorrect(suggestion.isCorrect());
 		Question question = suggestion.getQuestion();
-	
+
 		if (question != null) {
 			suggestionDTO.setQuestion(questionService.convertModelToDTO(question));
 		}
-		
+
 		suggestionDTO.setCreatedAt(suggestion.getCreatedAt());
 		suggestionDTO.setUpdatedAt(suggestion.getUpdatedAt());
 		return suggestionDTO;
