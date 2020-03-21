@@ -9,7 +9,7 @@ import com.learning.model.NoteQuiz;
 
 public interface NoteQuizRepository extends JpaRepository<NoteQuiz,Long > {
       
-	@Query("SELECT nq FROM NoteQuiz nq WHERE nq.user.id = ?1 or nq.quiz.id = ?2")
+	@Query("SELECT nq FROM NoteQuiz nq WHERE nq.user.id = ?1 and nq.quiz.id = ?2")
 	Page<NoteQuiz> findByUserAndQuiz(Long idUser, Long idQuiz, Pageable pageable);
 }
  
