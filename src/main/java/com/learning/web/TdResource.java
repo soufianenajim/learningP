@@ -27,7 +27,7 @@ public class TdResource {
 	TdService tdService;
 
 	@PostMapping(ConstantBase.CRUD_REST_FIND_BY_CRITERE)
-	public ResponseEntity<?> findByCriteres(Demande<TdDTO> demande) {
+	public ResponseEntity<?> findByCriteres(@RequestBody Demande<TdDTO> demande) {
 		try {
 			return new ResponseEntity<>(tdService.findByCriteres(demande), HttpStatus.OK);
 		} catch (Exception e) {

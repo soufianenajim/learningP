@@ -59,7 +59,7 @@ public class ChapitreServiceImpl implements ChapitreService {
 		Page<Chapitre> pageChapitre = chapitreRepository.findByName(chapitre.getName(), PageRequest.of(page, size));
 
 		List<ChapitreDTO> list = convertEntitiesToDtos(pageChapitre.getContent());
-		int totalElement = pageChapitre.getNumberOfElements();
+		Long totalElement = pageChapitre.getTotalElements();
 
 		return new PartialList<ChapitreDTO>(totalElement, list);
 	}

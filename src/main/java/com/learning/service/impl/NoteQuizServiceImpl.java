@@ -63,7 +63,7 @@ public class NoteQuizServiceImpl implements NoteQuizService {
 				noteQuiz.getQuiz().getId(), PageRequest.of(page, size));
 
 		List<NoteQuizDTO> list = convertEntitiesToDtos(pageNoteQuiz.getContent());
-		int totalElement = pageNoteQuiz.getNumberOfElements();
+		Long totalElement = pageNoteQuiz.getTotalElements();
 
 		return new PartialList<NoteQuizDTO>(totalElement, list);
 	}

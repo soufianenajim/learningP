@@ -60,7 +60,7 @@ public class SuggestionServiceImpl implements SuggestionService {
 				suggestion.getQuestion().getId(), PageRequest.of(page, size));
 
 		List<SuggestionDTO> list = convertEntitiesToDtos(pageSuggestion.getContent());
-		int totalElement = pageSuggestion.getNumberOfElements();
+		Long totalElement = pageSuggestion.getTotalElements();
 
 		return new PartialList<SuggestionDTO>(totalElement, list);
 	}

@@ -20,7 +20,7 @@ public class Td extends Historized {
 	@Column(name = "name", length = 100)
 	private String name;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	@JoinColumn(name = "cour_id")
 	private Cour cour;
 	

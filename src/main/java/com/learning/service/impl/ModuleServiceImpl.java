@@ -58,7 +58,7 @@ public class ModuleServiceImpl implements ModuleService {
 		Page<Module> pageModule = moduleRepository.findByName(module.getName(), PageRequest.of(page, size));
 
 		List<ModuleDTO> list = convertEntitiesToDtos(pageModule.getContent());
-		int totalElement = pageModule.getNumberOfElements();
+		Long totalElement = pageModule.getTotalElements();
 
 		return new PartialList<ModuleDTO>(totalElement, list);
 	}

@@ -58,7 +58,7 @@ public class ParagrapheServiceImpl implements ParagrapheService {
 				paragraphe.getChapitre().getId(), PageRequest.of(page, size));
 
 		List<ParagrapheDTO> list = convertEntitiesToDtos(pageParagraphe.getContent());
-		int totalElement = pageParagraphe.getNumberOfElements();
+		Long totalElement = pageParagraphe.getTotalElements();
 
 		return new PartialList<ParagrapheDTO>(totalElement, list);
 	}

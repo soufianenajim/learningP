@@ -63,7 +63,7 @@ public class NoteExamServiceImpl implements NoteExamService {
 				noteExam.getExam().getId(), PageRequest.of(page, size));
 
 		List<NoteExamDTO> list = convertEntitiesToDtos(pageNoteExam.getContent());
-		int totalElement = pageNoteExam.getNumberOfElements();
+		Long totalElement = pageNoteExam.getTotalElements();
 
 		return new PartialList<NoteExamDTO>(totalElement, list);
 	}

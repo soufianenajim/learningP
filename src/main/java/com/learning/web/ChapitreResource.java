@@ -25,9 +25,9 @@ public class ChapitreResource {
 	private static Logger LOGGER = LogManager.getLogger("ChapitreResource");
 	@Autowired
 	ChapitreService chapitreService;
-
+	
 	@PostMapping(ConstantBase.CRUD_REST_FIND_BY_CRITERE)
-	public ResponseEntity<?> findByCriteres(Demande<ChapitreDTO> demande) {
+	public ResponseEntity<?> findByCriteres(@RequestBody Demande<ChapitreDTO> demande) {
 		try {
 			return new ResponseEntity<>(chapitreService.findByCriteres(demande), HttpStatus.OK);
 		} catch (Exception e) {

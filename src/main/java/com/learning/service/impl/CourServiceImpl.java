@@ -25,7 +25,6 @@ public class CourServiceImpl implements CourService {
 	private CourRepository courRepository;
 	@Autowired
 	private ModuleService moduleService;
-	
 
 	// save or update
 	@Override
@@ -57,10 +56,11 @@ public class CourServiceImpl implements CourService {
 		CourDTO cour = demande.getModel();
 		int page = demande.getPage();
 		int size = demande.getSize();
-		Page<Cour> pageCour = courRepository.findByNameAndModule(cour.getName(),cour.getModule().getId(), PageRequest.of(page, size));
+		Page<Cour> pageCour = courRepository.findByNameAndModule(cour.getName(), cour.getModule().getId(),
+				PageRequest.of(page, size));
 
 		List<CourDTO> list = convertEntitiesToDtos(pageCour.getContent());
-		int totalElement = pageCour.getNumberOfElements();
+		Long totalElement = pageCour.getTotalElements();
 
 		return new PartialList<CourDTO>(totalElement, list);
 	}
@@ -85,9 +85,9 @@ public class CourServiceImpl implements CourService {
 		Module module = cour.getModule();
 		if (module != null) {
 			courDTO.setModule(moduleService.convertModelToDTO(cour.getModule()));
-			
+
 		}
-		
+
 		courDTO.setCreatedAt(cour.getCreatedAt());
 		courDTO.setUpdatedAt(cour.getUpdatedAt());
 		return courDTO;
@@ -122,6 +122,23 @@ public class CourServiceImpl implements CourService {
 			list.add(convertDTOtoModel(courDTO));
 		}
 		return list;
+	}
+
+	@Override
+	public Cour findEnitityById(Long id) {
+		Optional<Cour> optional = courRepository.findById(id);
+
+		if (optional.isPresent()) {
+			Cour courFromDb = optional.get();
+			return courFromDb;
+		}
+		return null;
+	}
+
+	@Override
+	public List<CourDTO> findAll() {
+		List<Cour> cours = courRepository.findAll();
+		return convertEntitiesToDtos(cours);
 	}
 
 }

@@ -1,12 +1,14 @@
 package com.learning.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.learning.dao.UserRepository;
 import com.learning.dto.UserDTO;
+import com.learning.model.Td;
 import com.learning.model.User;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
@@ -27,7 +29,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDTO findById(long idOut) {
-		// TODO Auto-generated method stub
+		Optional<User> optional = userRepository.findById(idOut);
+
+		if (optional.isPresent()) {
+			User user = optional.get();
+			return convertModelToDTO(user);
+		}
 		return null;
 	}
 
@@ -54,9 +61,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDTO convertModelToDTO(User t) {
-		// TODO Auto-generated method stub
-		return null;
+	public UserDTO convertModelToDTO(User user) {
+		UserDTO userDTO=new UserDTO();
+		userDTO.setId(user.getId());
+		userDTO.setFirstName(user.getFirstName());
+		userDTO.setLastName(user.getLastName());
+		userDTO.setCreatedAt(user.getCreatedAt());
+		userDTO.setUpdatedAt(user.getUpdatedAt());
+		
+		return userDTO;
 	}
 
 	@Override

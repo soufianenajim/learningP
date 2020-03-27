@@ -59,7 +59,7 @@ public class QuizServiceImpl implements QuizService {
 		pageQuiz = quizRepository.findByNameAndCour(quiz.getName(), quiz.getCour().getId(), PageRequest.of(page, size));
 
 		List<QuizDTO> list = convertEntitiesToDtos(pageQuiz.getContent());
-		int totalElement = pageQuiz.getNumberOfElements();
+		Long totalElement = pageQuiz.getTotalElements();
 
 		return new PartialList<QuizDTO>(totalElement, list);
 	}

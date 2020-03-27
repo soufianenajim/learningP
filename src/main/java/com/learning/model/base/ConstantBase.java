@@ -11,6 +11,8 @@ public final class ConstantBase {
 	// Default route for save/update an object
 	public static final String CRUD_REST_SAVE_OR_UPDATE = "save-or-update";
 	
+
+	
 	// Default route for delete an object
 	public static final String CRUD_REST_DELETE = "delete";
 	

@@ -26,9 +26,9 @@ public class ModuleResource {
 	private static Logger LOGGER = LogManager.getLogger("ModuleResource");
 	@Autowired
 	ModuleService moduleService;
-
+//  http://localhost:8080/learning_backEnd/module/find-by-critere methode post 
 	@PostMapping(ConstantBase.CRUD_REST_FIND_BY_CRITERE)
-	public ResponseEntity<?> findByCriteres(Demande<ModuleDTO> demande) {
+	public ResponseEntity<?> findByCriteres(@RequestBody Demande<ModuleDTO> demande) {
 		try {
 			return new ResponseEntity<>(moduleService.findByCriteres(demande), HttpStatus.OK);
 		} catch (Exception e) {

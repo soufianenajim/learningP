@@ -29,7 +29,12 @@ public class TdServiceImpl implements TdService {
 	@Override
 	public TdDTO save(TdDTO tdDTO) {
 		Td td = convertDTOtoModel(tdDTO);
-		td = tdRepository.save(td);
+		if (td.getCour().getId() != null) {
+			Cour cour = courService.findEnitityById(td.getCour().getId());
+			if (cour != null)
+				td.setCour(cour);
+		}
+		td = tdRepository.saveAndFlush(td);
 		return convertModelToDTO(td);
 	}
 
@@ -56,12 +61,13 @@ public class TdServiceImpl implements TdService {
 		int page = demande.getPage();
 		int size = demande.getSize();
 		Page<Td> pageTd = null;
-
-		pageTd = tdRepository.findByNameAndCour(td.getName(),
-				td.getCour().getId(), PageRequest.of(page, size));
+		String name = td.getName();
+		Long idCour = td.getCour() != null ? td.getCour().getId() : null;
+		pageTd = idCour != null ? tdRepository.findByNameAndCour(name, idCour, PageRequest.of(page, size))
+				: tdRepository.findByName(name, PageRequest.of(page, size));
 
 		List<TdDTO> list = convertEntitiesToDtos(pageTd.getContent());
-		int totalElement = pageTd.getNumberOfElements();
+		Long totalElement = pageTd.getTotalElements();
 
 		return new PartialList<TdDTO>(totalElement, list);
 	}
@@ -82,7 +88,7 @@ public class TdServiceImpl implements TdService {
 		TdDTO tdDTO = new TdDTO();
 		tdDTO.setId(td.getId());
 		tdDTO.setName(td.getName());
-	
+
 		Cour cour = td.getCour();
 
 		if (cour != null) {

@@ -1,6 +1,7 @@
 package com.learning.dto;
 
 public class RoleDTO extends HistorizedDTO {
+
 	private String name;
 
 	public RoleDTO() {

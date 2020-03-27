@@ -58,7 +58,7 @@ public class ExamServiceImpl implements ExamService {
 		Page<Exam> pageExam = examRepository.findByName(exam.getName(), PageRequest.of(page, size));
 
 		List<ExamDTO> list = convertEntitiesToDtos(pageExam.getContent());
-		int totalElement = pageExam.getNumberOfElements();
+		Long totalElement = pageExam.getTotalElements();
 
 		return new PartialList<ExamDTO>(totalElement, list);
 	}

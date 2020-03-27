@@ -78,7 +78,7 @@ public class QuestionServiceImpl implements QuestionService {
 		}
 
 		List<QuestionDTO> list = convertEntitiesToDtos(pageQuestion.getContent());
-		int totalElement = pageQuestion.getNumberOfElements();
+		Long totalElement = pageQuestion.getTotalElements();
 
 		return new PartialList<QuestionDTO>(totalElement, list);
 	}

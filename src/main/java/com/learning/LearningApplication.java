@@ -18,10 +18,10 @@ public class LearningApplication {
 		
 		ApplicationContext ctx =  SpringApplication.run(LearningApplication.class, args);
 		UserService userService = ctx.getBean(UserService.class);
-		UserDTO u=new UserDTO();
-		u.setFirstName("rahma");
-		u.setLastName("hamza");
-		userService.save(u);
+//		UserDTO u=new UserDTO();
+//		u.setFirstName("rahma");
+//		u.setLastName("hamza");
+//		userService.save(u);
 
 	}
 
