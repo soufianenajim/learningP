@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.learning.dto.SuggestionDTO;
 import com.learning.model.base.ConstantBase;
 import com.learning.model.base.Demande;
+import com.learning.security.SecurityConstants;
 import com.learning.service.SuggestionService;
 
 @RestController
@@ -51,7 +52,7 @@ public class SuggestionResource {
 	public ResponseEntity<?> deleteById(@PathVariable Long id) {
 		try {
 			suggestionService.deleteById(id);
-			return new ResponseEntity<>(ConstantBase.DONE, HttpStatus.OK);
+			return new ResponseEntity<>(SecurityConstants.convertObjectToJson(ConstantBase.DONE), HttpStatus.OK);
 		} catch (Exception e) {
 			LOGGER.error("Problem occored in api/suggestion" + ConstantBase.CRUD_REST_DELETE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);

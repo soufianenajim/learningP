@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 public class UserDTO extends HistorizedDTO {
 
 	private String login;
+	
 
 	private String password;
 

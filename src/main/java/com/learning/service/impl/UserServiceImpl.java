@@ -1,5 +1,6 @@
 package com.learning.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,13 +63,13 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDTO convertModelToDTO(User user) {
-		UserDTO userDTO=new UserDTO();
+		UserDTO userDTO = new UserDTO();
 		userDTO.setId(user.getId());
 		userDTO.setFirstName(user.getFirstName());
 		userDTO.setLastName(user.getLastName());
 		userDTO.setCreatedAt(user.getCreatedAt());
 		userDTO.setUpdatedAt(user.getUpdatedAt());
-		
+
 		return userDTO;
 	}
 
@@ -80,8 +81,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserDTO> convertEntitiesToDtos(List<User> list) {
-		// TODO Auto-generated method stub
-		return null;
+		List<UserDTO> users = new ArrayList<UserDTO>();
+
+		for (User user : list) {
+			users.add(convertModelToDTO(user));
+		}
+		return users;
 	}
 
 	@Override
@@ -94,6 +99,13 @@ public class UserServiceImpl implements UserService {
 	public void deleteById(Long id) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public List<UserDTO> findAllProfessor() {
+		// a modifier par finndAll By role professor
+		List<User> users = userRepository.findAll();
+		return convertEntitiesToDtos(users);
 	}
 
 }

@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.learning.dao.ModuleRepository;
 import com.learning.dto.ModuleDTO;
+import com.learning.dto.TdDTO;
 import com.learning.model.Module;
+import com.learning.model.Td;
 import com.learning.model.User;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
@@ -20,7 +22,7 @@ import com.learning.service.UserService;
 
 @Service
 public class ModuleServiceImpl implements ModuleService {
-	
+
 	@Autowired
 	private ModuleRepository moduleRepository;
 	@Autowired
@@ -55,7 +57,12 @@ public class ModuleServiceImpl implements ModuleService {
 		ModuleDTO module = demande.getModel();
 		int page = demande.getPage();
 		int size = demande.getSize();
-		Page<Module> pageModule = moduleRepository.findByName(module.getName(), PageRequest.of(page, size));
+		Page<Module> pageModule = null;
+		String name = module.getName();
+		Long idProf = module.getUser() != null ? module.getUser().getId() : null;
+
+		pageModule = idProf != null ? moduleRepository.findByNameAndUser(name, idProf, PageRequest.of(page, size))
+				: moduleRepository.findByName(name, PageRequest.of(page, size));
 
 		List<ModuleDTO> list = convertEntitiesToDtos(pageModule.getContent());
 		Long totalElement = pageModule.getTotalElements();
@@ -99,7 +106,10 @@ public class ModuleServiceImpl implements ModuleService {
 
 	@Override
 	public void deleteById(Long id) {
-		moduleRepository.deleteById(id);
+
+		boolean exist = moduleRepository.existsById(id);
+		if (exist)
+			moduleRepository.deleteById(id);
 
 	}
 

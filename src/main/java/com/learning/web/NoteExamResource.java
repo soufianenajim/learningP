@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.learning.dto.NoteExamDTO;
 import com.learning.model.base.ConstantBase;
 import com.learning.model.base.Demande;
+import com.learning.security.SecurityConstants;
 import com.learning.service.NoteExamService;
 
 @RestController
@@ -51,7 +52,7 @@ public class NoteExamResource {
 	public ResponseEntity<?> deleteById(@PathVariable Long id) {
 		try {
 			noteExamService.deleteById(id);
-			return new ResponseEntity<>(ConstantBase.DONE, HttpStatus.OK);
+			return new ResponseEntity<>(SecurityConstants.convertObjectToJson(ConstantBase.DONE), HttpStatus.OK);
 		} catch (Exception e) {
 			LOGGER.error("Problem occored in api/noteExam" + ConstantBase.CRUD_REST_DELETE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
