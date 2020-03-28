@@ -3,17 +3,13 @@ package com.learning.dto;
 import java.util.List;
 
 public class ChapitreDTO extends HistorizedDTO {
-	
+
 	private String name;
 
-	
-	
 	private CourDTO cour;
 
-	
-	
-	private List<ParagrapheDTO> paragraphes; 
-	
+	private List<ParagrapheDTO> paragraphes;
+
 	public ChapitreDTO() {
 		super();
 	}
@@ -30,8 +26,6 @@ public class ChapitreDTO extends HistorizedDTO {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	
 
 	public String getName() {
 		return name;
@@ -56,6 +50,5 @@ public class ChapitreDTO extends HistorizedDTO {
 	public void setParagraphes(List<ParagrapheDTO> paragraphes) {
 		this.paragraphes = paragraphes;
 	}
-
 
 }

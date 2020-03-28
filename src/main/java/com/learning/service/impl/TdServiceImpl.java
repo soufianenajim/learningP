@@ -63,6 +63,7 @@ public class TdServiceImpl implements TdService {
 		Page<Td> pageTd = null;
 		String name = td.getName();
 		Long idCour = td.getCour() != null ? td.getCour().getId() : null;
+
 		pageTd = idCour != null ? tdRepository.findByNameAndCour(name, idCour, PageRequest.of(page, size))
 				: tdRepository.findByName(name, PageRequest.of(page, size));
 
@@ -108,8 +109,10 @@ public class TdServiceImpl implements TdService {
 
 	@Override
 	public void deleteById(Long id) {
-		tdRepository.deleteById(id);
-
+		Boolean existed = tdRepository.existsById(id);
+		if (existed) {
+			tdRepository.deleteById(id);
+		}
 	}
 
 	@Override

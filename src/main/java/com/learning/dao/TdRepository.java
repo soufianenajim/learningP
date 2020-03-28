@@ -9,9 +9,9 @@ import com.learning.model.Td;
 
 public interface TdRepository extends JpaRepository<Td, Long> {
 	
-	@Query("SELECT t FROM Td t WHERE (LOWER(t.name) LIKE CONCAT(?1, '%')) ")
+	@Query("SELECT t FROM Td t WHERE (LOWER(t.name) LIKE CONCAT(lower(?1), '%')) ")
 	Page<Td> findByName(String code,  Pageable pageable);
 	
-	@Query("SELECT t FROM Td t WHERE (LOWER(t.name) LIKE CONCAT(?1, '%')) and t.cour.id=?2 ")
+	@Query("SELECT t FROM Td t WHERE (LOWER(t.name) LIKE CONCAT(lower(?1), '%')) and t.cour.id=?2 ")
 	Page<Td> findByNameAndCour(String code, Long idCour, Pageable pageable);
 }
