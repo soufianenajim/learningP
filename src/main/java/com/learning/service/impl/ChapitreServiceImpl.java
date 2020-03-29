@@ -56,11 +56,15 @@ public class ChapitreServiceImpl implements ChapitreService {
 		ChapitreDTO chapitre = demande.getModel();
 		int page = demande.getPage();
 		int size = demande.getSize();
-		Page<Chapitre> pageChapitre = chapitreRepository.findByName(chapitre.getName(), PageRequest.of(page, size));
+		Page<Chapitre> pageChapitre = null;
+		String name = chapitre.getName();
+		Long idCour = chapitre.getCour() != null ? chapitre.getCour().getId() : null;
+
+		pageChapitre = idCour != null ? chapitreRepository.findByNameAndCour(name, idCour, PageRequest.of(page, size))
+				: chapitreRepository.findByName(name, PageRequest.of(page, size));
 
 		List<ChapitreDTO> list = convertEntitiesToDtos(pageChapitre.getContent());
 		Long totalElement = pageChapitre.getTotalElements();
-
 		return new PartialList<ChapitreDTO>(totalElement, list);
 	}
 

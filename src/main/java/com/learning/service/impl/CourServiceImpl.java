@@ -56,8 +56,12 @@ public class CourServiceImpl implements CourService {
 		CourDTO cour = demande.getModel();
 		int page = demande.getPage();
 		int size = demande.getSize();
-		Page<Cour> pageCour = courRepository.findByNameAndModule(cour.getName(), cour.getModule().getId(),
-				PageRequest.of(page, size));
+		Page<Cour> pageCour = null;
+		String name = cour.getName();
+		Long idModule = cour.getModule() != null ? cour.getModule().getId() : null;
+
+		pageCour = idModule != null ? courRepository.findByNameAndModule(name, idModule, PageRequest.of(page, size))
+				: courRepository.findByName(name, PageRequest.of(page, size));
 
 		List<CourDTO> list = convertEntitiesToDtos(pageCour.getContent());
 		Long totalElement = pageCour.getTotalElements();

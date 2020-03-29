@@ -11,4 +11,7 @@ public interface CourRepository extends JpaRepository<Cour,Long > {
 	
 	@Query("SELECT c FROM Cour c WHERE (LOWER(c.name) LIKE CONCAT(?1, '%')) and c.module.id = ?2")
 	Page<Cour> findByNameAndModule(String name,Long idModule,Pageable pageable);
+	
+	@Query("SELECT c FROM Cour c WHERE (LOWER(c.name) LIKE CONCAT(?1, '%'))")
+	Page<Cour> findByName(String name,Pageable pageable);
 }

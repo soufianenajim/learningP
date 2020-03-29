@@ -11,9 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.learning.dao.ModuleRepository;
 import com.learning.dto.ModuleDTO;
-import com.learning.dto.TdDTO;
 import com.learning.model.Module;
-import com.learning.model.Td;
 import com.learning.model.User;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
@@ -130,6 +128,12 @@ public class ModuleServiceImpl implements ModuleService {
 			list.add(convertDTOtoModel(moduleDTO));
 		}
 		return list;
+	}
+
+	@Override
+	public List<ModuleDTO> findAll() {
+		List<Module> list = moduleRepository.findAll();
+		return convertEntitiesToDtos(list);
 	}
 
 }

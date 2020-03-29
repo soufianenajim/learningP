@@ -28,7 +28,7 @@ public class CourResource {
 	CourService courService;
 
 	@PostMapping(ConstantBase.CRUD_REST_FIND_BY_CRITERE)
-	public ResponseEntity<?> findByCriteres(Demande<CourDTO> demande) {
+	public ResponseEntity<?> findByCriteres(@RequestBody Demande<CourDTO> demande) {
 		try {
 			return new ResponseEntity<>(courService.findByCriteres(demande), HttpStatus.OK);
 		} catch (Exception e) {
@@ -69,6 +69,7 @@ public class CourResource {
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
 	@GetMapping(ConstantBase.CRUD_REST_FIND_ALL)
 	public ResponseEntity<?> findAll() {
 		try {
