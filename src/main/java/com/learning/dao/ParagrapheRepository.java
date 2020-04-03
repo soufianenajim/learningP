@@ -9,6 +9,9 @@ import com.learning.model.Paragraphe;
 
 public interface ParagrapheRepository extends JpaRepository<Paragraphe,Long > {
 	
-	@Query("SELECT p FROM Paragraphe p WHERE (LOWER(p.name) LIKE CONCAT(?1, '%')) and p.chapitre.id = ?2")
-	Page<Paragraphe> findByNameAndChapitre(String name,Long idChapitre,Pageable pageable);
+	@Query("SELECT p FROM Paragraphe p WHERE (LOWER(p.name) LIKE CONCAT(lower(?1), '%')) ")
+	Page<Paragraphe> findByName(String name, Pageable pageable);
+
+	@Query("SELECT p FROM Paragraphe p WHERE (LOWER(p.name) LIKE CONCAT(lower(?1), '%')) and p.chapitre.id=?2 ")
+	Page<Paragraphe> findByNameAndChapitre(String name, Long idChapitre, Pageable pageable);
 }

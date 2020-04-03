@@ -26,7 +26,7 @@ public class ChapitreResource {
 	private static Logger LOGGER = LogManager.getLogger("ChapitreResource");
 	@Autowired
 	ChapitreService chapitreService;
-	
+
 	@PostMapping(ConstantBase.CRUD_REST_FIND_BY_CRITERE)
 	public ResponseEntity<?> findByCriteres(@RequestBody Demande<ChapitreDTO> demande) {
 		try {
@@ -70,4 +70,13 @@ public class ChapitreResource {
 		}
 	}
 
+	@GetMapping(ConstantBase.CRUD_REST_FIND_ALL)
+	public ResponseEntity<?> findAll() {
+		try {
+			return new ResponseEntity<>(chapitreService.findAll(), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

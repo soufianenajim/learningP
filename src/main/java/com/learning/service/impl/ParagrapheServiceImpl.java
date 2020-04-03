@@ -54,8 +54,11 @@ public class ParagrapheServiceImpl implements ParagrapheService {
 		ParagrapheDTO paragraphe = demande.getModel();
 		int page = demande.getPage();
 		int size = demande.getSize();
-		Page<Paragraphe> pageParagraphe = paragrapheRepository.findByNameAndChapitre(paragraphe.getName(),
-				paragraphe.getChapitre().getId(), PageRequest.of(page, size));
+		String name = paragraphe.getName();
+		Long idChapitre = paragraphe.getChapitre() != null ? paragraphe.getChapitre().getId() : null;
+
+		Page<Paragraphe> pageParagraphe = idChapitre != null ?paragrapheRepository.findByNameAndChapitre(name, idChapitre, PageRequest.of(page, size))
+				: paragrapheRepository.findByName(name, PageRequest.of(page, size));
 
 		List<ParagrapheDTO> list = convertEntitiesToDtos(pageParagraphe.getContent());
 		Long totalElement = pageParagraphe.getTotalElements();
@@ -68,7 +71,7 @@ public class ParagrapheServiceImpl implements ParagrapheService {
 		Paragraphe paragraphe = new Paragraphe();
 		paragraphe.setId(paragrapheDTO.getId());
 		paragraphe.setName(paragrapheDTO.getName());
-
+		paragraphe.setContent(paragrapheDTO.getContent());
 		if (paragrapheDTO.getChapitre() != null) {
 			paragraphe.setChapitre(chapitreService.convertDTOtoModel(paragrapheDTO.getChapitre()));
 		}
@@ -80,6 +83,7 @@ public class ParagrapheServiceImpl implements ParagrapheService {
 		ParagrapheDTO paragrapheDTO = new ParagrapheDTO();
 		paragrapheDTO.setId(paragraphe.getId());
 		paragrapheDTO.setName(paragraphe.getName());
+		paragrapheDTO.setContent(paragraphe.getContent());
 		Chapitre chapitre = paragraphe.getChapitre();
 		if (chapitre != null) {
 			paragrapheDTO.setChapitre(chapitreService.convertModelToDTO(chapitre));

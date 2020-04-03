@@ -127,4 +127,10 @@ public class ChapitreServiceImpl implements ChapitreService {
 		return list;
 	}
 
+	@Override
+	public List<ChapitreDTO> findAll() {
+		List<Chapitre> list = chapitreRepository.findAll();
+		return convertEntitiesToDtos(list);
+	}
+
 }

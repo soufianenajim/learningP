@@ -28,7 +28,7 @@ public class ParagrapheResource {
 	ParagrapheService paragrapheService;
 
 	@PostMapping(ConstantBase.CRUD_REST_FIND_BY_CRITERE)
-	public ResponseEntity<?> findByCriteres(Demande<ParagrapheDTO> demande) {
+	public ResponseEntity<?> findByCriteres(@RequestBody Demande<ParagrapheDTO> demande) {
 		try {
 			return new ResponseEntity<>(paragrapheService.findByCriteres(demande), HttpStatus.OK);
 		} catch (Exception e) {
