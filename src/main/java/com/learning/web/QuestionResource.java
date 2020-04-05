@@ -28,7 +28,7 @@ public class QuestionResource {
 	QuestionService questionService;
 
 	@PostMapping(ConstantBase.CRUD_REST_FIND_BY_CRITERE)
-	public ResponseEntity<?> findByCriteres(Demande<QuestionDTO> demande) {
+	public ResponseEntity<?> findByCriteres(@RequestBody Demande<QuestionDTO> demande) {
 		try {
 			return new ResponseEntity<>(questionService.findByCriteres(demande), HttpStatus.OK);
 		} catch (Exception e) {

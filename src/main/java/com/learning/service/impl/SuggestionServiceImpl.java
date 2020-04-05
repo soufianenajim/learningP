@@ -83,11 +83,11 @@ public class SuggestionServiceImpl implements SuggestionService {
 		suggestionDTO.setId(suggestion.getId());
 		suggestionDTO.setName(suggestion.getName());
 		suggestionDTO.setCorrect(suggestion.isCorrect());
-		Question question = suggestion.getQuestion();
-
-		if (question != null) {
-			suggestionDTO.setQuestion(questionService.convertModelToDTO(question));
-		}
+//		Question question = suggestion.getQuestion();
+//
+//		if (question != null) {
+//			suggestionDTO.setQuestion(questionService.convertModelToDTO(question));
+//		}
 
 		suggestionDTO.setCreatedAt(suggestion.getCreatedAt());
 		suggestionDTO.setUpdatedAt(suggestion.getUpdatedAt());
@@ -123,6 +123,17 @@ public class SuggestionServiceImpl implements SuggestionService {
 			list.add(convertDTOtoModel(suggestionDTO));
 		}
 		return list;
+	}
+
+	@Override
+	public void saveSuggestionsByQuestion(List<SuggestionDTO> suggestions, Question question) {
+	for (SuggestionDTO suggestionDTO : suggestions) {
+		Suggestion suggestion=convertDTOtoModel(suggestionDTO);
+		suggestion.setQuestion(question);
+		suggestionRepository.save(suggestion);
+		
+	}
+		
 	}
 
 }

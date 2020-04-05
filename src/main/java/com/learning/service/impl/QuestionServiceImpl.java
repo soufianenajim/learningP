@@ -11,15 +11,18 @@ import org.springframework.stereotype.Service;
 
 import com.learning.dao.QuestionRepository;
 import com.learning.dto.QuestionDTO;
+import com.learning.dto.SuggestionDTO;
 import com.learning.model.Exam;
 import com.learning.model.Question;
 import com.learning.model.Quiz;
+import com.learning.model.Suggestion;
 import com.learning.model.Td;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.ExamService;
 import com.learning.service.QuestionService;
 import com.learning.service.QuizService;
+import com.learning.service.SuggestionService;
 import com.learning.service.TdService;
 
 @Service
@@ -35,11 +38,16 @@ public class QuestionServiceImpl implements QuestionService {
 
 	@Autowired
 	private ExamService examService;
+	@Autowired
+	private SuggestionService suggestionService;
 
 	@Override
 	public QuestionDTO save(QuestionDTO questionDTO) {
 		Question question = convertDTOtoModel(questionDTO);
 		question = questionRepository.save(question);
+		if (questionDTO.getSuggestions() != null) {
+			suggestionService.saveSuggestionsByQuestion(questionDTO.getSuggestions(), question);
+		}
 		return convertModelToDTO(question);
 	}
 
@@ -65,17 +73,10 @@ public class QuestionServiceImpl implements QuestionService {
 		QuestionDTO question = demande.getModel();
 		int page = demande.getPage();
 		int size = demande.getSize();
+		String code = question.getCode();
+		String name = question.getName();
 		Page<Question> pageQuestion = null;
-		if (question.getTd() != null) {
-			pageQuestion = questionRepository.findByCodeAndTd(question.getCode(), question.getTd().getId(),
-					PageRequest.of(page, size));
-		} else if (question.getQuiz() != null) {
-			pageQuestion = questionRepository.findByCodeAndQuiz(question.getCode(), question.getQuiz().getId(),
-					PageRequest.of(page, size));
-		} else {
-			pageQuestion = questionRepository.findByCodeAndExam(question.getCode(), question.getExam().getId(),
-					PageRequest.of(page, size));
-		}
+		pageQuestion = questionRepository.findByCodeAndName(code, name, PageRequest.of(page, size));
 
 		List<QuestionDTO> list = convertEntitiesToDtos(pageQuestion.getContent());
 		Long totalElement = pageQuestion.getTotalElements();
@@ -90,6 +91,7 @@ public class QuestionServiceImpl implements QuestionService {
 		question.setName(questionDTO.getName());
 		question.setCode(questionDTO.getCode());
 		question.setCorrectComment(questionDTO.getCorrectComment());
+
 		if (questionDTO.getTd() != null) {
 			question.setTd(tdService.convertDTOtoModel(questionDTO.getTd()));
 		}
@@ -112,6 +114,7 @@ public class QuestionServiceImpl implements QuestionService {
 		Td td = question.getTd();
 		Exam exam = question.getExam();
 		Quiz quiz = question.getQuiz();
+		List<Suggestion> suggestion=question.getSuggestions();
 		if (td != null) {
 			questionDTO.setTd(tdService.convertModelToDTO(td));
 		}
@@ -120,6 +123,9 @@ public class QuestionServiceImpl implements QuestionService {
 		}
 		if (exam != null) {
 			questionDTO.setExam(examService.convertModelToDTO(exam));
+		}
+		if(suggestion!=null) {
+			questionDTO.setSuggestions(suggestionService.convertEntitiesToDtos(suggestion));
 		}
 		questionDTO.setCreatedAt(question.getCreatedAt());
 		questionDTO.setUpdatedAt(question.getUpdatedAt());

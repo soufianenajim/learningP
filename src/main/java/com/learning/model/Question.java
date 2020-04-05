@@ -39,7 +39,7 @@ public class Question extends Historized {
 	@JoinColumn(name = "exam_id")
 	private Exam exam;
 	
-	@OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	private List<Suggestion> suggestions;
 
 
