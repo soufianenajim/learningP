@@ -13,26 +13,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.learning.dto.QuestionDTO;
+import com.learning.dto.QuizDTO;
 import com.learning.model.base.ConstantBase;
 import com.learning.model.base.Demande;
 import com.learning.security.SecurityConstants;
-import com.learning.service.QuestionService;
+import com.learning.service.QuizService;
 
 @RestController
-@RequestMapping("/question")
-public class QuestionResource {
+@RequestMapping("/quiz")
+public class QuizResource {
 
-	private static Logger LOGGER = LogManager.getLogger("QuestionResource");
+	private static Logger LOGGER = LogManager.getLogger("QuizResource");
 	@Autowired
-	QuestionService questionService;
+	QuizService quizService;
 
 	@PostMapping(ConstantBase.CRUD_REST_FIND_BY_CRITERE)
-	public ResponseEntity<?> findByCriteres(@RequestBody Demande<QuestionDTO> demande) {
+	public ResponseEntity<?> findByCriteres(@RequestBody Demande<QuizDTO> demande) {
 		try {
-			return new ResponseEntity<>(questionService.findByCriteres(demande), HttpStatus.OK);
+			return new ResponseEntity<>(quizService.findByCriteres(demande), HttpStatus.OK);
 		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/question" + ConstantBase.CRUD_REST_FIND_BY_CRITERE + " : {} ", e);
+			LOGGER.error("Problem occored in api/quiz" + ConstantBase.CRUD_REST_FIND_BY_CRITERE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -40,9 +40,9 @@ public class QuestionResource {
 	@GetMapping(ConstantBase.CRUD_REST_FIND_BY_ID + "/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id) {
 		try {
-			return new ResponseEntity<>(questionService.findById(id), HttpStatus.OK);
+			return new ResponseEntity<>(quizService.findById(id), HttpStatus.OK);
 		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/question" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			LOGGER.error("Problem occored in api/quiz" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
@@ -51,33 +51,23 @@ public class QuestionResource {
 	@DeleteMapping(ConstantBase.CRUD_REST_DELETE + "/{id}")
 	public ResponseEntity<?> deleteById(@PathVariable Long id) {
 		try {
-			questionService.deleteById(id);
+			quizService.deleteById(id);
 			return new ResponseEntity<>(SecurityConstants.convertObjectToJson(ConstantBase.DONE), HttpStatus.OK);
 		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/question" + ConstantBase.CRUD_REST_DELETE + " : {} ", e);
+			LOGGER.error("Problem occored in api/quiz" + ConstantBase.CRUD_REST_DELETE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@PostMapping(ConstantBase.CRUD_REST_SAVE_OR_UPDATE)
-	public ResponseEntity<?> save(@RequestBody QuestionDTO questionDTO) {
+	public ResponseEntity<?> save(@RequestBody QuizDTO quizDTO) {
 		try {
 
-			return new ResponseEntity<>(questionService.save(questionDTO), HttpStatus.OK);
+			return new ResponseEntity<>(quizService.save(quizDTO), HttpStatus.OK);
 		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/question" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
+			LOGGER.error("Problem occored in api/quiz" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-	}
-	@GetMapping("/find-by-quiz/{id}")
-	public ResponseEntity<?> findByQuiz(@PathVariable Long id) {
-		try {
-			return new ResponseEntity<>(questionService.findByQuiz(id), HttpStatus.OK);
-		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/suggestion" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
-			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-
 	}
 
 }

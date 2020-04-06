@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.learning.dao.QuestionRepository;
 import com.learning.dto.QuestionDTO;
-import com.learning.dto.SuggestionDTO;
 import com.learning.model.Exam;
 import com.learning.model.Question;
 import com.learning.model.Quiz;
@@ -114,7 +113,7 @@ public class QuestionServiceImpl implements QuestionService {
 		Td td = question.getTd();
 		Exam exam = question.getExam();
 		Quiz quiz = question.getQuiz();
-		List<Suggestion> suggestion=question.getSuggestions();
+		List<Suggestion> suggestion = question.getSuggestions();
 		if (td != null) {
 			questionDTO.setTd(tdService.convertModelToDTO(td));
 		}
@@ -124,7 +123,7 @@ public class QuestionServiceImpl implements QuestionService {
 		if (exam != null) {
 			questionDTO.setExam(examService.convertModelToDTO(exam));
 		}
-		if(suggestion!=null) {
+		if (suggestion != null) {
 			questionDTO.setSuggestions(suggestionService.convertEntitiesToDtos(suggestion));
 		}
 		questionDTO.setCreatedAt(question.getCreatedAt());
@@ -161,6 +160,21 @@ public class QuestionServiceImpl implements QuestionService {
 			list.add(convertDTOtoModel(questionDTO));
 		}
 		return list;
+	}
+
+	@Override
+	public void saveQuestionsByQuiz(List<QuestionDTO> questions, Quiz quiz) {
+		for (QuestionDTO questionDTO : questions) {
+			Question question = convertDTOtoModel(questionDTO);
+			question.setQuiz(quiz);
+			questionRepository.save(question);
+		}
+
+	}
+
+	@Override
+	public List<QuestionDTO> findByQuiz(Long quizId) {
+		return convertEntitiesToDtos(questionRepository.findByQuiz(quizId));
 	}
 
 }

@@ -91,6 +91,7 @@ public class CourServiceImpl implements CourService {
 			courDTO.setModule(moduleService.convertModelToDTO(cour.getModule()));
 
 		}
+		
 
 		courDTO.setCreatedAt(cour.getCreatedAt());
 		courDTO.setUpdatedAt(cour.getUpdatedAt());

@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 import com.learning.dao.QuizRepository;
 import com.learning.dto.QuizDTO;
 import com.learning.model.Cour;
+import com.learning.model.Question;
 import com.learning.model.Quiz;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.CourService;
+import com.learning.service.QuestionService;
 import com.learning.service.QuizService;
 
 @Service
@@ -24,11 +26,16 @@ public class QuizServiceImpl implements QuizService {
 	private QuizRepository quizRepository;
 	@Autowired
 	private CourService courService;
+	@Autowired
+	private QuestionService questionService;
 
 	@Override
 	public QuizDTO save(QuizDTO quizDTO) {
 		Quiz quiz = convertDTOtoModel(quizDTO);
 		quiz = quizRepository.save(quiz);
+		if (quizDTO.getQuestions() != null) {
+			questionService.saveQuestionsByQuiz(quizDTO.getQuestions(), quiz);
+		}
 		return convertModelToDTO(quiz);
 	}
 
@@ -55,12 +62,14 @@ public class QuizServiceImpl implements QuizService {
 		int page = demande.getPage();
 		int size = demande.getSize();
 		Page<Quiz> pageQuiz = null;
+		String name = quiz.getName();
+		Long idCour = quiz.getCour() != null ? quiz.getCour().getId() : null;
 
-		pageQuiz = quizRepository.findByNameAndCour(quiz.getName(), quiz.getCour().getId(), PageRequest.of(page, size));
+		pageQuiz = idCour != null ? quizRepository.findByNameAndCour(name, idCour, PageRequest.of(page, size))
+				: quizRepository.findByName(name, PageRequest.of(page, size));
 
 		List<QuizDTO> list = convertEntitiesToDtos(pageQuiz.getContent());
 		Long totalElement = pageQuiz.getTotalElements();
-
 		return new PartialList<QuizDTO>(totalElement, list);
 	}
 
@@ -81,11 +90,11 @@ public class QuizServiceImpl implements QuizService {
 		quizDTO.setId(quiz.getId());
 		quizDTO.setName(quiz.getName());
 		Cour cour = quiz.getCour();
-	
 		if (cour != null) {
 			quizDTO.setCour(courService.convertModelToDTO(cour));
 		}
 		
+
 		quizDTO.setCreatedAt(quiz.getCreatedAt());
 		quizDTO.setUpdatedAt(quiz.getUpdatedAt());
 		return quizDTO;
