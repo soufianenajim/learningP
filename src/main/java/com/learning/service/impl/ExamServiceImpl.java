@@ -33,8 +33,8 @@ public class ExamServiceImpl implements ExamService {
 	public ExamDTO save(ExamDTO examDTO) {
 		Exam exam = convertDTOtoModel(examDTO);
 		exam = examRepository.save(exam);
-		if (examDTO.getQuestions()!=null) {
-           questionService.saveQuestionsByExam(examDTO.getQuestions(),exam);  
+		if (examDTO.getQuestions() != null) {
+			questionService.saveQuestionsByExam(examDTO.getQuestions(), exam);
 		}
 		return convertModelToDTO(exam);
 	}
@@ -53,6 +53,7 @@ public class ExamServiceImpl implements ExamService {
 	@Override
 	public void delete(Exam exam) {
 		examRepository.delete(exam);
+
 	}
 
 	@Override
@@ -109,6 +110,7 @@ public class ExamServiceImpl implements ExamService {
 	@Override
 	public void deleteById(Long id) {
 		examRepository.deleteById(id);
+		questionService.detachExam(id);
 
 	}
 

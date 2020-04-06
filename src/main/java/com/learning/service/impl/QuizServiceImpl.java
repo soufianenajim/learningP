@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.learning.dao.QuizRepository;
 import com.learning.dto.QuizDTO;
 import com.learning.model.Cour;
-import com.learning.model.Question;
 import com.learning.model.Quiz;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
@@ -109,6 +108,7 @@ public class QuizServiceImpl implements QuizService {
 	@Override
 	public void deleteById(Long id) {
 		quizRepository.deleteById(id);
+		questionService.detachQuiz(id);
 
 	}
 

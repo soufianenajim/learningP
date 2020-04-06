@@ -164,6 +164,7 @@ public class QuestionServiceImpl implements QuestionService {
 
 	@Override
 	public void saveQuestionsByQuiz(List<QuestionDTO> questions, Quiz quiz) {
+		 detachQuiz(quiz.getId());
 		for (QuestionDTO questionDTO : questions) {
 			Question question = convertDTOtoModel(questionDTO);
 			question.setQuiz(quiz);
@@ -179,6 +180,7 @@ public class QuestionServiceImpl implements QuestionService {
 
 	@Override
 	public void saveQuestionsByExam(List<QuestionDTO> questions, Exam exam) {
+		detachExam(exam.getId());
 		for (QuestionDTO questionDTO : questions) {
 			Question question = convertDTOtoModel(questionDTO);
 			question.setExam(exam);
@@ -190,6 +192,17 @@ public class QuestionServiceImpl implements QuestionService {
 	@Override
 	public List<QuestionDTO> findByExam(Long examId) {
 		return convertEntitiesToDtos(questionRepository.findByExam(examId));
+	}
+
+	@Override
+	public void detachExam(Long examId) {
+		questionRepository.detacheExam(examId);
+		
+	}
+	@Override
+	public void detachQuiz(Long quizId) {
+		questionRepository.detacheQuiz(quizId);
+		
 	}
 
 }
