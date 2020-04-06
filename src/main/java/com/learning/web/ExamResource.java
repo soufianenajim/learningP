@@ -22,13 +22,13 @@ import com.learning.service.ExamService;
 @RestController
 @RequestMapping("/exam")
 public class ExamResource {
-	
+
 	private static Logger LOGGER = LogManager.getLogger("ExamResource");
 	@Autowired
 	ExamService examService;
 
 	@PostMapping(ConstantBase.CRUD_REST_FIND_BY_CRITERE)
-	public ResponseEntity<?> findByCriteres(Demande<ExamDTO> demande) {
+	public ResponseEntity<?> findByCriteres(@RequestBody Demande<ExamDTO> demande) {
 		try {
 			return new ResponseEntity<>(examService.findByCriteres(demande), HttpStatus.OK);
 		} catch (Exception e) {
@@ -69,7 +69,5 @@ public class ExamResource {
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	
 
 }

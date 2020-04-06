@@ -15,4 +15,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
 	@Query("SELECT q FROM Question q WHERE q.quiz.id=?1")
 	List<Question> findByQuiz(Long quizId);
+	
+	@Query("SELECT q FROM Question q WHERE q.exam.id=?1")
+	List<Question> findByExam(Long examId);
 }

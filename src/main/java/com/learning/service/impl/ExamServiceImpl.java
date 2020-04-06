@@ -17,6 +17,7 @@ import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.ExamService;
 import com.learning.service.ModuleService;
+import com.learning.service.QuestionService;
 
 @Service
 public class ExamServiceImpl implements ExamService {
@@ -25,11 +26,16 @@ public class ExamServiceImpl implements ExamService {
 	private ModuleService moduleService;
 	@Autowired
 	private ExamRepository examRepository;
+	@Autowired
+	private QuestionService questionService;
 
 	@Override
 	public ExamDTO save(ExamDTO examDTO) {
 		Exam exam = convertDTOtoModel(examDTO);
 		exam = examRepository.save(exam);
+		if (examDTO.getQuestions()!=null) {
+           questionService.saveQuestionsByExam(examDTO.getQuestions(),exam);  
+		}
 		return convertModelToDTO(exam);
 	}
 
@@ -55,12 +61,17 @@ public class ExamServiceImpl implements ExamService {
 		ExamDTO exam = demande.getModel();
 		int page = demande.getPage();
 		int size = demande.getSize();
-		Page<Exam> pageExam = examRepository.findByName(exam.getName(), PageRequest.of(page, size));
+		Page<Exam> pageExam = null;
+		String name = exam.getName();
+		Long idModule = exam.getModule() != null ? exam.getModule().getId() : null;
+
+		pageExam = idModule != null ? examRepository.findByNameAndModule(name, idModule, PageRequest.of(page, size))
+				: examRepository.findByName(name, PageRequest.of(page, size));
 
 		List<ExamDTO> list = convertEntitiesToDtos(pageExam.getContent());
 		Long totalElement = pageExam.getTotalElements();
-
 		return new PartialList<ExamDTO>(totalElement, list);
+
 	}
 
 	@Override

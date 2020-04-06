@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.learning.dao.UserRepository;
 import com.learning.dto.UserDTO;
-import com.learning.model.Td;
 import com.learning.model.User;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;

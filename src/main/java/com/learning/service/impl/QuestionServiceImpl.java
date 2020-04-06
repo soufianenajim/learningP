@@ -177,4 +177,19 @@ public class QuestionServiceImpl implements QuestionService {
 		return convertEntitiesToDtos(questionRepository.findByQuiz(quizId));
 	}
 
+	@Override
+	public void saveQuestionsByExam(List<QuestionDTO> questions, Exam exam) {
+		for (QuestionDTO questionDTO : questions) {
+			Question question = convertDTOtoModel(questionDTO);
+			question.setExam(exam);
+			questionRepository.save(question);
+		}
+		
+	}
+
+	@Override
+	public List<QuestionDTO> findByExam(Long examId) {
+		return convertEntitiesToDtos(questionRepository.findByExam(examId));
+	}
+
 }
