@@ -61,7 +61,7 @@ public class ParagrapheServiceImpl implements ParagrapheService {
 				: paragrapheRepository.findByName(name, PageRequest.of(page, size));
 
 		List<ParagrapheDTO> list = convertEntitiesToDtos(pageParagraphe.getContent());
-		Long totalElement = pageParagraphe.getTotalElements();
+		Long totalElement = pageParagraphe.getTotalElements(); // Nbr des elements récupérer par la recherche
 
 		return new PartialList<ParagrapheDTO>(totalElement, list);
 	}

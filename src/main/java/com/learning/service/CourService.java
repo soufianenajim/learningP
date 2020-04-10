@@ -8,4 +8,5 @@ import com.learning.model.Cour;
 public interface CourService extends CrudService<Cour, CourDTO> {
 	Cour findEnitityById(Long id);
 	List<CourDTO> findAll();
+	
 }

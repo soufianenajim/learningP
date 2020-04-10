@@ -2,19 +2,21 @@ package com.learning.dto;
 
 import java.util.List;
 
-public class ModuleDTO extends HistorizedDTO{
-	
+public class ModuleDTO extends HistorizedDTO {
+
 	private String name;
 
-	
 	private UserDTO user;
 
+	private LevelDTO level;
+
+
+	private BranchDTO branch;
 	
 	private List<CourDTO> cours;
-	
-	
+
 	private List<ExamDTO> exams;
-	
+
 	public ModuleDTO() {
 		super();
 	}
@@ -31,7 +33,6 @@ public class ModuleDTO extends HistorizedDTO{
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
 
 	public String getName() {
 		return name;
@@ -48,8 +49,6 @@ public class ModuleDTO extends HistorizedDTO{
 	public void setUser(UserDTO user) {
 		this.user = user;
 	}
-	
-	
 
 	public List<CourDTO> getCours() {
 		return cours;
@@ -58,7 +57,6 @@ public class ModuleDTO extends HistorizedDTO{
 	public void setCours(List<CourDTO> cours) {
 		this.cours = cours;
 	}
-	
 
 	public List<ExamDTO> getExams() {
 		return exams;
@@ -68,5 +66,21 @@ public class ModuleDTO extends HistorizedDTO{
 		this.exams = exams;
 	}
 
+	public LevelDTO getLevel() {
+		return level;
+	}
+
+	public void setLevel(LevelDTO level) {
+		this.level = level;
+	}
+
+	public BranchDTO getBranch() {
+		return branch;
+	}
+
+	public void setBranch(BranchDTO branch) {
+		this.branch = branch;
+	}
+	
 
 }

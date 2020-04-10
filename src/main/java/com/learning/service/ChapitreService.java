@@ -7,5 +7,7 @@ import com.learning.model.Chapitre;
 
 public interface ChapitreService extends CrudService<Chapitre, ChapitreDTO> {
 	List<ChapitreDTO> findAll();
+	
+	
 
 }

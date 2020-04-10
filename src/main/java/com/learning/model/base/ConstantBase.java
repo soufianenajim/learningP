@@ -24,4 +24,5 @@ public final class ConstantBase {
 	//Server done success
 	public final static String DONE = "DONE";
 	
+	
 }

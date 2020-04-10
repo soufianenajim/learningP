@@ -16,6 +16,7 @@ import com.learning.model.Td;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.CourService;
+import com.learning.service.QuestionService;
 import com.learning.service.TdService;
 
 @Service
@@ -25,16 +26,17 @@ public class TdServiceImpl implements TdService {
 	private TdRepository tdRepository;
 	@Autowired
 	private CourService courService;
+	
+	@Autowired
+	private QuestionService questionService;
 
 	@Override
 	public TdDTO save(TdDTO tdDTO) {
 		Td td = convertDTOtoModel(tdDTO);
-		if (td.getCour().getId() != null) {
-			Cour cour = courService.findEnitityById(td.getCour().getId());
-			if (cour != null)
-				td.setCour(cour);
+		td = tdRepository.save(td);
+		if (tdDTO.getQuestions() != null) {
+			questionService.saveQuestionsByTd(tdDTO.getQuestions(), td);
 		}
-		td = tdRepository.saveAndFlush(td);
 		return convertModelToDTO(td);
 	}
 

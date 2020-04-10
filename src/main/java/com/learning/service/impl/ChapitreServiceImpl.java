@@ -23,6 +23,7 @@ public class ChapitreServiceImpl implements ChapitreService {
 
 	@Autowired
 	private ChapitreRepository chapitreRepository;
+	
 	@Autowired
 	private CourService courService;
 
@@ -33,6 +34,7 @@ public class ChapitreServiceImpl implements ChapitreService {
 		chapitre = chapitreRepository.save(chapitre);
 		return convertModelToDTO(chapitre);
 	}
+	
 
 	@Override
 	public ChapitreDTO findById(long idOut) {

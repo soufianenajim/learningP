@@ -21,6 +21,9 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
 	@Query("SELECT q FROM Question q WHERE q.exam.id=?1")
 	List<Question> findByExam(Long examId);
+	
+	@Query("SELECT q FROM Question q WHERE q.td.id=?1")
+	List<Question> findByTd(Long tdId);
 
 	@Modifying
 	@Transactional
@@ -31,4 +34,9 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 	@Transactional
 	@Query("update Question q set q.quiz.id=null where q.quiz.id=?1 ")
 	void detacheQuiz(Long examId);
+	
+	@Modifying
+	@Transactional
+	@Query("update Question q set q.td.id=null where q.td.id=?1 ")
+	void detacheTd(Long tdId);
 }

@@ -2,7 +2,7 @@ package com.learning.dto;
 
 import java.util.Date;
 
-public class HistorizedDTO {
+public abstract class HistorizedDTO {
 	
 	protected Long id;
 

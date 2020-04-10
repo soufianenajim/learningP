@@ -205,4 +205,28 @@ public class QuestionServiceImpl implements QuestionService {
 		
 	}
 
+	@Override
+	public List<QuestionDTO> findByTd(Long tdId) {
+		
+		return convertEntitiesToDtos(questionRepository.findByTd(tdId));
+	}
+
+	@Override
+	public void saveQuestionsByTd(List<QuestionDTO> questions, Td td) {
+		
+		detachTd(td.getId());
+		for (QuestionDTO questionDTO : questions) {
+			Question question = convertDTOtoModel(questionDTO);
+			question.setTd(td);
+			questionRepository.save(question);
+		}
+		
+	}
+
+	@Override
+	public void detachTd(Long tdId) {
+		questionRepository.detacheTd(tdId);
+		
+	}
+
 }

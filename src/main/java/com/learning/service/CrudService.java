@@ -26,5 +26,6 @@ public interface CrudService<Model, ModelDTO> {
 	List<ModelDTO> convertEntitiesToDtos(List<Model> list);
 
 	List<Model> convertDtosToEntities(List<ModelDTO> list);
+	
 
 }
