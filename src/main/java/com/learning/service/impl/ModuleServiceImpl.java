@@ -11,10 +11,14 @@ import org.springframework.stereotype.Service;
 
 import com.learning.dao.ModuleRepository;
 import com.learning.dto.ModuleDTO;
+import com.learning.model.Branch;
+import com.learning.model.Level;
 import com.learning.model.Module;
 import com.learning.model.User;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
+import com.learning.service.BranchService;
+import com.learning.service.LevelService;
 import com.learning.service.ModuleService;
 import com.learning.service.UserService;
 
@@ -25,6 +29,10 @@ public class ModuleServiceImpl implements ModuleService {
 	private ModuleRepository moduleRepository;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private BranchService branchService;
+	@Autowired
+	private LevelService levelService;
 
 	@Override
 	public ModuleDTO save(ModuleDTO moduleDTO) {
@@ -77,6 +85,13 @@ public class ModuleServiceImpl implements ModuleService {
 		if (moduleDTO.getUser() != null) {
 			module.setUser(userService.convertDTOtoModel(moduleDTO.getUser()));
 		}
+
+		if (moduleDTO.getBranch() != null) {
+			module.setBranch(branchService.convertDTOtoModel(moduleDTO.getBranch()));
+		}
+		if (moduleDTO.getLevel() != null) {
+			module.setLevel(levelService.convertDTOtoModel(moduleDTO.getLevel()));
+		}
 		return module;
 	}
 
@@ -86,11 +101,18 @@ public class ModuleServiceImpl implements ModuleService {
 		moduleDTO.setId(module.getId());
 		moduleDTO.setName(module.getName());
 		User user = module.getUser();
+		Branch branch = module.getBranch();
+		Level level = module.getLevel();
 		if (user != null) {
 			moduleDTO.setUser(userService.convertModelToDTO(module.getUser()));
 
 		}
-
+		if (branch != null) {
+			moduleDTO.setBranch(branchService.convertModelToDTO(branch));
+		}
+		if (level != null) {
+			moduleDTO.setLevel(levelService.convertModelToDTO(level));
+		}
 		moduleDTO.setCreatedAt(module.getCreatedAt());
 		moduleDTO.setUpdatedAt(module.getUpdatedAt());
 		return moduleDTO;
