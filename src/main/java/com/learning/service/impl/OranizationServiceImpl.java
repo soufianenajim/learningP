@@ -11,9 +11,13 @@ import org.springframework.stereotype.Service;
 
 import com.learning.dao.OrganizationRepository;
 import com.learning.dto.OrganizationDTO;
+import com.learning.model.Branch;
+import com.learning.model.Level;
 import com.learning.model.Organization;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
+import com.learning.service.BranchService;
+import com.learning.service.LevelService;
 import com.learning.service.OrganizationService;
 
 @Service
@@ -21,17 +25,24 @@ public class OranizationServiceImpl implements OrganizationService {
 
 	@Autowired
 	private OrganizationRepository organizationRepository;
-	
-	
+	@Autowired
+	private BranchService branchService;
+	@Autowired
+	private LevelService levelService;
 
 	// save or update
 	@Override
 	public OrganizationDTO save(OrganizationDTO organizationDTO) {
 		Organization organization = convertDTOtoModel(organizationDTO);
 		organization = organizationRepository.save(organization);
+		if (organizationDTO.getBranchs() != null) {
+			branchService.saveBranchsByOrganization(organizationDTO.getBranchs(), organization);
+		}
+		if (organizationDTO.getLevels() != null) {
+			levelService.saveLevelsByOrganization(organizationDTO.getLevels(), organization);
+		}
 		return convertModelToDTO(organization);
 	}
-	
 
 	@Override
 	public OrganizationDTO findById(long idOut) {
@@ -58,7 +69,7 @@ public class OranizationServiceImpl implements OrganizationService {
 		Page<Organization> pageOrganization = null;
 		String name = organization.getName();
 
-		pageOrganization= organizationRepository.findByName(name, PageRequest.of(page, size));
+		pageOrganization = organizationRepository.findByName(name, PageRequest.of(page, size));
 
 		List<OrganizationDTO> list = convertEntitiesToDtos(pageOrganization.getContent());
 		Long totalElement = pageOrganization.getTotalElements();
@@ -70,6 +81,7 @@ public class OranizationServiceImpl implements OrganizationService {
 		Organization organization = new Organization();
 		organization.setId(organizationDTO.getId());
 		organization.setName(organizationDTO.getName());
+
 		return organization;
 	}
 
@@ -78,7 +90,14 @@ public class OranizationServiceImpl implements OrganizationService {
 		OrganizationDTO organizationDTO = new OrganizationDTO();
 		organizationDTO.setId(organization.getId());
 		organizationDTO.setName(organization.getName());
-
+		List<Branch> branchs = organization.getBranchs();
+		List<Level> levels = organization.getLevels();
+		if (branchs != null) {
+			organizationDTO.setBranchs(branchService.convertEntitiesToDtosWithOutOrganization(branchs));
+		}
+		if (levels != null) {
+			organizationDTO.setLevels(levelService.convertEntitiesToDtosWithOutOrganization(levels));
+		}
 		organizationDTO.setCreatedAt(organization.getCreatedAt());
 		organizationDTO.setUpdatedAt(organization.getUpdatedAt());
 		return organizationDTO;
@@ -93,7 +112,8 @@ public class OranizationServiceImpl implements OrganizationService {
 	@Override
 	public void deleteById(Long id) {
 		organizationRepository.deleteById(id);
-
+		branchService.deleteByOrganizationId(id);
+		levelService.deleteByOrganizationId(id);
 	}
 
 	@Override

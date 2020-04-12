@@ -1,7 +1,12 @@
 package com.learning.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -12,7 +17,29 @@ public class Organization extends  Historized {
 	@Column(name = "name", length = 100)
 	private String name;
 
+	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	private List<Branch> branchs;
 	
+	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	private List<Level> levels;
+	
+	
+
+	public List<Branch> getBranchs() {
+		return branchs;
+	}
+
+	public void setBranchs(List<Branch> branchs) {
+		this.branchs = branchs;
+	}
+
+	public List<Level> getLevels() {
+		return levels;
+	}
+
+	public void setLevels(List<Level> levels) {
+		this.levels = levels;
+	}
 
 	public String getName() {
 		return name;

@@ -127,12 +127,12 @@ public class SuggestionServiceImpl implements SuggestionService {
 
 	@Override
 	public void saveSuggestionsByQuestion(List<SuggestionDTO> suggestions, Question question) {
-	for (SuggestionDTO suggestionDTO : suggestions) {
-		Suggestion suggestion=convertDTOtoModel(suggestionDTO);
-		suggestion.setQuestion(question);
-		suggestionRepository.save(suggestion);
-		
-	}
+		for (SuggestionDTO suggestionDTO : suggestions) {
+			Suggestion suggestion = convertDTOtoModel(suggestionDTO);
+			suggestion.setQuestion(question);
+			suggestionRepository.save(suggestion);
+
+		}
 		
 	}
 

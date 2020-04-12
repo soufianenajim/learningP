@@ -11,6 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.learning.dao.LevelRepository;
 import com.learning.dto.LevelDTO;
+import com.learning.dto.LevelDTO;
+import com.learning.dto.LevelDTO;
+import com.learning.model.Level;
+import com.learning.model.Level;
 import com.learning.model.Level;
 import com.learning.model.Organization;
 import com.learning.model.base.Demande;
@@ -135,4 +139,56 @@ public class LevelServiceImpl implements LevelService {
 		return convertEntitiesToDtos(list);
 	}
 
+	@Override
+	public Level convertDTOtoModelWithOutOrganization(LevelDTO levelDTO) {
+		Level level = new Level();
+		level.setId(levelDTO.getId());
+		level.setName(levelDTO.getName());
+		return level;
+	}
+
+	@Override
+	public LevelDTO convertModelToDTOWithOutOrganization(Level level) {
+		LevelDTO levelDTO = new LevelDTO();
+		levelDTO.setId(level.getId());
+		levelDTO.setName(level.getName());
+		return levelDTO;
+	}
+
+	@Override
+	public List<LevelDTO> convertEntitiesToDtosWithOutOrganization(List<Level> list) {
+		List<LevelDTO> levels = new ArrayList<>();
+		for (Level level : list) {
+			levels.add(convertModelToDTOWithOutOrganization(level));
+		}
+		return levels;
+	}
+
+	@Override
+	public List<Level> convertDtosToEntitiesWithOutOrganization(List<LevelDTO> list) {
+		List<Level> levels = new ArrayList<>();
+		for (LevelDTO level : list) {
+			levels.add(convertDTOtoModelWithOutOrganization(level));
+		}
+		return levels;
+	}
+
+	@Override
+	public void saveLevelsByOrganization(List<LevelDTO> levels, Organization organization) {
+		for (LevelDTO levelDTO : levels) {
+			Level level = convertDTOtoModel(levelDTO);
+			level.setOrganization(organization);
+			levelRepository.save(level);
+
+		}
+
+	}
+
+	@Override
+	public void deleteByOrganizationId(Long id) {
+	levelRepository.deleteByOrganisation(id);
+		
+	}
+
+	
 }

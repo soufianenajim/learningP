@@ -20,7 +20,7 @@ public class Suggestion extends Historized {
 
 	@Column(name = "correct", nullable = false, columnDefinition = "TINYINT(1)")
 	private boolean correct;
-	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "question_id")
 	private Question question;
 

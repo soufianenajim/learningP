@@ -23,7 +23,7 @@ public class BranchServiceImpl implements BranchService {
 
 	@Autowired
 	private BranchRepository branchRepository;
-	
+
 	@Autowired
 	private OrganizationService courService;
 
@@ -34,7 +34,6 @@ public class BranchServiceImpl implements BranchService {
 		branch = branchRepository.save(branch);
 		return convertModelToDTO(branch);
 	}
-	
 
 	@Override
 	public BranchDTO findById(long idOut) {
@@ -62,7 +61,8 @@ public class BranchServiceImpl implements BranchService {
 		String name = branch.getName();
 		Long idOrganization = branch.getOrganization() != null ? branch.getOrganization().getId() : null;
 
-		pageBranch = idOrganization != null ? branchRepository.findByNameAndOrganization(name, idOrganization, PageRequest.of(page, size))
+		pageBranch = idOrganization != null
+				? branchRepository.findByNameAndOrganization(name, idOrganization, PageRequest.of(page, size))
 				: branchRepository.findByName(name, PageRequest.of(page, size));
 
 		List<BranchDTO> list = convertEntitiesToDtos(pageBranch.getContent());
@@ -90,9 +90,9 @@ public class BranchServiceImpl implements BranchService {
 		Organization cour = branch.getOrganization();
 		if (cour != null) {
 			branchDTO.setOrganization(courService.convertModelToDTO(branch.getOrganization()));
-			
+
 		}
-		
+
 		branchDTO.setCreatedAt(branch.getCreatedAt());
 		branchDTO.setUpdatedAt(branch.getUpdatedAt());
 		return branchDTO;
@@ -134,5 +134,57 @@ public class BranchServiceImpl implements BranchService {
 		List<Branch> list = branchRepository.findAll();
 		return convertEntitiesToDtos(list);
 	}
+
+	@Override
+	public Branch convertDTOtoModelWithOutOrganization(BranchDTO branchDTO) {
+		Branch branch = new Branch();
+		branch.setId(branchDTO.getId());
+		branch.setName(branchDTO.getName());
+		return branch;
+	}
+
+	@Override
+	public BranchDTO convertModelToDTOWithOutOrganization(Branch branch) {
+		BranchDTO branchDTO = new BranchDTO();
+		branchDTO.setId(branch.getId());
+		branchDTO.setName(branch.getName());
+		return branchDTO;
+	}
+
+	@Override
+	public List<BranchDTO> convertEntitiesToDtosWithOutOrganization(List<Branch> list) {
+		List<BranchDTO> branchs = new ArrayList<>();
+		for (Branch branch : list) {
+			branchs.add(convertModelToDTOWithOutOrganization(branch));
+		}
+		return branchs;
+	}
+
+	@Override
+	public List<Branch> convertDtosToEntitiesWithOutOrganization(List<BranchDTO> list) {
+		List<Branch> branchs = new ArrayList<>();
+		for (BranchDTO branch : list) {
+			branchs.add(convertDTOtoModelWithOutOrganization(branch));
+		}
+		return branchs;
+	}
+
+	@Override
+	public void saveBranchsByOrganization(List<BranchDTO> branchs, Organization organization) {
+		for (BranchDTO branchDTO : branchs) {
+			Branch branch = convertDTOtoModel(branchDTO);
+			branch.setOrganization(organization);
+			branchRepository.save(branch);
+
+		}
+
+	}
+
+	@Override
+	public void deleteByOrganizationId(Long id) {
+	branchRepository.deleteByOrganisation(id);
+		
+	}
+
 
 }
