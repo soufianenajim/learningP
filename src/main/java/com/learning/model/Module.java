@@ -21,8 +21,8 @@ public class Module extends Historized {
 	private String name;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private User user;
+	@JoinColumn(name = "professor_id")
+	private User professor;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "level_id")
@@ -34,7 +34,7 @@ public class Module extends Historized {
 
 	
 
-	@OneToMany(mappedBy = "module", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "module", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<Cour> cours;
 	
 	@OneToMany(mappedBy = "module", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -67,11 +67,11 @@ public class Module extends Historized {
 	}
 
 	public User getUser() {
-		return user;
+		return professor;
 	}
 
 	public void setUser(User user) {
-		this.user = user;
+		this.professor = user;
 	}
 	
 	
@@ -112,7 +112,7 @@ public class Module extends Historized {
 
 	@Override
 	public String toString() {
-		return "Module [name=" + name + ", user=" + user + ", level=" + level + ", branch=" + branch + ", cours="
+		return "Module [name=" + name + ", user=" + professor + ", level=" + level + ", branch=" + branch + ", cours="
 				+ cours + ", exams=" + exams + "]";
 	}
 

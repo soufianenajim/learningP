@@ -20,30 +20,28 @@ public class Question extends Historized {
 
 	@Column(name = "name", length = 100)
 	private String name;
-	
+
 	@Column(name = "code", length = 100)
 	private String code;
-	
+
 	@Lob
 	private String correctComment;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
+
+	@ManyToOne(fetch=FetchType.LAZY,cascade = {CascadeType.DETACH})
 	@JoinColumn(name = "td_id")
 	private Td td;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.DETACH})
 	@JoinColumn(name = "quiz_id")
 	private Quiz quiz;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
+
+	@ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.DETACH})
 	@JoinColumn(name = "exam_id")
 	private Exam exam;
-	
-	@OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+
+	@OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
 	private List<Suggestion> suggestions;
 
-
-	
 	public Question() {
 		super();
 	}
@@ -60,7 +58,6 @@ public class Question extends Historized {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
 
 	public String getName() {
 		return name;
@@ -109,8 +106,6 @@ public class Question extends Historized {
 	public void setExam(Exam exam) {
 		this.exam = exam;
 	}
-	
-	
 
 	public List<Suggestion> getSuggestions() {
 		return suggestions;
@@ -119,17 +114,11 @@ public class Question extends Historized {
 	public void setSuggestions(List<Suggestion> suggestions) {
 		this.suggestions = suggestions;
 	}
-	
-	
 
 	@Override
 	public String toString() {
 		return "Question [name=" + name + ", code=" + code + ", correctComment=" + correctComment + ", td=" + td
 				+ ", quiz=" + quiz + ", exam=" + exam + "]";
 	}
-
-
-	
-
 
 }

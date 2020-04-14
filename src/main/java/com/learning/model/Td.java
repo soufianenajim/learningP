@@ -20,12 +20,13 @@ public class Td extends Historized {
 	@Column(name = "name", length = 100)
 	private String name;
 
-	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cour_id")
 	private Cour cour;
-	
-	@OneToMany(mappedBy = "td", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+
+	@OneToMany(mappedBy = "td", fetch = FetchType.LAZY, cascade = CascadeType.DETACH )
 	private List<Question> questions;
+
 	public Td() {
 		super();
 	}
@@ -42,8 +43,6 @@ public class Td extends Historized {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	
 
 	public String getName() {
 		return name;
@@ -52,8 +51,6 @@ public class Td extends Historized {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	
 
 	public Cour getCour() {
 		return cour;
@@ -75,8 +72,5 @@ public class Td extends Historized {
 	public String toString() {
 		return "Td [name=" + name + ", cour=" + cour + "]";
 	}
-
-	
-	
 
 }

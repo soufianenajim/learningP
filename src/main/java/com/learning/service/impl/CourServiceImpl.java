@@ -74,10 +74,13 @@ public class CourServiceImpl implements CourService {
 		Cour cour = new Cour();
 		cour.setId(courDTO.getId());
 		cour.setName(courDTO.getName());
-
+		cour.setIntroduction(courDTO.getIntroduction());
+		cour.setResume(courDTO.getResume());
+		cour.setConclusion(courDTO.getConclusion());
 		if (courDTO.getModule() != null) {
 			cour.setModule(moduleService.convertDTOtoModel(courDTO.getModule()));
 		}
+
 		return cour;
 	}
 
@@ -86,12 +89,14 @@ public class CourServiceImpl implements CourService {
 		CourDTO courDTO = new CourDTO();
 		courDTO.setId(cour.getId());
 		courDTO.setName(cour.getName());
+		courDTO.setIntroduction(cour.getIntroduction());
+		courDTO.setResume(cour.getResume());
+		courDTO.setConclusion(cour.getConclusion());
 		Module module = cour.getModule();
 		if (module != null) {
 			courDTO.setModule(moduleService.convertModelToDTO(cour.getModule()));
 
 		}
-		
 
 		courDTO.setCreatedAt(cour.getCreatedAt());
 		courDTO.setUpdatedAt(cour.getUpdatedAt());
@@ -144,6 +149,12 @@ public class CourServiceImpl implements CourService {
 	public List<CourDTO> findAll() {
 		List<Cour> cours = courRepository.findAll();
 		return convertEntitiesToDtos(cours);
+	}
+
+	@Override
+	public void deleteByModule(Long idModule) {
+		courRepository.deleteByModule(idModule);
+
 	}
 
 }

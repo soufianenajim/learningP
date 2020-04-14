@@ -9,4 +9,5 @@ public interface CourService extends CrudService<Cour, CourDTO> {
 	Cour findEnitityById(Long id);
 	List<CourDTO> findAll();
 	
+	void deleteByModule(Long idModule);
 }

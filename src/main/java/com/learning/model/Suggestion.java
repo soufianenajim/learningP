@@ -1,7 +1,6 @@
 
 package com.learning.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,7 +19,7 @@ public class Suggestion extends Historized {
 
 	@Column(name = "correct", nullable = false, columnDefinition = "TINYINT(1)")
 	private boolean correct;
-	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "question_id")
 	private Question question;
 

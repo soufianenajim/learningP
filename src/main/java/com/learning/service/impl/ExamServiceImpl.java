@@ -133,4 +133,10 @@ public class ExamServiceImpl implements ExamService {
 		return list;
 	}
 
+	@Override
+	public void deleteByModule(Long idModule) {
+		examRepository.deleteByModule(idModule);
+		
+	}
+
 }

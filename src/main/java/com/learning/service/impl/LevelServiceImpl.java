@@ -11,10 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.learning.dao.LevelRepository;
 import com.learning.dto.LevelDTO;
-import com.learning.dto.LevelDTO;
-import com.learning.dto.LevelDTO;
-import com.learning.model.Level;
-import com.learning.model.Level;
 import com.learning.model.Level;
 import com.learning.model.Organization;
 import com.learning.model.base.Demande;

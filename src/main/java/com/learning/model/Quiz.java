@@ -20,10 +20,11 @@ public class Quiz extends Historized {
 	@Column(name = "name", length = 100)
 	private String name;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY,cascade = { CascadeType.DETACH })
 	@JoinColumn(name = "cour_id")
 	private Cour cour;
-	@OneToMany(mappedBy = "quiz", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	
+	@OneToMany(mappedBy = "quiz", fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
 	private List<Question> questions;
 
 	public Quiz() {

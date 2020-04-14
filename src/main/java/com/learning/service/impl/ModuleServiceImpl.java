@@ -33,6 +33,7 @@ public class ModuleServiceImpl implements ModuleService {
 	private BranchService branchService;
 	@Autowired
 	private LevelService levelService;
+	
 
 	@Override
 	public ModuleDTO save(ModuleDTO moduleDTO) {
@@ -126,10 +127,8 @@ public class ModuleServiceImpl implements ModuleService {
 
 	@Override
 	public void deleteById(Long id) {
-
-		boolean exist = moduleRepository.existsById(id);
-		if (exist)
-			moduleRepository.deleteById(id);
+		moduleRepository.deleteById(id);
+		
 
 	}
 

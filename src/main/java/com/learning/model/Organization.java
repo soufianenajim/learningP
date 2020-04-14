@@ -17,10 +17,10 @@ public class Organization extends  Historized {
 	@Column(name = "name", length = 100)
 	private String name;
 
-	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
 	private List<Branch> branchs;
 	
-	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
 	private List<Level> levels;
 	
 	
