@@ -10,4 +10,13 @@ public interface CourService extends CrudService<Cour, CourDTO> {
 	List<CourDTO> findAll();
 	
 	void deleteByModule(Long idModule);
+	
+
+	Cour convertDTOtoModelWithOutModule(CourDTO courDTO);
+
+	CourDTO convertModelToDTOWithOutModule(final Cour cour);
+
+	List<CourDTO> convertEntitiesToDtosWithOutModule(List<Cour> list);
+
+	List<Cour> convertDtosToEntitiesWithOutModule(List<CourDTO> list);
 }

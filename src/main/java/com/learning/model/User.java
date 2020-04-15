@@ -50,6 +50,18 @@ public class User extends Historized {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REF_ROLE")
 	private Role refRole;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "level_id")
+	private Level level;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "branch_id")
+	private Branch branch;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "organization_id")
+	private Organization organization;
 
 
      
@@ -161,6 +173,31 @@ public class User extends Historized {
 
 	public void setRefRole(Role refRole) {
 		this.refRole = refRole;
+	}
+	
+
+	public Level getLevel() {
+		return level;
+	}
+
+	public void setLevel(Level level) {
+		this.level = level;
+	}
+
+	public Branch getBranch() {
+		return branch;
+	}
+
+	public void setBranch(Branch branch) {
+		this.branch = branch;
+	}
+
+	public Organization getOrganization() {
+		return organization;
+	}
+
+	public void setOrganization(Organization organization) {
+		this.organization = organization;
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.learning.dao.ModuleRepository;
 import com.learning.dto.ModuleDTO;
+import com.learning.dto.UserDTO;
 import com.learning.model.Branch;
 import com.learning.model.Level;
 import com.learning.model.Module;
@@ -20,6 +21,8 @@ import com.learning.model.base.PartialList;
 import com.learning.service.BranchService;
 import com.learning.service.LevelService;
 import com.learning.service.ModuleService;
+import com.learning.service.ProgressionCourService;
+import com.learning.service.ProgressionModuleService;
 import com.learning.service.UserService;
 
 @Service
@@ -33,12 +36,22 @@ public class ModuleServiceImpl implements ModuleService {
 	private BranchService branchService;
 	@Autowired
 	private LevelService levelService;
-	
+	@Autowired
+	private ProgressionModuleService progressionModuleService;
+	@Autowired
+	private ProgressionCourService progressionCourService;
 
 	@Override
 	public ModuleDTO save(ModuleDTO moduleDTO) {
 		Module module = convertDTOtoModel(moduleDTO);
 		module = moduleRepository.save(module);
+        //get student by level and branch 
+		List<UserDTO> students = userService.findByLevelAndBranch(moduleDTO.getLevel().getId(),
+				moduleDTO.getBranch().getId());
+		// save progressionModule with module and students  
+		progressionModuleService.saveByModuleAndStudents(module, students);
+	
+
 		return convertModelToDTO(module);
 	}
 
@@ -66,7 +79,7 @@ public class ModuleServiceImpl implements ModuleService {
 		int size = demande.getSize();
 		Page<Module> pageModule = null;
 		String name = module.getName();
-		Long idProf = module.getUser() != null ? module.getUser().getId() : null;
+		Long idProf = module.getProfessor() != null ? module.getProfessor().getId() : null;
 
 		pageModule = idProf != null ? moduleRepository.findByNameAndUser(name, idProf, PageRequest.of(page, size))
 				: moduleRepository.findByName(name, PageRequest.of(page, size));
@@ -83,8 +96,8 @@ public class ModuleServiceImpl implements ModuleService {
 		module.setId(moduleDTO.getId());
 		module.setName(moduleDTO.getName());
 
-		if (moduleDTO.getUser() != null) {
-			module.setUser(userService.convertDTOtoModel(moduleDTO.getUser()));
+		if (moduleDTO.getProfessor() != null) {
+			module.setProfessor(userService.convertDTOtoModel(moduleDTO.getProfessor()));
 		}
 
 		if (moduleDTO.getBranch() != null) {
@@ -101,11 +114,11 @@ public class ModuleServiceImpl implements ModuleService {
 		ModuleDTO moduleDTO = new ModuleDTO();
 		moduleDTO.setId(module.getId());
 		moduleDTO.setName(module.getName());
-		User user = module.getUser();
+		User user = module.getProfessor();
 		Branch branch = module.getBranch();
 		Level level = module.getLevel();
 		if (user != null) {
-			moduleDTO.setUser(userService.convertModelToDTO(module.getUser()));
+			moduleDTO.setProfessor(userService.convertModelToDTO(module.getProfessor()));
 
 		}
 		if (branch != null) {
@@ -128,7 +141,6 @@ public class ModuleServiceImpl implements ModuleService {
 	@Override
 	public void deleteById(Long id) {
 		moduleRepository.deleteById(id);
-		
 
 	}
 
@@ -155,6 +167,43 @@ public class ModuleServiceImpl implements ModuleService {
 	public List<ModuleDTO> findAll() {
 		List<Module> list = moduleRepository.findAll();
 		return convertEntitiesToDtos(list);
+	}
+
+	@Override
+	public Module convertDTOtoModelWithOutRelation(ModuleDTO moduleDTO) {
+		Module module = new Module();
+		module.setId(moduleDTO.getId());
+		module.setName(moduleDTO.getName());
+
+		return module;
+	}
+
+	@Override
+	public ModuleDTO convertModelToDTOWithOutRelation(Module module) {
+		ModuleDTO moduleDTO = new ModuleDTO();
+		moduleDTO.setId(module.getId());
+		moduleDTO.setName(module.getName());
+		moduleDTO.setCreatedAt(module.getCreatedAt());
+		moduleDTO.setUpdatedAt(module.getUpdatedAt());
+		return moduleDTO;
+	}
+
+	@Override
+	public List<ModuleDTO> convertEntitiesToDtosWithOutRelation(List<Module> modules) {
+		List<ModuleDTO> list = new ArrayList<ModuleDTO>();
+		for (Module module : modules) {
+			list.add(convertModelToDTOWithOutRelation(module));
+		}
+		return list;
+	}
+
+	@Override
+	public List<Module> convertDtosToEntitiesWithOutRelation(List<ModuleDTO> modulesDTO) {
+		List<Module> list = new ArrayList<Module>();
+		for (ModuleDTO moduleDTO : modulesDTO) {
+			list.add(convertDTOtoModelWithOutRelation(moduleDTO));
+		}
+		return list;
 	}
 
 }

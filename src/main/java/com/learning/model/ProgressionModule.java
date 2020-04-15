@@ -1,9 +1,17 @@
 package com.learning.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "progression_module")
 public class ProgressionModule extends Historized {
 
 	/**
@@ -18,10 +26,11 @@ public class ProgressionModule extends Historized {
 	@JoinColumn(name = "module_id")
 	private Module module;
 	private Double progressionCour;
-	private Double progressionQuiz;
 	private Double progressionExam;
 	private Double NoteFinal;
 
+	@OneToMany(mappedBy = "module", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	private List<ProgressionModule> progressionModules;
 	public ProgressionModule() {
 		super();
 		
@@ -57,13 +66,7 @@ public class ProgressionModule extends Historized {
 		this.progressionCour = progressionCour;
 	}
 
-	public Double getProgressionQuiz() {
-		return progressionQuiz;
-	}
-
-	public void setProgressionQuiz(Double progressionQuiz) {
-		this.progressionQuiz = progressionQuiz;
-	}
+	
 
 	public Double getProgressionExam() {
 		return progressionExam;

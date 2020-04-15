@@ -23,6 +23,15 @@ public class UserDTO extends HistorizedDTO {
 
 	private RoleDTO refRole;
 
+	private LevelDTO level;
+	
+
+	private BranchDTO branch;
+	
+
+	private OrganizationDTO organization;
+
+
 	public UserDTO() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -121,5 +130,30 @@ public class UserDTO extends HistorizedDTO {
 	public void setRefRole(RoleDTO refRole) {
 		this.refRole = refRole;
 	}
+
+	public LevelDTO getLevel() {
+		return level;
+	}
+
+	public void setLevel(LevelDTO level) {
+		this.level = level;
+	}
+
+	public BranchDTO getBranch() {
+		return branch;
+	}
+
+	public void setBranch(BranchDTO branch) {
+		this.branch = branch;
+	}
+
+	public OrganizationDTO getOrganization() {
+		return organization;
+	}
+
+	public void setOrganization(OrganizationDTO organization) {
+		this.organization = organization;
+	}
+	
 
 }

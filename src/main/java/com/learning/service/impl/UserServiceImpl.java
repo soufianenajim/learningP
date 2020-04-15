@@ -53,6 +53,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User convertDTOtoModel(UserDTO userDTO) {
 		User user = new User();
+		user.setId(userDTO.getId());
 		user.setFirstName(userDTO.getFirstName());
 		user.setLastName(userDTO.getLastName());
 		user.setIsOffline(false);
@@ -105,6 +106,56 @@ public class UserServiceImpl implements UserService {
 		// a modifier par finndAll By role professor
 		List<User> users = userRepository.findAll();
 		return convertEntitiesToDtos(users);
+	}
+
+	@Override
+	public User convertDTOtoModelWithOutRelation(UserDTO userDTO) {
+		User user = new User();
+		user.setId(userDTO.getId());
+		user.setFirstName(userDTO.getFirstName());
+		user.setLastName(userDTO.getLastName());
+		user.setIsOffline(false);
+
+		return user;
+	}
+
+	@Override
+	public UserDTO convertModelToDTOWithOutRelation(User user) {
+	
+		UserDTO userDTO = new UserDTO();
+		userDTO.setId(user.getId());
+		userDTO.setFirstName(user.getFirstName());
+		userDTO.setLastName(user.getLastName());
+		userDTO.setCreatedAt(user.getCreatedAt());
+		userDTO.setUpdatedAt(user.getUpdatedAt());
+
+		return userDTO;
+	}
+
+	@Override
+	public List<UserDTO> convertEntitiesToDtosWithOutRelation(List<User> list) {
+		List<UserDTO> users = new ArrayList<UserDTO>();
+
+		for (User user : list) {
+			users.add(convertModelToDTOWithOutRelation(user));
+		}
+		return users;
+	}
+
+	@Override
+	public List<User> convertDtosToEntitiesWithOutRelation(List<UserDTO> list) {
+		List<User> users = new ArrayList<User>();
+
+		for (UserDTO user : list) {
+			users.add(convertDTOtoModel(user));
+		}
+		return users;
+	}
+
+	@Override
+	public List<UserDTO> findByLevelAndBranch(Long idLevel, Long idBranch) {
+		List<User> list=userRepository.findByLevelAndBranch(idLevel, idBranch);
+		return convertEntitiesToDtosWithOutRelation(list);
 	}
 
 }

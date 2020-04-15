@@ -20,12 +20,10 @@ public class Cour extends Historized {
 
 	@Column(name = "name", length = 100)
 	private String name;
+
 	@Lob
-	private String introduction;
-	@Lob
-	private String resume;
-	@Lob
-	private String conclusion;
+	private String content;
+
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "module_id")
@@ -33,7 +31,7 @@ public class Cour extends Historized {
 
 
 	@OneToMany(mappedBy = "cour", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-	private List<Quiz> quizs;
+	private List<ProgressionCour> progressionCours;
 
 	@OneToMany(mappedBy = "cour", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<Td> tds;
@@ -73,13 +71,6 @@ public class Cour extends Historized {
 
 	
 
-	public List<Quiz> getQuizs() {
-		return quizs;
-	}
-
-	public void setQuizs(List<Quiz> quizs) {
-		this.quizs = quizs;
-	}
 
 	public List<Td> getTds() {
 		return tds;
@@ -90,35 +81,23 @@ public class Cour extends Historized {
 	}
 	
 
-	public String getIntroduction() {
-		return introduction;
+	
+
+	public String getContent() {
+		return content;
 	}
 
-	public void setIntroduction(String introduction) {
-		this.introduction = introduction;
-	}
-
-	public String getResume() {
-		return resume;
-	}
-
-	public void setResume(String resume) {
-		this.resume = resume;
-	}
-
-	public String getConclusion() {
-		return conclusion;
-	}
-
-	public void setConclusion(String conclusion) {
-		this.conclusion = conclusion;
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	@Override
 	public String toString() {
-		return "Cour [name=" + name + ", introduction=" + introduction + ", resume=" + resume + ", conclusion="
-				+ conclusion + ", module=" + module + ", quizs=" + quizs + ", tds=" + tds + "]";
+		return "Cour [name=" + name + ", content=" + content + ", module=" + module + ", tds="
+				+ tds + "]";
 	}
+
+	
 
 	
 

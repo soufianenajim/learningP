@@ -13,26 +13,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.learning.dto.NoteQuizDTO;
+import com.learning.dto.ProgressionModuleDTO;
 import com.learning.model.base.ConstantBase;
 import com.learning.model.base.Demande;
 import com.learning.security.SecurityConstants;
-import com.learning.service.NoteQuizService;
+import com.learning.service.ProgressionModuleService;
 
 @RestController
-@RequestMapping("/noteQuiz")
-public class NoteQuizResource {
+@RequestMapping("/progression-module")
+public class ProgressionModuleResource {
 
-	private static Logger LOGGER = LogManager.getLogger("NoteQuizResource");
+	private static Logger LOGGER = LogManager.getLogger("ProgressionModuleResource");
 	@Autowired
-	NoteQuizService noteQuizService;
+	ProgressionModuleService progressionModuleService;
 
 	@PostMapping(ConstantBase.CRUD_REST_FIND_BY_CRITERE)
-	public ResponseEntity<?> findByCriteres(Demande<NoteQuizDTO> demande) {
+	public ResponseEntity<?> findByCriteres(@RequestBody Demande<ProgressionModuleDTO> demande) {
 		try {
-			return new ResponseEntity<>(noteQuizService.findByCriteres(demande), HttpStatus.OK);
+			return new ResponseEntity<>(progressionModuleService.findByCriteres(demande), HttpStatus.OK);
 		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/noteQuiz" + ConstantBase.CRUD_REST_FIND_BY_CRITERE + " : {} ", e);
+			LOGGER.error("Problem occored in api/progression-module" + ConstantBase.CRUD_REST_FIND_BY_CRITERE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -40,9 +40,9 @@ public class NoteQuizResource {
 	@GetMapping(ConstantBase.CRUD_REST_FIND_BY_ID + "/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id) {
 		try {
-			return new ResponseEntity<>(noteQuizService.findById(id), HttpStatus.OK);
+			return new ResponseEntity<>(progressionModuleService.findById(id), HttpStatus.OK);
 		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/noteQuiz" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			LOGGER.error("Problem occored in api/progression-module" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
@@ -51,23 +51,24 @@ public class NoteQuizResource {
 	@DeleteMapping(ConstantBase.CRUD_REST_DELETE + "/{id}")
 	public ResponseEntity<?> deleteById(@PathVariable Long id) {
 		try {
-			noteQuizService.deleteById(id);
+			progressionModuleService.deleteById(id);
 			return new ResponseEntity<>(SecurityConstants.convertObjectToJson(ConstantBase.DONE), HttpStatus.OK);
 		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/noteQuiz" + ConstantBase.CRUD_REST_DELETE + " : {} ", e);
+			LOGGER.error("Problem occored in api/progression-module" + ConstantBase.CRUD_REST_DELETE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@PostMapping(ConstantBase.CRUD_REST_SAVE_OR_UPDATE)
-	public ResponseEntity<?> save(@RequestBody NoteQuizDTO noteQuizDTO) {
+	public ResponseEntity<?> save(@RequestBody ProgressionModuleDTO progressionModuleDTO) {
 		try {
 
-			return new ResponseEntity<>(noteQuizService.save(noteQuizDTO), HttpStatus.OK);
+			return new ResponseEntity<>(progressionModuleService.save(progressionModuleDTO), HttpStatus.OK);
 		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/noteQuiz" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
+			LOGGER.error("Problem occored in api/progression-module" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
+	
 }

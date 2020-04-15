@@ -3,24 +3,14 @@ package com.learning.dto;
 import java.util.List;
 
 public class CourDTO extends HistorizedDTO {
-	
-	
 
-	
 	private String name;
 
-	
-	private String introduction;
-	
-	private String resume;
-	
-	private String conclusion;
-	
+	private String content;
+
 	private ModuleDTO module;
-	
-	
+
 	private List<ChapitreDTO> chapitres;
-	
 
 	private List<QuizDTO> quizs;
 
@@ -40,8 +30,6 @@ public class CourDTO extends HistorizedDTO {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	
 
 	public String getName() {
 		return name;
@@ -58,7 +46,6 @@ public class CourDTO extends HistorizedDTO {
 	public void setModule(ModuleDTO module) {
 		this.module = module;
 	}
-	
 
 	public List<ChapitreDTO> getChapitres() {
 		return chapitres;
@@ -76,31 +63,16 @@ public class CourDTO extends HistorizedDTO {
 		this.quizs = quizs;
 	}
 
-	public String getIntroduction() {
-		return introduction;
+	public String getContent() {
+		return content;
 	}
 
-	public void setIntroduction(String introduction) {
-		this.introduction = introduction;
+	public void setContent(String content) {
+		this.content = content;
 	}
 
-	public String getResume() {
-		return resume;
-	}
-
-	public void setResume(String resume) {
-		this.resume = resume;
-	}
-
-	public String getConclusion() {
-		return conclusion;
-	}
-
-	public void setConclusion(String conclusion) {
-		this.conclusion = conclusion;
-	}
-	
 	
 
-	
+
+
 }

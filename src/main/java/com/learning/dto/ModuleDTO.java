@@ -6,7 +6,7 @@ public class ModuleDTO extends HistorizedDTO {
 
 	private String name;
 
-	private UserDTO user;
+	private UserDTO professor;
 
 	private LevelDTO level;
 
@@ -42,12 +42,13 @@ public class ModuleDTO extends HistorizedDTO {
 		this.name = name;
 	}
 
-	public UserDTO getUser() {
-		return user;
+	
+	public UserDTO getProfessor() {
+		return professor;
 	}
 
-	public void setUser(UserDTO user) {
-		this.user = user;
+	public void setProfessor(UserDTO professor) {
+		this.professor = professor;
 	}
 
 	public List<CourDTO> getCours() {

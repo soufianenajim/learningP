@@ -66,15 +66,15 @@ public class Module extends Historized {
 		this.name = name;
 	}
 
-	public User getUser() {
+	
+
+	public User getProfessor() {
 		return professor;
 	}
 
-	public void setUser(User user) {
-		this.professor = user;
+	public void setProfessor(User professor) {
+		this.professor = professor;
 	}
-	
-	
 
 	public List<Cour> getCours() {
 		return cours;

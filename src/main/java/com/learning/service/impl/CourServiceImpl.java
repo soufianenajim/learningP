@@ -11,12 +11,15 @@ import org.springframework.stereotype.Service;
 
 import com.learning.dao.CourRepository;
 import com.learning.dto.CourDTO;
+import com.learning.dto.UserDTO;
 import com.learning.model.Cour;
 import com.learning.model.Module;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.CourService;
 import com.learning.service.ModuleService;
+import com.learning.service.ProgressionCourService;
+import com.learning.service.UserService;
 
 @Service
 public class CourServiceImpl implements CourService {
@@ -25,12 +28,21 @@ public class CourServiceImpl implements CourService {
 	private CourRepository courRepository;
 	@Autowired
 	private ModuleService moduleService;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private ProgressionCourService progressionCourService;
 
 	// save or update
 	@Override
 	public CourDTO save(CourDTO courDTO) {
 		Cour cour = convertDTOtoModel(courDTO);
 		cour = courRepository.save(cour);
+		Module module=cour.getModule();
+		Long idLevel=module.getLevel().getId();
+		Long idBranch=module.getBranch().getId();
+		List<UserDTO> students =userService.findByLevelAndBranch(idLevel, idBranch);
+		progressionCourService.saveByCourAndStudents(cour, students);
 		return convertModelToDTO(cour);
 	}
 
@@ -74,9 +86,7 @@ public class CourServiceImpl implements CourService {
 		Cour cour = new Cour();
 		cour.setId(courDTO.getId());
 		cour.setName(courDTO.getName());
-		cour.setIntroduction(courDTO.getIntroduction());
-		cour.setResume(courDTO.getResume());
-		cour.setConclusion(courDTO.getConclusion());
+		cour.setContent(courDTO.getContent());
 		if (courDTO.getModule() != null) {
 			cour.setModule(moduleService.convertDTOtoModel(courDTO.getModule()));
 		}
@@ -89,9 +99,7 @@ public class CourServiceImpl implements CourService {
 		CourDTO courDTO = new CourDTO();
 		courDTO.setId(cour.getId());
 		courDTO.setName(cour.getName());
-		courDTO.setIntroduction(cour.getIntroduction());
-		courDTO.setResume(cour.getResume());
-		courDTO.setConclusion(cour.getConclusion());
+		courDTO.setContent(cour.getContent());
 		Module module = cour.getModule();
 		if (module != null) {
 			courDTO.setModule(moduleService.convertModelToDTO(cour.getModule()));
@@ -155,6 +163,45 @@ public class CourServiceImpl implements CourService {
 	public void deleteByModule(Long idModule) {
 		courRepository.deleteByModule(idModule);
 
+	}
+
+	@Override
+	public Cour convertDTOtoModelWithOutModule(CourDTO courDTO) {
+		Cour cour = new Cour();
+		cour.setId(courDTO.getId());
+		cour.setName(courDTO.getName());
+		cour.setContent(courDTO.getContent());
+
+		return cour;
+	}
+
+	@Override
+	public CourDTO convertModelToDTOWithOutModule(Cour cour) {
+		CourDTO courDTO = new CourDTO();
+		courDTO.setId(cour.getId());
+		courDTO.setName(cour.getName());
+		courDTO.setContent(cour.getContent());
+		courDTO.setCreatedAt(cour.getCreatedAt());
+		courDTO.setUpdatedAt(cour.getUpdatedAt());
+		return courDTO;
+	}
+
+	@Override
+	public List<CourDTO> convertEntitiesToDtosWithOutModule(List<Cour> cours) {
+		List<CourDTO> list = new ArrayList<CourDTO>();
+		for (Cour cour : cours) {
+			list.add(convertModelToDTOWithOutModule(cour));
+		}
+		return list;
+	}
+
+	@Override
+	public List<Cour> convertDtosToEntitiesWithOutModule(List<CourDTO> coursDTO) {
+		List<Cour> list = new ArrayList<Cour>();
+		for (CourDTO courDTO : coursDTO) {
+			list.add(convertDTOtoModelWithOutModule(courDTO));
+		}
+		return list;
 	}
 
 }
