@@ -70,4 +70,14 @@ public class RoleResource {
 		}
 	}
 
+	@GetMapping(ConstantBase.CRUD_REST_FIND_ALL)
+	public ResponseEntity<?> findAll() {
+		try {
+			return new ResponseEntity<>(roleService.findAll(), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/role" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
 }

@@ -1,13 +1,9 @@
 package com.learning.model;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -25,12 +21,14 @@ public class ProgressionModule extends Historized {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "module_id")
 	private Module module;
+	
 	private Double progressionCour;
+	
 	private Double progressionExam;
+	
 	private Double NoteFinal;
 
-	@OneToMany(mappedBy = "module", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-	private List<ProgressionModule> progressionModules;
+	
 	public ProgressionModule() {
 		super();
 		

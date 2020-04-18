@@ -20,4 +20,6 @@ public interface BranchService extends CrudService<Branch, BranchDTO> {
 	List<Branch> convertDtosToEntitiesWithOutOrganization(List<BranchDTO> list);
 	
    void deleteByOrganizationId(Long id);
+   
+   List<BranchDTO> findByOrganization(Long id);
 }

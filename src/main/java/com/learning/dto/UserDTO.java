@@ -1,10 +1,8 @@
 package com.learning.dto;
 
-import javax.validation.constraints.NotNull;
-
 public class UserDTO extends HistorizedDTO {
 
-	private String login;
+	private String email;
 	
 
 	private String password;
@@ -13,6 +11,8 @@ public class UserDTO extends HistorizedDTO {
 
 	private String lastName;
 
+	private String phone;
+	
 	private String token;
 
 	private String tokenDate;
@@ -37,27 +37,7 @@ public class UserDTO extends HistorizedDTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public UserDTO(String firstName, @NotNull String login, @NotNull String password) {
-		super();
-		this.firstName = firstName;
-		this.login = login;
-		this.password = password;
-		;
-	}
-
-	public UserDTO(Long id, String login, String password, String firstName, String lastName, String token,
-			String tokenDate, @NotNull Boolean isOnline, @NotNull Boolean isOffline, RoleDTO role) {
-		super(id);
-		this.login = login;
-		this.password = password;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.token = token;
-		this.tokenDate = tokenDate;
-		this.isOnline = isOnline;
-		this.isOffline = isOffline;
-		this.refRole = role;
-	}
+	
 
 	public String getFirstName() {
 		return firstName;
@@ -75,13 +55,19 @@ public class UserDTO extends HistorizedDTO {
 		this.lastName = lastName;
 	}
 
-	public String getLogin() {
-		return login;
+	
+
+	public String getEmail() {
+		return email;
 	}
 
-	public void setLogin(String login) {
-		this.login = login;
+
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
+
+
 
 	public String getPassword() {
 		return password;
@@ -154,6 +140,19 @@ public class UserDTO extends HistorizedDTO {
 	public void setOrganization(OrganizationDTO organization) {
 		this.organization = organization;
 	}
+
+
+
+	public String getPhone() {
+		return phone;
+	}
+
+
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	
 	
 
 }

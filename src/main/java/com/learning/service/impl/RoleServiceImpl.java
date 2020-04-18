@@ -100,4 +100,9 @@ public class RoleServiceImpl implements RoleService {
 		return list;
 	}
 
+	@Override
+	public List<RoleDTO> findAll() {
+		return convertEntitiesToDtos(roleRepository.findAll());
+	}
+
 }

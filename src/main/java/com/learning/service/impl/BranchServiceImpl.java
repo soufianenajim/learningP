@@ -186,5 +186,11 @@ public class BranchServiceImpl implements BranchService {
 		
 	}
 
+	@Override
+	public List<BranchDTO> findByOrganization(Long id) {
+	
+		return convertEntitiesToDtosWithOutOrganization(branchRepository.findByOrganization(id));
+	}
+
 
 }

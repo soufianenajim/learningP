@@ -21,7 +21,6 @@ import com.learning.model.base.PartialList;
 import com.learning.service.BranchService;
 import com.learning.service.LevelService;
 import com.learning.service.ModuleService;
-import com.learning.service.ProgressionCourService;
 import com.learning.service.ProgressionModuleService;
 import com.learning.service.UserService;
 
@@ -38,8 +37,7 @@ public class ModuleServiceImpl implements ModuleService {
 	private LevelService levelService;
 	@Autowired
 	private ProgressionModuleService progressionModuleService;
-	@Autowired
-	private ProgressionCourService progressionCourService;
+	
 
 	@Override
 	public ModuleDTO save(ModuleDTO moduleDTO) {
@@ -204,6 +202,12 @@ public class ModuleServiceImpl implements ModuleService {
 			list.add(convertDTOtoModelWithOutRelation(moduleDTO));
 		}
 		return list;
+	}
+
+	@Override
+	public List<ModuleDTO> findByLevelAndBranch(Long idLevel, Long idBranch) {
+		
+		return convertEntitiesToDtosWithOutRelation(moduleRepository.findByLevelAndBranch(idLevel, idBranch));
 	}
 
 }

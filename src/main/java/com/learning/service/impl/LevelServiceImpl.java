@@ -186,5 +186,12 @@ public class LevelServiceImpl implements LevelService {
 		
 	}
 
+
+	@Override
+	public List<LevelDTO> findByOrganization(Long id) {
+		
+		return convertEntitiesToDtosWithOutOrganization(levelRepository.findByOrganization(id));
+	}
+
 	
 }

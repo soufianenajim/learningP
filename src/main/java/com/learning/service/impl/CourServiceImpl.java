@@ -204,4 +204,11 @@ public class CourServiceImpl implements CourService {
 		return list;
 	}
 
+	@Override
+	public List<CourDTO> findByModule(Long idModule) {
+		List<Cour> list=courRepository.findByModule( idModule);
+		
+		return convertEntitiesToDtosWithOutModule(list);
+	}
+
 }

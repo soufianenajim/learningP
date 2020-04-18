@@ -8,7 +8,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-
 @Entity
 @Table(name = "user")
 public class User extends Historized {
@@ -18,19 +17,21 @@ public class User extends Historized {
 	 */
 	private static final long serialVersionUID = 7263208288016824088L;
 
-	@Column(name = "LOGIN", length = 30)
-	private String login;
+	@Column(name = "email", length = 50)
+	private String email;
 
-	@Column(name = "PASSWORD", length = 255)
+	@Column(name = "password", length = 255)
 	private String password;
-	
-	@Column(name = "first_name", length = 100)
+
+	@Column(name = "first_name", length = 50)
 	private String firstName;
 
-	@Column(name = "last_name", length = 100)
+	@Column(name = "last_name", length = 50)
 	private String lastName;
 
-	
+	@Column(name = "phone", length = 20)
+	private String phone;
+
 	@Column(name = "TOKEN", length = 512)
 	private String token;
 
@@ -44,59 +45,26 @@ public class User extends Historized {
 	@Column(name = "IS_OFFLINE")
 	@NotNull
 	private Boolean isOffline = false;
-	
-	
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REF_ROLE")
 	private Role refRole;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "level_id")
 	private Level level;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "branch_id")
 	private Branch branch;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "organization_id")
 	private Organization organization;
 
-
-     
-	
-	
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
-	}
-
-	public User(String firstName,@NotNull String login, @NotNull String password) {
-		super();
-		this.firstName=firstName;
-		this.login = login;
-		this.password = password;
-		;
-	}
-
-	
-	
-
-	
-
-	public User(Long id , String login,  String password, String firstName, String lastName, String token,
-			String tokenDate, @NotNull Boolean isOnline, @NotNull Boolean isOffline,Role role) {
-		super(id);
-		this.login = login;
-		this.password = password;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.token = token;
-		this.tokenDate = tokenDate;
-		this.isOnline = isOnline;
-		this.isOffline = isOffline;
-		this.refRole=role;
 	}
 
 	public String getFirstName() {
@@ -115,12 +83,12 @@ public class User extends Historized {
 		this.lastName = lastName;
 	}
 
-	public String getLogin() {
-		return login;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setLogin(String login) {
-		this.login = login;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPassword() {
@@ -162,10 +130,6 @@ public class User extends Historized {
 	public void setIsOffline(Boolean isOffline) {
 		this.isOffline = isOffline;
 	}
-	
-	
-
-	
 
 	public Role getRefRole() {
 		return refRole;
@@ -174,7 +138,6 @@ public class User extends Historized {
 	public void setRefRole(Role refRole) {
 		this.refRole = refRole;
 	}
-	
 
 	public Level getLevel() {
 		return level;
@@ -200,13 +163,20 @@ public class User extends Historized {
 		this.organization = organization;
 	}
 
-	@Override
-	public String toString() {
-		return "User [login=" + login + ", password=" + password + ", token=" + token + ", tokenDate=" + tokenDate
-				+ ", isOnline=" + isOnline + ", isOffline=" + isOffline +  ", toString()="
-				+ super.toString() + "]";
+	public String getPhone() {
+		return phone;
 	}
 
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
-	
+	@Override
+	public String toString() {
+		return "User [email=" + email + ", password=" + password + ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", token=" + token + ", tokenDate=" + tokenDate + ", isOnline=" + isOnline + ", isOffline="
+				+ isOffline + ", refRole=" + refRole + ", level=" + level + ", branch=" + branch + ", organization="
+				+ organization + "]";
+	}
+
 }

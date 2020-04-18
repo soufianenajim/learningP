@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ public class QuestionResource {
 	@Autowired
 	QuestionService questionService;
 
+//	@PreAuthorize("hasRole('TEACHER')")
 	@PostMapping(ConstantBase.CRUD_REST_FIND_BY_CRITERE)
 	public ResponseEntity<?> findByCriteres(@RequestBody Demande<QuestionDTO> demande) {
 		try {
@@ -69,6 +71,7 @@ public class QuestionResource {
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
 	@GetMapping("/find-by-quiz/{id}")
 	public ResponseEntity<?> findByQuiz(@PathVariable Long id) {
 		try {
@@ -77,11 +80,9 @@ public class QuestionResource {
 			LOGGER.error("Problem occored in api/suggestion" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-		
 
 	}
-	
+
 	@GetMapping("/find-by-td/{id}")
 	public ResponseEntity<?> findByTd(@PathVariable Long id) {
 		try {
@@ -90,13 +91,9 @@ public class QuestionResource {
 			LOGGER.error("Problem occored in api/suggestion" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-		
 
 	}
-	
-	
-	
+
 	@GetMapping("/find-by-exam/{id}")
 	public ResponseEntity<?> findByExam(@PathVariable Long id) {
 		try {
@@ -107,6 +104,5 @@ public class QuestionResource {
 		}
 
 	}
-	
 
 }

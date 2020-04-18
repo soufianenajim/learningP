@@ -1,5 +1,7 @@
 package com.learning.dao;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
@@ -22,4 +24,7 @@ public interface LevelRepository extends JpaRepository<Level,Long > {
 	@Transactional
 	@Query("delete  FROM Level  WHERE  organization.id=?1 ")
 	void deleteByOrganisation(Long id);
+	
+	@Query("SELECT l FROM Level l WHERE  l.organization.id=?1 ")
+	List<Level> findByOrganization(Long idOrganization);
 }

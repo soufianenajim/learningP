@@ -22,6 +22,7 @@ public interface LevelService extends CrudService<Level, LevelDTO> {
 	
    void deleteByOrganizationId(Long id);
 	
+   List<LevelDTO> findByOrganization(Long id);
 	
 
 }

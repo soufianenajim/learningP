@@ -40,6 +40,9 @@ public class Module extends Historized {
 	@OneToMany(mappedBy = "module", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Exam> exams;
 	
+	@OneToMany(mappedBy = "module", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	private List<ProgressionModule> progressionModules;
+	
 	public Module() {
 		super();
 	}
@@ -108,6 +111,15 @@ public class Module extends Historized {
 
 	public void setBranch(Branch branch) {
 		this.branch = branch;
+	}
+	
+
+	public List<ProgressionModule> getProgressionModules() {
+		return progressionModules;
+	}
+
+	public void setProgressionModules(List<ProgressionModule> progressionModules) {
+		this.progressionModules = progressionModules;
 	}
 
 	@Override

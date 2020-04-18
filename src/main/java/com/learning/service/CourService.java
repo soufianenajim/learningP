@@ -7,10 +7,10 @@ import com.learning.model.Cour;
 
 public interface CourService extends CrudService<Cour, CourDTO> {
 	Cour findEnitityById(Long id);
+
 	List<CourDTO> findAll();
-	
+
 	void deleteByModule(Long idModule);
-	
 
 	Cour convertDTOtoModelWithOutModule(CourDTO courDTO);
 
@@ -19,4 +19,6 @@ public interface CourService extends CrudService<Cour, CourDTO> {
 	List<CourDTO> convertEntitiesToDtosWithOutModule(List<Cour> list);
 
 	List<Cour> convertDtosToEntitiesWithOutModule(List<CourDTO> list);
+
+	List<CourDTO> findByModule(Long idModule);
 }

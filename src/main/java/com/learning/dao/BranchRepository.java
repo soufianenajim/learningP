@@ -1,5 +1,7 @@
 package com.learning.dao;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
@@ -21,5 +23,8 @@ public interface BranchRepository extends JpaRepository<Branch,Long > {
 	@Transactional
 	@Query("delete  FROM Branch  WHERE  organization.id=?1 ")
 	void deleteByOrganisation(Long id);
+	
+	@Query("SELECT b FROM Branch b WHERE b.organization.id=?1 ")
+	List<Branch> findByOrganization(Long id);
 	
 }

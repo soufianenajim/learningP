@@ -45,7 +45,9 @@ public class CrsFilter implements Filter {
 
 			// Access-Control-Allow-Headers
 			response.setHeader("Access-Control-Allow-Headers",
-					"Origin, X-Requested-With, Content-Type, Accept, " + "X-CSRF-TOKEN");
+					"Origin, X-Requested-With, Content-Type, Accept, Authorization");
+			
+			
 		}
 
 		chain.doFilter(req, res);

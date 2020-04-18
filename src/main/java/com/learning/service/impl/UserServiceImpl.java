@@ -5,13 +5,27 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.learning.dao.RoleRepository;
 import com.learning.dao.UserRepository;
+import com.learning.dao.UserRepositorySearchCriteria;
 import com.learning.dto.UserDTO;
+import com.learning.exceptions.BusinessException;
+import com.learning.model.Branch;
+import com.learning.model.Level;
+import com.learning.model.Organization;
+import com.learning.model.Role;
 import com.learning.model.User;
+import com.learning.model.base.ConstantBase;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
+import com.learning.security.services.UserDetailsImpl;
+import com.learning.service.BranchService;
+import com.learning.service.LevelService;
+import com.learning.service.OrganizationService;
+import com.learning.service.RoleService;
 import com.learning.service.UserService;
 
 @Service
@@ -19,12 +33,56 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserRepository userRepository;
+	@Autowired
+	RoleRepository roleRepository;
+	@Autowired
+	PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private RoleService roleService;
+	@Autowired
+	private OrganizationService organizationService;
+	@Autowired
+	private BranchService branchService;
+	@Autowired
+	private LevelService levelService;
+	@Autowired
+	private UserRepositorySearchCriteria userRepositorySearchCriteria;
 
 	@Override
-	public UserDTO save(UserDTO userDTO) {
+	public UserDTO saveU(UserDTO userDTO) throws BusinessException {
+ //  id=5;
+		Optional<User> user = userRepository.findByEmail(userDTO.getEmail());
+		User existingUser = user.isPresent() ? user.get() : null;
+		if (userDTO.getId() != null
+				&& (existingUser == null || (existingUser != null && userDTO.getId() == existingUser.getId()))) {
+			existingUser = existingUser != null ? existingUser : userRepository.findById(userDTO.getId()).get();
+			return updateUser(userDTO, existingUser);
+		} else {
+			if (existingUser == null) {
+
+				return saveUser(userDTO, existingUser);
+			} else {
+				throw new BusinessException(ConstantBase.USER_EXIST);
+			}
+		}
+	}
+
+	private UserDTO updateUser(UserDTO userDTO, User existingUser) throws BusinessException {
 		User user = convertDTOtoModel(userDTO);
+		user.setPassword(existingUser.getPassword());
+
 		user = userRepository.saveAndFlush(user);
+
 		return convertModelToDTO(user);
+	}
+
+	private UserDTO saveUser(UserDTO userDTO, User existingUser) throws BusinessException {
+
+		User user = convertDTOtoModel(userDTO);
+		user.setPassword(passwordEncoder.encode("Afak@1234"));
+		user = userRepository.saveAndFlush(user);
+		return userDTO;
 	}
 
 	@Override
@@ -46,17 +104,24 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public PartialList<UserDTO> findByCriteres(Demande<UserDTO> demande) {
-		// TODO Auto-generated method stub
-		return null;
+		List<User> users = userRepositorySearchCriteria.findByCriteres(demande);
+		Long count = userRepositorySearchCriteria.countByCriteres(demande);
+		return new PartialList<UserDTO>(count, convertEntitiesToDtos(users));
 	}
 
 	@Override
 	public User convertDTOtoModel(UserDTO userDTO) {
 		User user = new User();
 		user.setId(userDTO.getId());
+		user.setEmail(userDTO.getEmail());
 		user.setFirstName(userDTO.getFirstName());
 		user.setLastName(userDTO.getLastName());
-		user.setIsOffline(false);
+		user.setPhone(userDTO.getPhone());
+		user.setPassword(userDTO.getPassword());
+		user.setRefRole(roleService.convertDTOtoModel(userDTO.getRefRole()));
+		user.setOrganization(organizationService.convertDTOtoModel(userDTO.getOrganization()));
+		user.setBranch(branchService.convertDTOtoModelWithOutOrganization(userDTO.getBranch()));
+		user.setLevel(levelService.convertDTOtoModelWithOutOrganization(userDTO.getLevel()));
 
 		return user;
 	}
@@ -67,6 +132,25 @@ public class UserServiceImpl implements UserService {
 		userDTO.setId(user.getId());
 		userDTO.setFirstName(user.getFirstName());
 		userDTO.setLastName(user.getLastName());
+		userDTO.setEmail(user.getEmail());
+		userDTO.setPhone(user.getPhone());
+		userDTO.setPassword(user.getPassword());
+		Organization organization = user.getOrganization();
+		Level level = user.getLevel();
+		Branch branch = user.getBranch();
+		Role role = user.getRefRole();
+		if (organization != null) {
+			userDTO.setOrganization(organizationService.convertModelToDTO(organization));
+		}
+		if (level != null) {
+			userDTO.setLevel(levelService.convertModelToDTOWithOutOrganization(level));
+		}
+		if (role != null) {
+			userDTO.setRefRole(roleService.convertModelToDTO(role));
+		}
+		if (branch != null) {
+			userDTO.setBranch(branchService.convertModelToDTOWithOutOrganization(branch));
+		}
 		userDTO.setCreatedAt(user.getCreatedAt());
 		userDTO.setUpdatedAt(user.getUpdatedAt());
 
@@ -97,8 +181,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void deleteById(Long id) {
-		// TODO Auto-generated method stub
-
+		userRepository.deleteById(id);
 	}
 
 	@Override
@@ -121,7 +204,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDTO convertModelToDTOWithOutRelation(User user) {
-	
+
 		UserDTO userDTO = new UserDTO();
 		userDTO.setId(user.getId());
 		userDTO.setFirstName(user.getFirstName());
@@ -154,8 +237,21 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserDTO> findByLevelAndBranch(Long idLevel, Long idBranch) {
-		List<User> list=userRepository.findByLevelAndBranch(idLevel, idBranch);
+		List<User> list = userRepository.findByLevelAndBranch(idLevel, idBranch);
 		return convertEntitiesToDtosWithOutRelation(list);
+	}
+
+	@Override
+	public UserDTO convertFromUserDetailsToDTO(UserDetailsImpl userDetail, String token) {
+		UserDTO userDTO = findById(userDetail.getId());
+		userDTO.setToken(token);
+		return userDTO;
+	}
+
+	@Override
+	public UserDTO save(UserDTO dto) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

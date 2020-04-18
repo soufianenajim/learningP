@@ -79,4 +79,13 @@ public class BranchResource {
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	@GetMapping("find-by-organization/{id}")
+	public ResponseEntity<?> findByOrganization(@PathVariable Long id) {
+		try {
+			return new ResponseEntity<>(branchService.findByOrganization(id), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }
