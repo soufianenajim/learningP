@@ -69,5 +69,15 @@ public class TdResource {
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@GetMapping("find-by-cour/{id}")
+	public ResponseEntity<?> findByCour(@PathVariable Long id) {
+		try {
 
+			return new ResponseEntity<>(tdService.findByCour(id), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/td" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

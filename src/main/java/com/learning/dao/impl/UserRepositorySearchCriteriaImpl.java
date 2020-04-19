@@ -21,8 +21,10 @@ import com.learning.model.base.SortOrder;
 
 @Repository
 public class UserRepositorySearchCriteriaImpl implements UserRepositorySearchCriteria {
+	
 	@Autowired
 	private EntityManager em;
+	
 	private CriteriaBuilder cb = null;
 
 	private Root<User> user = null;
@@ -31,7 +33,7 @@ public class UserRepositorySearchCriteriaImpl implements UserRepositorySearchCri
 
 	@Override
 	public List<User> findByCriteres(Demande<UserDTO> demande) {
-		 cb = em.getCriteriaBuilder();
+		cb = em.getCriteriaBuilder();
 		CriteriaQuery<User> cq = cb.createQuery(User.class);
 
 		user = cq.from(User.class);
@@ -71,10 +73,6 @@ public class UserRepositorySearchCriteriaImpl implements UserRepositorySearchCri
 		List<Predicate> predicates = new ArrayList<>();
 		UserDTO userDTO = demande.getModel();
 
-		// escape all underscore characters from the string fields of userDto
-		userDTO.setFirstName(userDTO.getFirstName());
-		userDTO.setLastName(userDTO.getLastName());
-		userDTO.setEmail(userDTO.getEmail());
 		if (!StringUtils.isEmpty(userDTO.getFirstName())) {
 			predicates.add(
 					cb.like(cb.lower(user.<String>get("firstName")), "%" + userDTO.getFirstName().toLowerCase() + "%"));
@@ -88,7 +86,7 @@ public class UserRepositorySearchCriteriaImpl implements UserRepositorySearchCri
 		}
 
 		if (!StringUtils.isEmpty(userDTO.getRefRole()) && userDTO.getRefRole() != null) {
-			predicates.add(cb.equal(user.<Long>get("role"), userDTO.getRefRole().getId()));
+			predicates.add(cb.equal(user.<Long>get("refRole"), userDTO.getRefRole().getId()));
 
 		}
 
@@ -99,7 +97,7 @@ public class UserRepositorySearchCriteriaImpl implements UserRepositorySearchCri
 			predicates.add(cb.equal(user.<Long>get("level"), userDTO.getLevel().getId()));
 		}
 		if (!StringUtils.isEmpty(userDTO.getBranch()) && userDTO.getBranch() != null) {
-			predicates.add(cb.equal(user.<Long>get("organization"), userDTO.getOrganization().getId()));
+			predicates.add(cb.equal(user.<Long>get("branch"), userDTO.getBranch().getId()));
 		}
 
 		return predicates;

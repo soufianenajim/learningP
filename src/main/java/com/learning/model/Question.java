@@ -18,7 +18,7 @@ public class Question extends Historized {
 
 	private static final long serialVersionUID = -8858004000210805400L;
 
-	@Column(name = "name", length = 100)
+	@Column(name = "name", length = 512)
 	private String name;
 
 	@Column(name = "code", length = 100)

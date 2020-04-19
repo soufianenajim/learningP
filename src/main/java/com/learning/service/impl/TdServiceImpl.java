@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.learning.dao.TdRepository;
 import com.learning.dto.TdDTO;
+import com.learning.dto.UserDTO;
 import com.learning.model.Cour;
+import com.learning.model.Question;
 import com.learning.model.Td;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
@@ -26,7 +28,7 @@ public class TdServiceImpl implements TdService {
 	private TdRepository tdRepository;
 	@Autowired
 	private CourService courService;
-	
+
 	@Autowired
 	private QuestionService questionService;
 
@@ -134,6 +136,28 @@ public class TdServiceImpl implements TdService {
 			list.add(convertDTOtoModel(tdDTO));
 		}
 		return list;
+	}
+
+	private TdDTO convertModelToDTOWithQuestions(Td td) {
+		TdDTO tdDTO = convertModelToDTO(td);
+		List<Question> questions = td.getQuestions();
+		if (questions != null) {
+			tdDTO.setQuestions(questionService.convertEntitiesToDtos(questions));
+		}
+		return tdDTO;
+	}
+	private List<TdDTO> convertEntitiesToDTOsWithQuestions(List<Td> tds) {
+		List<TdDTO> list = new ArrayList<TdDTO>();
+		for (Td td : tds) {
+			list.add(convertModelToDTOWithQuestions(td));
+		}
+		return list;
+	}
+
+	@Override
+	public List<TdDTO> findByCour(Long courId) {
+		List<Td> list = tdRepository.findByCour(courId);
+		return convertEntitiesToDTOsWithQuestions(list);
 	}
 
 }
