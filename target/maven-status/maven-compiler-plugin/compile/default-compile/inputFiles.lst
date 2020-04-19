@@ -12,6 +12,7 @@ C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\service\impl
 C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\web\TdResource.java
 C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\dto\ExamDTO.java
 C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\web\OrganizationResource.java
+C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\dao\UserRepositorySearchCriteria.java
 C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\dto\ModuleDTO.java
 C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\model\ProgressionCour.java
 C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\model\User.java
@@ -35,6 +36,7 @@ C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\service\Sugg
 C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\service\ProgressionCourService.java
 C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\dto\ProgressionCourDTO.java
 C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\web\BranchResource.java
+C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\exceptions\BusinessException.java
 C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\model\base\PartialList.java
 C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\web\QuizResource.java
 C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\service\ModuleService.java
@@ -63,6 +65,7 @@ C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\web\Question
 C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\dto\RoleDTO.java
 C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\service\impl\TdServiceImpl.java
 C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\web\ProgressionModuleResource.java
+C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\dao\impl\UserRepositorySearchCriteriaImpl.java
 C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\dto\QuestionDTO.java
 C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\dto\BranchDTO.java
 C:\soufiane\workspace-learning\learningP\src\main\java\com\learning\dto\LoginDTO.java

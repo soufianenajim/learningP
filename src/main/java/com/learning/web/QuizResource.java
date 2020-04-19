@@ -69,5 +69,15 @@ public class QuizResource {
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@GetMapping("find-by-module/{id}")
+	public ResponseEntity<?> findByModule(@PathVariable Long id) {
+		try {
+			return new ResponseEntity<>(quizService.findByModule(id), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/quiz" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
+	}
 }

@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -24,17 +25,19 @@ public class Cour extends Historized {
 	@Lob
 	private String content;
 
-	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "module_id")
 	private Module module;
-
 
 	@OneToMany(mappedBy = "cour", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<ProgressionCour> progressionCours;
 
 	@OneToMany(mappedBy = "cour", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<Td> tds;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "quiz_id", referencedColumnName = "id")
+	private Quiz quiz;
 
 	public Cour() {
 		super();
@@ -69,9 +72,6 @@ public class Cour extends Historized {
 		this.module = module;
 	}
 
-	
-
-
 	public List<Td> getTds() {
 		return tds;
 	}
@@ -79,9 +79,6 @@ public class Cour extends Historized {
 	public void setTds(List<Td> tds) {
 		this.tds = tds;
 	}
-	
-
-	
 
 	public String getContent() {
 		return content;
@@ -90,15 +87,19 @@ public class Cour extends Historized {
 	public void setContent(String content) {
 		this.content = content;
 	}
+	
+
+	public Quiz getQuiz() {
+		return quiz;
+	}
+
+	public void setQuiz(Quiz quiz) {
+		this.quiz = quiz;
+	}
 
 	@Override
 	public String toString() {
-		return "Cour [name=" + name + ", content=" + content + ", module=" + module + ", tds="
-				+ tds + "]";
+		return "Cour [name=" + name + ", content=" + content + ", module=" + module + ", tds=" + tds + "]";
 	}
-
-	
-
-	
 
 }

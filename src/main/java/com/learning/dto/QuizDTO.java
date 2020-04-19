@@ -6,7 +6,7 @@ public class QuizDTO extends HistorizedDTO {
 
 	private String name;
 
-	private CourDTO cour;
+	private ModuleDTO module;
 
 	private List<QuestionDTO> questions;
 
@@ -35,12 +35,12 @@ public class QuizDTO extends HistorizedDTO {
 		this.name = name;
 	}
 
-	public CourDTO getCour() {
-		return cour;
+	public ModuleDTO getModule() {
+		return module;
 	}
 
-	public void setCour(CourDTO cour) {
-		this.cour = cour;
+	public void setModule(ModuleDTO module) {
+		this.module = module;
 	}
 
 	public List<QuestionDTO> getQuestions() {

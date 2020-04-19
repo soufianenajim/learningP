@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -21,11 +22,14 @@ public class Quiz extends Historized {
 	private String name;
 
 	@ManyToOne(fetch = FetchType.LAZY,cascade = { CascadeType.DETACH })
-	@JoinColumn(name = "cour_id")
-	private Cour cour;
+	@JoinColumn(name = "module_id")
+	private Module module;
 	
 	@OneToMany(mappedBy = "quiz", fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
 	private List<Question> questions;
+	
+	@OneToOne(mappedBy = "quiz")
+    private Cour cour;
 
 	public Quiz() {
 		super();
@@ -52,15 +56,17 @@ public class Quiz extends Historized {
 		this.name = name;
 	}
 
-	public Cour getCour() {
-		return cour;
+	
+	
+	
+
+	public Module getModule() {
+		return module;
 	}
 
-	public void setCour(Cour cour) {
-		this.cour = cour;
+	public void setModule(Module module) {
+		this.module = module;
 	}
-	
-	
 
 	public List<Question> getQuestions() {
 		return questions;
@@ -72,7 +78,7 @@ public class Quiz extends Historized {
 
 	@Override
 	public String toString() {
-		return "Td [name=" + name + ", cour=" + cour + "]";
+		return "Td [name=" + name + ", module=" + module + "]";
 	}
 
 }

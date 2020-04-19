@@ -14,11 +14,13 @@ import com.learning.dto.CourDTO;
 import com.learning.dto.UserDTO;
 import com.learning.model.Cour;
 import com.learning.model.Module;
+import com.learning.model.Quiz;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.CourService;
 import com.learning.service.ModuleService;
 import com.learning.service.ProgressionCourService;
+import com.learning.service.QuizService;
 import com.learning.service.UserService;
 
 @Service
@@ -32,6 +34,8 @@ public class CourServiceImpl implements CourService {
 	private UserService userService;
 	@Autowired
 	private ProgressionCourService progressionCourService;
+	@Autowired
+	private QuizService quizService;
 
 	// save or update
 	@Override
@@ -89,8 +93,12 @@ public class CourServiceImpl implements CourService {
 		cour.setId(courDTO.getId());
 		cour.setName(courDTO.getName());
 		cour.setContent(courDTO.getContent());
+
 		if (courDTO.getModule() != null) {
 			cour.setModule(moduleService.convertDTOtoModel(courDTO.getModule()));
+		}
+		if (courDTO.getQuiz() != null) {
+			cour.setQuiz(quizService.convertDTOtoModel(courDTO.getQuiz()));
 		}
 
 		return cour;
@@ -103,9 +111,13 @@ public class CourServiceImpl implements CourService {
 		courDTO.setName(cour.getName());
 		courDTO.setContent(cour.getContent());
 		Module module = cour.getModule();
+		Quiz quiz = cour.getQuiz();
 		if (module != null) {
 			courDTO.setModule(moduleService.convertModelToDTO(cour.getModule()));
 
+		}
+		if (quiz != null) {
+			courDTO.setQuiz(quizService.convertModelToDTO(quiz));
 		}
 
 		courDTO.setCreatedAt(cour.getCreatedAt());
@@ -183,6 +195,10 @@ public class CourServiceImpl implements CourService {
 		courDTO.setId(cour.getId());
 		courDTO.setName(cour.getName());
 		courDTO.setContent(cour.getContent());
+		Quiz quiz = cour.getQuiz();
+		if (quiz != null) {
+			courDTO.setQuiz(quizService.convertModelToDTOWithQuestion(quiz));
+		}
 		courDTO.setCreatedAt(cour.getCreatedAt());
 		courDTO.setUpdatedAt(cour.getUpdatedAt());
 		return courDTO;

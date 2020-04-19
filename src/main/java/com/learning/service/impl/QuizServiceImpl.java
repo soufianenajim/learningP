@@ -11,11 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.learning.dao.QuizRepository;
 import com.learning.dto.QuizDTO;
-import com.learning.model.Cour;
+import com.learning.model.Module;
+import com.learning.model.Question;
 import com.learning.model.Quiz;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
-import com.learning.service.CourService;
+import com.learning.service.ModuleService;
 import com.learning.service.QuestionService;
 import com.learning.service.QuizService;
 
@@ -24,7 +25,7 @@ public class QuizServiceImpl implements QuizService {
 	@Autowired
 	private QuizRepository quizRepository;
 	@Autowired
-	private CourService courService;
+	private ModuleService moduleService;
 	@Autowired
 	private QuestionService questionService;
 
@@ -62,9 +63,9 @@ public class QuizServiceImpl implements QuizService {
 		int size = demande.getSize();
 		Page<Quiz> pageQuiz = null;
 		String name = quiz.getName();
-		Long idCour = quiz.getCour() != null ? quiz.getCour().getId() : null;
+		Long idModule = quiz.getModule() != null ? quiz.getModule().getId() : null;
 
-		pageQuiz = idCour != null ? quizRepository.findByNameAndCour(name, idCour, PageRequest.of(page, size))
+		pageQuiz = idModule != null ? quizRepository.findByNameAndModule(name, idModule, PageRequest.of(page, size))
 				: quizRepository.findByName(name, PageRequest.of(page, size));
 
 		List<QuizDTO> list = convertEntitiesToDtos(pageQuiz.getContent());
@@ -77,8 +78,8 @@ public class QuizServiceImpl implements QuizService {
 		Quiz quiz = new Quiz();
 		quiz.setId(quizDTO.getId());
 		quiz.setName(quizDTO.getName());
-		if (quizDTO.getCour() != null) {
-			quiz.setCour(courService.convertDTOtoModel(quizDTO.getCour()));
+		if (quizDTO.getModule() != null) {
+			quiz.setModule(moduleService.convertDTOtoModel(quizDTO.getModule()));
 		}
 		return quiz;
 	}
@@ -88,11 +89,10 @@ public class QuizServiceImpl implements QuizService {
 		QuizDTO quizDTO = new QuizDTO();
 		quizDTO.setId(quiz.getId());
 		quizDTO.setName(quiz.getName());
-		Cour cour = quiz.getCour();
-		if (cour != null) {
-			quizDTO.setCour(courService.convertModelToDTO(cour));
+		Module module = quiz.getModule();
+		if (module != null) {
+			quizDTO.setModule(moduleService.convertModelToDTO(module));
 		}
-		
 
 		quizDTO.setCreatedAt(quiz.getCreatedAt());
 		quizDTO.setUpdatedAt(quiz.getUpdatedAt());
@@ -129,6 +129,23 @@ public class QuizServiceImpl implements QuizService {
 			list.add(convertDTOtoModel(quizDTO));
 		}
 		return list;
+	}
+
+	@Override
+	public List<QuizDTO> findByModule(Long idModule) {
+
+		return convertEntitiesToDtos(quizRepository.findByModule(idModule));
+	}
+
+	@Override
+	public QuizDTO convertModelToDTOWithQuestion(Quiz quiz) {
+
+		QuizDTO quizDTO = convertModelToDTO(quiz);
+		List<Question> questions = quiz.getQuestions();
+		if (questions != null) {
+			quizDTO.setQuestions(questionService.convertEntitiesToDtos(questions));
+		}
+		return quizDTO;
 	}
 
 }

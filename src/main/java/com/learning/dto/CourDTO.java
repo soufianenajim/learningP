@@ -12,7 +12,7 @@ public class CourDTO extends HistorizedDTO {
 
 	private List<ChapitreDTO> chapitres;
 
-	private List<QuizDTO> quizs;
+	private QuizDTO quiz;
 
 	public CourDTO() {
 		super();
@@ -55,20 +55,21 @@ public class CourDTO extends HistorizedDTO {
 		this.chapitres = chapitres;
 	}
 
-	public List<QuizDTO> getQuizs() {
-		return quizs;
-	}
-
-	public void setQuizs(List<QuizDTO> quizs) {
-		this.quizs = quizs;
-	}
-
+	
 	public String getContent() {
 		return content;
 	}
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public QuizDTO getQuiz() {
+		return quiz;
+	}
+
+	public void setQuiz(QuizDTO quiz) {
+		this.quiz = quiz;
 	}
 
 	

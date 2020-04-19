@@ -10,6 +10,7 @@ com\learning\model\Historized.class
 com\learning\model\Organization.class
 com\learning\dto\ProgressionModuleDTO.class
 com\learning\service\QuestionService.class
+com\learning\exceptions\BusinessException.class
 com\learning\service\impl\ModuleServiceImpl.class
 com\learning\web\AuthResource.class
 com\learning\dto\TdDTO.class
@@ -17,6 +18,7 @@ com\learning\model\Level.class
 com\learning\dao\CourRepository.class
 com\learning\dao\QuizRepository.class
 com\learning\service\impl\OranizationServiceImpl.class
+com\learning\dao\UserRepositorySearchCriteria.class
 com\learning\web\UserResource.class
 com\learning\service\impl\ProgressionCourServiceImpl.class
 com\learning\service\impl\LevelServiceImpl.class
@@ -103,6 +105,7 @@ com\learning\model\Cour.class
 com\learning\model\base\ConstantBase.class
 com\learning\service\CrudService.class
 com\learning\service\impl\UserServiceImpl.class
+com\learning\dao\impl\UserRepositorySearchCriteriaImpl.class
 com\learning\web\RoleResource.class
 com\learning\web\TdResource.class
 com\learning\web\ProgressionCourResource.class
