@@ -37,18 +37,18 @@ public class ModuleServiceImpl implements ModuleService {
 	private LevelService levelService;
 	@Autowired
 	private ProgressionModuleService progressionModuleService;
-	
 
 	@Override
 	public ModuleDTO save(ModuleDTO moduleDTO) {
 		Module module = convertDTOtoModel(moduleDTO);
 		module = moduleRepository.save(module);
-        //get student by level and branch 
-		List<UserDTO> students = userService.findByLevelAndBranch(moduleDTO.getLevel().getId(),
-				moduleDTO.getBranch().getId());
-		// save progressionModule with module and students  
-		progressionModuleService.saveByModuleAndStudents(module, students);
-	
+		// get student by level and branch
+		if (moduleDTO.getId() == null) {
+			List<UserDTO> students = userService.findByLevelAndBranch(moduleDTO.getLevel().getId(),
+					moduleDTO.getBranch().getId());
+			// save progressionModule with module and students
+			progressionModuleService.saveByModuleAndStudents(module, students);
+		}
 
 		return convertModelToDTO(module);
 	}
@@ -183,6 +183,10 @@ public class ModuleServiceImpl implements ModuleService {
 		moduleDTO.setName(module.getName());
 		moduleDTO.setCreatedAt(module.getCreatedAt());
 		moduleDTO.setUpdatedAt(module.getUpdatedAt());
+		User professor=module.getProfessor();
+		if(professor!=null) {
+			moduleDTO.setProfessor(userService.convertModelToDTOWithOutRelation(professor));
+		}
 		return moduleDTO;
 	}
 
@@ -206,7 +210,7 @@ public class ModuleServiceImpl implements ModuleService {
 
 	@Override
 	public List<ModuleDTO> findByLevelAndBranch(Long idLevel, Long idBranch) {
-		
+
 		return convertEntitiesToDtosWithOutRelation(moduleRepository.findByLevelAndBranch(idLevel, idBranch));
 	}
 
