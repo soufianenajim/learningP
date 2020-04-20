@@ -9,7 +9,7 @@ import com.learning.security.services.UserDetailsImpl;
 
 public interface UserService extends CrudService<User, UserDTO> {
 
-	List<UserDTO> findAllProfessor();
+	List<UserDTO> findAllProfessorByOrganisation(Long idOrg);
 
 	User convertDTOtoModelWithOutRelation(UserDTO dto);
 

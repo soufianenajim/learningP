@@ -8,5 +8,7 @@ import com.learning.model.Module;
 import com.learning.model.ProgressionModule;
 
 public interface ProgressionModuleService extends CrudService<ProgressionModule, ProgressionModuleDTO> {
-	void saveByModuleAndStudents(Module module,List<UserDTO> students);
+	void saveByModuleAndStudents(Module module, List<UserDTO> students);
+
+	void updateProgressionModule(Long idModule,Long idStudent);
 }

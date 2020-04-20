@@ -13,5 +13,8 @@ public interface ProgressionModuleRepository extends JpaRepository<ProgressionMo
 
 	@Query("SELECT pm FROM ProgressionModule pm WHERE pm.student.id=?1 and pm.module.id=?2 ")
 	Page<ProgressionModule> findByUserAndModule(Long userId, Long moduleId, Pageable pageable);
+	
+	@Query("SELECT pm FROM ProgressionModule pm WHERE pm.module.id=?1 and pm.student.id=?2  ")
+	ProgressionModule findByModuleAndStudent(Long moduleId,Long studentId);
 
 }

@@ -19,6 +19,7 @@ import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.CourService;
 import com.learning.service.ProgressionCourService;
+import com.learning.service.ProgressionModuleService;
 import com.learning.service.UserService;
 
 @Service
@@ -30,12 +31,16 @@ public class ProgressionCourServiceImpl implements ProgressionCourService {
 	private UserService userService;
 	@Autowired
 	private CourService courService;
+	@Autowired
+	private ProgressionModuleService progressionModuleService;
 
 	// save or update
 	@Override
 	public ProgressionCourDTO save(ProgressionCourDTO progressionCourDTO) {
 		ProgressionCour progressionCour = convertDTOtoModel(progressionCourDTO);
 		progressionCour = progressionCourRepository.save(progressionCour);
+		progressionModuleService.updateProgressionModule(progressionCourDTO.getModuleId(),
+				progressionCourDTO.getStudent().getId());
 		return convertModelToDTO(progressionCour);
 	}
 
@@ -61,13 +66,14 @@ public class ProgressionCourServiceImpl implements ProgressionCourService {
 		ProgressionCourDTO progressionCour = demande.getModel();
 		int page = demande.getPage();
 		int size = demande.getSize();
-		Long idStudent = progressionCour.getStudent()!=null ?progressionCour.getStudent().getId():null;
-		Long idModule=progressionCour.getModuleId();
-		Long idCour = progressionCour.getCour()!=null?progressionCour.getCour().getId():null;
+		Long idStudent = progressionCour.getStudent() != null ? progressionCour.getStudent().getId() : null;
+		Long idModule = progressionCour.getModuleId();
+		Long idCour = progressionCour.getCour() != null ? progressionCour.getCour().getId() : null;
 		Page<ProgressionCour> pageProgressionCour = idStudent != null
 				? idCour != null
 						? progressionCourRepository.findByStudentAndCour(idStudent, idCour, PageRequest.of(page, size))
-						: progressionCourRepository.findByStudentAndModule(idStudent,idModule, PageRequest.of(page, size))
+						: progressionCourRepository.findByStudentAndModule(idStudent, idModule,
+								PageRequest.of(page, size))
 				: null;
 
 		if (pageProgressionCour != null) {
@@ -158,17 +164,20 @@ public class ProgressionCourServiceImpl implements ProgressionCourService {
 	@Override
 	public void saveByCourAndStudents(Cour cour, List<UserDTO> students) {
 		for (UserDTO student : students) {
-			ProgressionCour progressionCour=new ProgressionCour();
+			ProgressionCour progressionCour = new ProgressionCour();
 			progressionCour.setCour(cour);
 			progressionCour.setStudent(userService.convertDTOtoModel(student));
 			progressionCour.setProgression(0.0);
-			
+
 			progressionCourRepository.save(progressionCour);
 		}
-		
+
 	}
 
-	
-	
+	@Override
+	public List<Double> listOfProgressionByModuleAndStudent(Long idModule, Long idStudent) {
+
+		return progressionCourRepository.listOfProgressionByModuleAndStudent(idModule, idStudent);
+	}
 
 }

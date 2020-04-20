@@ -10,5 +10,5 @@ import com.learning.model.ProgressionCour;
 public interface ProgressionCourService extends CrudService<ProgressionCour, ProgressionCourDTO> {
 	
 	void saveByCourAndStudents(Cour cour,List<UserDTO> students);
-	
+    List<Double> listOfProgressionByModuleAndStudent(Long idModule,Long idStudent);	
 }

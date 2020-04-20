@@ -18,6 +18,7 @@ import com.learning.model.User;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.ModuleService;
+import com.learning.service.ProgressionCourService;
 import com.learning.service.ProgressionModuleService;
 import com.learning.service.UserService;
 
@@ -30,6 +31,8 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 	private UserService userService;
 	@Autowired
 	private ModuleService moduleService;
+	@Autowired
+	private ProgressionCourService progressionCourService;
 
 	// save or update
 	@Override
@@ -159,6 +162,22 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 			progressionModuleRepository.save(progressionModule);
 		}
 
+	}
+
+	@Override
+	public void updateProgressionModule(Long idModule, Long idStudent) {
+		List<Double> listProgressionCour = progressionCourService.listOfProgressionByModuleAndStudent(idModule,
+				idStudent);
+		Double progressionTemp = 0.0;
+		Double result = 0.0;
+		for (Double progressionCour : listProgressionCour) {
+
+			progressionTemp += progressionCour;
+		}
+		result = progressionTemp / listProgressionCour.size();
+		ProgressionModule progressionModule=progressionModuleRepository.findByModuleAndStudent(idModule, idStudent);
+		progressionModule.setProgressionCour(result);
+		progressionModuleRepository.save(progressionModule);
 	}
 
 }

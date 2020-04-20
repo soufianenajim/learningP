@@ -1,5 +1,7 @@
 package com.learning.dao;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +18,8 @@ public interface ProgressionCourRepository extends JpaRepository<ProgressionCour
 
 	@Query("SELECT pc FROM ProgressionCour pc WHERE pc.student.id=?1 and pc.cour.module.id=?2")
 	Page<ProgressionCour> findByStudentAndModule(Long userId,Long moduleId, Pageable pageable);
+	
+	@Query("SELECT pc.progression FROM ProgressionCour pc WHERE pc.cour.module.id=?1 and  pc.student.id=?2")
+	List<Double> listOfProgressionByModuleAndStudent(Long idModule,Long idStudent);
 }
+

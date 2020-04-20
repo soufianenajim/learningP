@@ -17,6 +17,7 @@ import com.learning.model.Branch;
 import com.learning.model.Level;
 import com.learning.model.Organization;
 import com.learning.model.Role;
+import com.learning.model.RoleName;
 import com.learning.model.User;
 import com.learning.model.base.ConstantBase;
 import com.learning.model.base.Demande;
@@ -51,7 +52,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDTO saveU(UserDTO userDTO) throws BusinessException {
- //  id=5;
+		// id=5;
 		Optional<User> user = userRepository.findByEmail(userDTO.getEmail());
 		User existingUser = user.isPresent() ? user.get() : null;
 		if (userDTO.getId() != null
@@ -118,10 +119,20 @@ public class UserServiceImpl implements UserService {
 		user.setLastName(userDTO.getLastName());
 		user.setPhone(userDTO.getPhone());
 		user.setPassword(userDTO.getPassword());
-		user.setRefRole(roleService.convertDTOtoModel(userDTO.getRefRole()));
-		user.setOrganization(organizationService.convertDTOtoModel(userDTO.getOrganization()));
-		user.setBranch(branchService.convertDTOtoModelWithOutOrganization(userDTO.getBranch()));
-		user.setLevel(levelService.convertDTOtoModelWithOutOrganization(userDTO.getLevel()));
+		if (userDTO.getRefRole() != null) {
+			user.setRefRole(roleService.convertDTOtoModel(userDTO.getRefRole()));
+		}
+		if(userDTO.getOrganization()!=null) {
+			
+			user.setOrganization(organizationService.convertDTOtoModel(userDTO.getOrganization()));
+		}
+		
+		if (userDTO.getBranch() != null) {
+			user.setBranch(branchService.convertDTOtoModelWithOutOrganization(userDTO.getBranch()));
+		}
+		if (userDTO.getLevel() != null) {
+			user.setLevel(levelService.convertDTOtoModelWithOutOrganization(userDTO.getLevel()));
+		}
 
 		return user;
 	}
@@ -185,9 +196,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserDTO> findAllProfessor() {
-		// a modifier par finndAll By role professor
-		List<User> users = userRepository.findAll();
+	public List<UserDTO> findAllProfessorByOrganisation(Long idOrga) {
+
+		List<User> users = userRepository.findByRoleAndOrganization(RoleName.ROLE_TEACHER, idOrga);
 		return convertEntitiesToDtos(users);
 	}
 

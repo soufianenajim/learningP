@@ -71,11 +71,11 @@ public class UserResource {
 		}
 	}
 	
-	@GetMapping(ConstantBase.CRUD_REST_FIND_ALL + "-professor")
-	public ResponseEntity<?> findAll_Professor() {
+	@GetMapping(ConstantBase.CRUD_REST_FIND_ALL + "-professor-by-orga/{idOrg}")
+	public ResponseEntity<?> findAll_Professor(@PathVariable Long idOrg) {
 		try {
 
-			return new ResponseEntity<>(userService.findAllProfessor(), HttpStatus.OK);
+			return new ResponseEntity<>(userService.findAllProfessorByOrganisation(idOrg), HttpStatus.OK);
 		} catch (Exception e) {
 			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
