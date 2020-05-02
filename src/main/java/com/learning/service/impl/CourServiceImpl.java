@@ -44,9 +44,8 @@ public class CourServiceImpl implements CourService {
 		cour = courRepository.save(cour);
 		if (courDTO.getId() == null) {
 			Module module = cour.getModule();
-			Long idLevel = module.getLevel().getId();
-			Long idBranch = module.getBranch().getId();
-			List<UserDTO> students = userService.findByLevelAndBranch(idLevel, idBranch);
+			Long idGroup = module.getGroup().getId();
+			List<UserDTO> students = userService.findByGroup(idGroup);
 			progressionCourService.saveByCourAndStudents(cour, students);
 		}
 		return convertModelToDTO(cour);

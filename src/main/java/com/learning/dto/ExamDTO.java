@@ -1,5 +1,6 @@
 package com.learning.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ExamDTO extends HistorizedDTO{
@@ -10,6 +11,9 @@ public class ExamDTO extends HistorizedDTO{
 	
 	private String name;
 
+	private LocalDateTime startDateTime;
+	
+	private LocalDateTime endDateTime;
 	
 	private ModuleDTO module;
 
@@ -60,6 +64,22 @@ public class ExamDTO extends HistorizedDTO{
 
 	public void setQuestions(List<QuestionDTO> questions) {
 		this.questions = questions;
+	}
+
+	public LocalDateTime getStartDateTime() {
+		return startDateTime;
+	}
+
+	public void setStartDateTime(LocalDateTime startDateTime) {
+		this.startDateTime = startDateTime;
+	}
+
+	public LocalDateTime getEndDateTime() {
+		return endDateTime;
+	}
+
+	public void setEndDateTime(LocalDateTime endDateTime) {
+		this.endDateTime = endDateTime;
 	}
 
 

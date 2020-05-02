@@ -20,6 +20,8 @@ public interface UserService extends CrudService<User, UserDTO> {
 	List<User> convertDtosToEntitiesWithOutRelation(List<UserDTO> list);
 
 	List<UserDTO> findByLevelAndBranch(Long idLevel, Long idBranch);
+	
+	List<UserDTO> findByGroup(Long idGroup);
 
 	UserDTO convertFromUserDetailsToDTO(UserDetailsImpl userDetail,String token);
 	

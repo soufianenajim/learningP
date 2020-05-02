@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.learning.dao.TdRepository;
 import com.learning.dto.TdDTO;
-import com.learning.dto.UserDTO;
 import com.learning.model.Cour;
 import com.learning.model.Question;
 import com.learning.model.Td;
@@ -158,6 +157,12 @@ public class TdServiceImpl implements TdService {
 	public List<TdDTO> findByCour(Long courId) {
 		List<Td> list = tdRepository.findByCour(courId);
 		return convertEntitiesToDTOsWithQuestions(list);
+	}
+
+	@Override
+	public List<TdDTO> findByModule(Long idModule) {
+		
+		return convertEntitiesToDtos(tdRepository.findByModule(idModule));
 	}
 
 }

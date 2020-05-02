@@ -80,6 +80,8 @@ public class ExamServiceImpl implements ExamService {
 		Exam exam = new Exam();
 		exam.setId(examDTO.getId());
 		exam.setName(examDTO.getName());
+		exam.setStartDateTime(examDTO.getStartDateTime().withSecond(0));
+		exam.setEndDateTime(examDTO.getEndDateTime().withSecond(0));
 
 		if (examDTO.getModule() != null) {
 			exam.setModule(moduleService.convertDTOtoModel(examDTO.getModule()));
@@ -92,6 +94,8 @@ public class ExamServiceImpl implements ExamService {
 		ExamDTO examDTO = new ExamDTO();
 		examDTO.setId(exam.getId());
 		examDTO.setName(exam.getName());
+		examDTO.setStartDateTime(exam.getStartDateTime());
+		examDTO.setEndDateTime(exam.getEndDateTime());
 		Module module = exam.getModule();
 		if (module != null) {
 			examDTO.setModule(moduleService.convertModelToDTO(exam.getModule()));
@@ -137,6 +141,12 @@ public class ExamServiceImpl implements ExamService {
 	public void deleteByModule(Long idModule) {
 		examRepository.deleteByModule(idModule);
 		
+	}
+
+	@Override
+	public List<ExamDTO> findByModule(Long idModule) {
+		
+		return convertEntitiesToDtos(examRepository.findByModule(idModule));
 	}
 
 }

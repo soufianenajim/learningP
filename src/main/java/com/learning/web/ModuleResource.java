@@ -81,11 +81,22 @@ public class ModuleResource {
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	@GetMapping("find-by-level-and-branch/{idLevel}/{idBranch}")
-	public ResponseEntity<?> findByLevelAndBranch(@PathVariable Long idLevel,@PathVariable Long idBranch) {
+	@GetMapping("find-by-group/{idGroup}")
+	public ResponseEntity<?> findByLevelAndBranch(@PathVariable Long idGroup) {
 		try {
 
-			return new ResponseEntity<>(moduleService.findByLevelAndBranch(idLevel, idBranch), HttpStatus.OK);
+			return new ResponseEntity<>(moduleService.findByGroup(idGroup), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("find-by-professor/{idProfessor}")
+	public ResponseEntity<?> findByProfessor(@PathVariable Long idProfessor) {
+		try {
+
+			return new ResponseEntity<>(moduleService.findByProfessor(idProfessor), HttpStatus.OK);
 		} catch (Exception e) {
 			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);

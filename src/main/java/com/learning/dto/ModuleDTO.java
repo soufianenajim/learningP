@@ -8,10 +8,7 @@ public class ModuleDTO extends HistorizedDTO {
 
 	private UserDTO professor;
 
-	private LevelDTO level;
-
-
-	private BranchDTO branch;
+	private GroupDTO group;
 	
 	private List<CourDTO> cours;
 
@@ -67,21 +64,13 @@ public class ModuleDTO extends HistorizedDTO {
 		this.exams = exams;
 	}
 
-	public LevelDTO getLevel() {
-		return level;
+	public GroupDTO getGroup() {
+		return group;
 	}
 
-	public void setLevel(LevelDTO level) {
-		this.level = level;
+	public void setGroup(GroupDTO group) {
+		this.group = group;
 	}
 
-	public BranchDTO getBranch() {
-		return branch;
-	}
-
-	public void setBranch(BranchDTO branch) {
-		this.branch = branch;
-	}
 	
-
 }

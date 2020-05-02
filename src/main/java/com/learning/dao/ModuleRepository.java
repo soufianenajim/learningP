@@ -17,6 +17,10 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
 	@Query("SELECT m FROM Module m WHERE (LOWER(m.name) LIKE CONCAT(lower(?1), '%')) and m.professor.id=?2 ")
 	Page<Module> findByNameAndUser(String name, Long idUser, Pageable pageable);
 
-	@Query("SELECT m FROM Module m WHERE m.level.id=?1 and m.branch.id=?2 ")
-	List<Module> findByLevelAndBranch(Long idLevel, Long idBranch);
+	@Query("SELECT m FROM Module m WHERE m.group.id=?1  ")
+	List<Module> findByGroup(Long idGroup);
+	
+
+	@Query("SELECT m FROM Module m WHERE m.professor.id=?1  ")
+	List<Module> findByProfessor(Long idProfessor);
 }

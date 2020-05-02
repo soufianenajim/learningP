@@ -1,9 +1,10 @@
 package com.learning.dto;
 
+import java.util.List;
+
 public class UserDTO extends HistorizedDTO {
 
 	private String email;
-	
 
 	private String password;
 
@@ -12,7 +13,7 @@ public class UserDTO extends HistorizedDTO {
 	private String lastName;
 
 	private String phone;
-	
+
 	private String token;
 
 	private String tokenDate;
@@ -23,21 +24,16 @@ public class UserDTO extends HistorizedDTO {
 
 	private RoleDTO refRole;
 
-	private LevelDTO level;
-	
-
-	private BranchDTO branch;
-	
+	private List<GroupDTO> groups;
 
 	private OrganizationDTO organization;
 
+	private Long groupId;
 
 	public UserDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
-	
 
 	public String getFirstName() {
 		return firstName;
@@ -55,19 +51,13 @@ public class UserDTO extends HistorizedDTO {
 		this.lastName = lastName;
 	}
 
-	
-
 	public String getEmail() {
 		return email;
 	}
 
-
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-
 
 	public String getPassword() {
 		return password;
@@ -117,20 +107,12 @@ public class UserDTO extends HistorizedDTO {
 		this.refRole = refRole;
 	}
 
-	public LevelDTO getLevel() {
-		return level;
+	public List<GroupDTO> getGroups() {
+		return groups;
 	}
 
-	public void setLevel(LevelDTO level) {
-		this.level = level;
-	}
-
-	public BranchDTO getBranch() {
-		return branch;
-	}
-
-	public void setBranch(BranchDTO branch) {
-		this.branch = branch;
+	public void setGroups(List<GroupDTO> groups) {
+		this.groups = groups;
 	}
 
 	public OrganizationDTO getOrganization() {
@@ -141,18 +123,20 @@ public class UserDTO extends HistorizedDTO {
 		this.organization = organization;
 	}
 
-
-
 	public String getPhone() {
 		return phone;
 	}
 
-
-
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	
-	
+
+	public Long getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(Long groupId) {
+		this.groupId = groupId;
+	}
 
 }

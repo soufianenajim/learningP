@@ -8,6 +8,7 @@ import com.learning.model.Td;
 public interface TdService extends CrudService<Td, TdDTO> {
 	List<TdDTO> findByCour(Long courId);
 	
+	List<TdDTO> findByModule(Long idModule);
 	
 	
 }

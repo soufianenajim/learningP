@@ -25,13 +25,10 @@ public class Module extends Historized {
 	private User professor;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "level_id")
-	private Level level;
+	@JoinColumn(name = "group_id")
+	private Group group;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "branch_id")
-	private Branch branch;
-
+	
 	
 
 	@OneToMany(mappedBy = "module", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
@@ -97,22 +94,13 @@ public class Module extends Historized {
 	}
 	
 
-	public Level getLevel() {
-		return level;
+	public Group getGroup() {
+		return group;
 	}
 
-	public void setLevel(Level level) {
-		this.level = level;
+	public void setGroup(Group group) {
+		this.group = group;
 	}
-
-	public Branch getBranch() {
-		return branch;
-	}
-
-	public void setBranch(Branch branch) {
-		this.branch = branch;
-	}
-	
 
 	public List<ProgressionModule> getProgressionModules() {
 		return progressionModules;
@@ -124,7 +112,7 @@ public class Module extends Historized {
 
 	@Override
 	public String toString() {
-		return "Module [name=" + name + ", user=" + professor + ", level=" + level + ", branch=" + branch + ", cours="
+		return "Module [name=" + name + ", user=" + professor + ", group=" + group  + ", cours="
 				+ cours + ", exams=" + exams + "]";
 	}
 

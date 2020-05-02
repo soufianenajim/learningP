@@ -13,8 +13,7 @@ import com.learning.dao.UserRepository;
 import com.learning.dao.UserRepositorySearchCriteria;
 import com.learning.dto.UserDTO;
 import com.learning.exceptions.BusinessException;
-import com.learning.model.Branch;
-import com.learning.model.Level;
+import com.learning.model.Group;
 import com.learning.model.Organization;
 import com.learning.model.Role;
 import com.learning.model.RoleName;
@@ -23,8 +22,7 @@ import com.learning.model.base.ConstantBase;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.security.services.UserDetailsImpl;
-import com.learning.service.BranchService;
-import com.learning.service.LevelService;
+import com.learning.service.GroupService;
 import com.learning.service.OrganizationService;
 import com.learning.service.RoleService;
 import com.learning.service.UserService;
@@ -44,9 +42,8 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private OrganizationService organizationService;
 	@Autowired
-	private BranchService branchService;
-	@Autowired
-	private LevelService levelService;
+	private GroupService groupService;
+
 	@Autowired
 	private UserRepositorySearchCriteria userRepositorySearchCriteria;
 
@@ -122,16 +119,13 @@ public class UserServiceImpl implements UserService {
 		if (userDTO.getRefRole() != null) {
 			user.setRefRole(roleService.convertDTOtoModel(userDTO.getRefRole()));
 		}
-		if(userDTO.getOrganization()!=null) {
-			
+		if (userDTO.getOrganization() != null) {
+
 			user.setOrganization(organizationService.convertDTOtoModel(userDTO.getOrganization()));
 		}
-		
-		if (userDTO.getBranch() != null) {
-			user.setBranch(branchService.convertDTOtoModelWithOutOrganization(userDTO.getBranch()));
-		}
-		if (userDTO.getLevel() != null) {
-			user.setLevel(levelService.convertDTOtoModelWithOutOrganization(userDTO.getLevel()));
+
+		if (userDTO.getGroups() != null) {
+			user.setGroups(groupService.convertDtosToEntities(userDTO.getGroups()));
 		}
 
 		return user;
@@ -145,23 +139,21 @@ public class UserServiceImpl implements UserService {
 		userDTO.setLastName(user.getLastName());
 		userDTO.setEmail(user.getEmail());
 		userDTO.setPhone(user.getPhone());
-		userDTO.setPassword(user.getPassword());
+		// userDTO.setPassword(user.getPassword());
 		Organization organization = user.getOrganization();
-		Level level = user.getLevel();
-		Branch branch = user.getBranch();
+
+		List<Group> groups = user.getGroups();
 		Role role = user.getRefRole();
 		if (organization != null) {
 			userDTO.setOrganization(organizationService.convertModelToDTO(organization));
 		}
-		if (level != null) {
-			userDTO.setLevel(levelService.convertModelToDTOWithOutOrganization(level));
+		if (groups != null) {
+			userDTO.setGroups(groupService.convertEntitiesToDtos(groups));
 		}
 		if (role != null) {
 			userDTO.setRefRole(roleService.convertModelToDTO(role));
 		}
-		if (branch != null) {
-			userDTO.setBranch(branchService.convertModelToDTOWithOutOrganization(branch));
-		}
+
 		userDTO.setCreatedAt(user.getCreatedAt());
 		userDTO.setUpdatedAt(user.getUpdatedAt());
 
@@ -248,8 +240,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserDTO> findByLevelAndBranch(Long idLevel, Long idBranch) {
-		List<User> list = userRepository.findByLevelAndBranch(idLevel, idBranch);
-		return convertEntitiesToDtosWithOutRelation(list);
+//		List<User> list = userRepository.findByLevelAndBranch(idLevel, idBranch);
+//		return convertEntitiesToDtosWithOutRelation(list);
+		return null;
 	}
 
 	@Override
@@ -263,6 +256,12 @@ public class UserServiceImpl implements UserService {
 	public UserDTO save(UserDTO dto) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<UserDTO> findByGroup(Long idGroup) {
+
+		return convertEntitiesToDtosWithOutRelation(userRepository.findByGroup(idGroup));
 	}
 
 }

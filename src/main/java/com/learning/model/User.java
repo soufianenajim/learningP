@@ -1,9 +1,13 @@
 package com.learning.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -51,16 +55,15 @@ public class User extends Historized {
 	private Role refRole;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "level_id")
-	private Level level;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "branch_id")
-	private Branch branch;
-
-	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "organization_id")
 	private Organization organization;
+	
+	@ManyToMany
+	@JoinTable(
+	  name = "user_group", 
+	  joinColumns = @JoinColumn(name = "user_id"), 
+	  inverseJoinColumns = @JoinColumn(name = "group_id"))
+	List<Group> groups;
 
 	public User() {
 		super();
@@ -139,21 +142,7 @@ public class User extends Historized {
 		this.refRole = refRole;
 	}
 
-	public Level getLevel() {
-		return level;
-	}
-
-	public void setLevel(Level level) {
-		this.level = level;
-	}
-
-	public Branch getBranch() {
-		return branch;
-	}
-
-	public void setBranch(Branch branch) {
-		this.branch = branch;
-	}
+	
 
 	public Organization getOrganization() {
 		return organization;
@@ -170,12 +159,23 @@ public class User extends Historized {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+	
+
+
+
+	public List<Group> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(List<Group> groups) {
+		this.groups = groups;
+	}
 
 	@Override
 	public String toString() {
 		return "User [email=" + email + ", password=" + password + ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", token=" + token + ", tokenDate=" + tokenDate + ", isOnline=" + isOnline + ", isOffline="
-				+ isOffline + ", refRole=" + refRole + ", level=" + level + ", branch=" + branch + ", organization="
+				+ isOffline + ", refRole=" + refRole +  ", organization="
 				+ organization + "]";
 	}
 

@@ -1,5 +1,6 @@
 package com.learning.model;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -21,6 +22,12 @@ public class Exam extends Historized {
 
 	@Column(name = "name", length = 100)
 	private String name;
+	
+	@Column(name="start_date_time")
+	private LocalDateTime startDateTime;
+	
+	@Column(name="end_date_time")
+	private LocalDateTime endDateTime;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "module_id")
@@ -29,6 +36,8 @@ public class Exam extends Historized {
 	
 	@OneToMany(mappedBy = "exam", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Question> questions;
+	
+	
 	
 	public Exam() {
 		super();
@@ -73,6 +82,23 @@ public class Exam extends Historized {
 
 	public void setQuestions(List<Question> questions) {
 		this.questions = questions;
+	}
+	
+
+	public LocalDateTime getStartDateTime() {
+		return startDateTime;
+	}
+
+	public void setStartDateTime(LocalDateTime startDateTime) {
+		this.startDateTime = startDateTime;
+	}
+
+	public LocalDateTime getEndDateTime() {
+		return endDateTime;
+	}
+
+	public void setEndDateTime(LocalDateTime endDateTime) {
+		this.endDateTime = endDateTime;
 	}
 
 	@Override

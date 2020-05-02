@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -15,16 +16,17 @@ import org.springframework.util.StringUtils;
 
 import com.learning.dao.UserRepositorySearchCriteria;
 import com.learning.dto.UserDTO;
+import com.learning.model.Group;
 import com.learning.model.User;
 import com.learning.model.base.Demande;
 import com.learning.model.base.SortOrder;
 
 @Repository
 public class UserRepositorySearchCriteriaImpl implements UserRepositorySearchCriteria {
-	
+
 	@Autowired
 	private EntityManager em;
-	
+
 	private CriteriaBuilder cb = null;
 
 	private Root<User> user = null;
@@ -57,7 +59,7 @@ public class UserRepositorySearchCriteriaImpl implements UserRepositorySearchCri
 
 	@Override
 	public Long countByCriteres(Demande<UserDTO> demande) {
-		 cb = em.getCriteriaBuilder();
+		cb = em.getCriteriaBuilder();
 		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
 
 		user = cq.from(User.class);
@@ -93,11 +95,10 @@ public class UserRepositorySearchCriteriaImpl implements UserRepositorySearchCri
 		if (!StringUtils.isEmpty(userDTO.getOrganization()) && userDTO.getOrganization() != null) {
 			predicates.add(cb.equal(user.<Long>get("organization"), userDTO.getOrganization().getId()));
 		}
-		if (!StringUtils.isEmpty(userDTO.getLevel()) && userDTO.getLevel() != null) {
-			predicates.add(cb.equal(user.<Long>get("level"), userDTO.getLevel().getId()));
-		}
-		if (!StringUtils.isEmpty(userDTO.getBranch()) && userDTO.getBranch() != null) {
-			predicates.add(cb.equal(user.<Long>get("branch"), userDTO.getBranch().getId()));
+		if (userDTO.getGroupId() != null) {
+			Join<User, Group> vulGroup = user.join("groups");
+
+			predicates.add(cb.equal(vulGroup.<Long>get("id"), userDTO.getGroupId()));
 		}
 
 		return predicates;

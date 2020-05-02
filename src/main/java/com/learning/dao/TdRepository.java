@@ -19,4 +19,7 @@ public interface TdRepository extends JpaRepository<Td, Long> {
 	
 	@Query("SELECT t FROM Td t WHERE t.cour.id=?1 ")
 	List<Td> findByCour(Long courId);
+	
+	@Query("SELECT t FROM Td t WHERE t.cour.module.id=?1 ")
+	List<Td> findByModule(Long idModule);
 }

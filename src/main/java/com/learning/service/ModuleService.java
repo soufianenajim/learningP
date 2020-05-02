@@ -16,5 +16,7 @@ public interface ModuleService extends CrudService<Module, ModuleDTO> {
 
 	List<Module> convertDtosToEntitiesWithOutRelation(List<ModuleDTO> list);
 	
-	List<ModuleDTO> findByLevelAndBranch(Long idLevel,Long idBranch);
+	List<ModuleDTO> findByGroup(Long idGroup);
+	
+	List<ModuleDTO> findByProfessor(Long idProfessor);
 }

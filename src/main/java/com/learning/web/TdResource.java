@@ -80,4 +80,14 @@ public class TdResource {
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	@GetMapping("find-by-module" + "/{id}")
+	public ResponseEntity<?> findByModule(@PathVariable Long id) {
+		try {
+			return new ResponseEntity<>(tdService.findByModule(id), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/exam/find-by-module: {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
 }

@@ -1,5 +1,7 @@
 package com.learning.dao;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
@@ -21,4 +23,7 @@ public interface ExamRepository extends JpaRepository<Exam,Long > {
 	@Transactional
 	@Query("delete  FROM Exam  WHERE  module.id=?1 ")
 	void deleteByModule(Long id);
+	
+	@Query("SELECT e FROM Exam e WHERE  e.module.id = ?1")
+	List<Exam> findByModule(Long idModule);
 }

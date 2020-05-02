@@ -12,14 +12,12 @@ import org.springframework.stereotype.Service;
 import com.learning.dao.ModuleRepository;
 import com.learning.dto.ModuleDTO;
 import com.learning.dto.UserDTO;
-import com.learning.model.Branch;
-import com.learning.model.Level;
+import com.learning.model.Group;
 import com.learning.model.Module;
 import com.learning.model.User;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
-import com.learning.service.BranchService;
-import com.learning.service.LevelService;
+import com.learning.service.GroupService;
 import com.learning.service.ModuleService;
 import com.learning.service.ProgressionModuleService;
 import com.learning.service.UserService;
@@ -32,9 +30,8 @@ public class ModuleServiceImpl implements ModuleService {
 	@Autowired
 	private UserService userService;
 	@Autowired
-	private BranchService branchService;
-	@Autowired
-	private LevelService levelService;
+	private GroupService groupService;
+	
 	@Autowired
 	private ProgressionModuleService progressionModuleService;
 
@@ -44,8 +41,7 @@ public class ModuleServiceImpl implements ModuleService {
 		module = moduleRepository.save(module);
 		// get student by level and branch
 		if (moduleDTO.getId() == null) {
-			List<UserDTO> students = userService.findByLevelAndBranch(moduleDTO.getLevel().getId(),
-					moduleDTO.getBranch().getId());
+			List<UserDTO> students = userService.findByGroup(moduleDTO.getGroup().getId());
 			// save progressionModule with module and students
 			progressionModuleService.saveByModuleAndStudents(module, students);
 		}
@@ -98,12 +94,10 @@ public class ModuleServiceImpl implements ModuleService {
 			module.setProfessor(userService.convertDTOtoModel(moduleDTO.getProfessor()));
 		}
 
-		if (moduleDTO.getBranch() != null) {
-			module.setBranch(branchService.convertDTOtoModel(moduleDTO.getBranch()));
+		if (moduleDTO.getGroup() != null) {
+			module.setGroup(groupService.convertDTOtoModel(moduleDTO.getGroup()));
 		}
-		if (moduleDTO.getLevel() != null) {
-			module.setLevel(levelService.convertDTOtoModel(moduleDTO.getLevel()));
-		}
+		
 		return module;
 	}
 
@@ -113,18 +107,16 @@ public class ModuleServiceImpl implements ModuleService {
 		moduleDTO.setId(module.getId());
 		moduleDTO.setName(module.getName());
 		User user = module.getProfessor();
-		Branch branch = module.getBranch();
-		Level level = module.getLevel();
+		Group group = module.getGroup();
+	
 		if (user != null) {
 			moduleDTO.setProfessor(userService.convertModelToDTO(module.getProfessor()));
 
 		}
-		if (branch != null) {
-			moduleDTO.setBranch(branchService.convertModelToDTO(branch));
+		if (group != null) {
+			moduleDTO.setGroup(groupService.convertModelToDTO(group));
 		}
-		if (level != null) {
-			moduleDTO.setLevel(levelService.convertModelToDTO(level));
-		}
+		
 		moduleDTO.setCreatedAt(module.getCreatedAt());
 		moduleDTO.setUpdatedAt(module.getUpdatedAt());
 		return moduleDTO;
@@ -209,9 +201,15 @@ public class ModuleServiceImpl implements ModuleService {
 	}
 
 	@Override
-	public List<ModuleDTO> findByLevelAndBranch(Long idLevel, Long idBranch) {
+	public List<ModuleDTO> findByGroup(Long idGroup) {
 
-		return convertEntitiesToDtosWithOutRelation(moduleRepository.findByLevelAndBranch(idLevel, idBranch));
+		return convertEntitiesToDtosWithOutRelation(moduleRepository.findByGroup(idGroup));
+	}
+
+	@Override
+	public List<ModuleDTO> findByProfessor(Long idProfessor) {
+		
+		return convertEntitiesToDtosWithOutRelation(moduleRepository.findByProfessor(idProfessor));
 	}
 
 }
