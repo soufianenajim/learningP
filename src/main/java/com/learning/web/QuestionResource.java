@@ -71,21 +71,11 @@ public class QuestionResource {
 		}
 	}
 
-	@GetMapping("/find-by-quiz/{id}")
-	public ResponseEntity<?> findByQuiz(@PathVariable Long id) {
-		try {
-			return new ResponseEntity<>(questionService.findByQuiz(id), HttpStatus.OK);
-		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/suggestion" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
-			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
 
-	}
-
-	@GetMapping("/find-by-td/{id}")
+	@GetMapping("/find-by-exercices/{id}")
 	public ResponseEntity<?> findByTd(@PathVariable Long id) {
 		try {
-			return new ResponseEntity<>(questionService.findByTd(id), HttpStatus.OK);
+			return new ResponseEntity<>(questionService.findByExercices(id), HttpStatus.OK);
 		} catch (Exception e) {
 			LOGGER.error("Problem occored in api/suggestion" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);

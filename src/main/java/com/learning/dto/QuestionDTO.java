@@ -13,11 +13,8 @@ public class QuestionDTO extends HistorizedDTO{
 	private String correctComment;
 	
 	
-	private TdDTO td;
+	private ExercicesDTO exercices;
 
-	
-	private QuizDTO quiz;
-	
 	
 	private ExamDTO exam;
 	
@@ -68,20 +65,16 @@ public class QuestionDTO extends HistorizedDTO{
 		this.correctComment = correctComment;
 	}
 
-	public TdDTO getTd() {
-		return td;
+	
+
+	
+
+	public ExercicesDTO getExercices() {
+		return exercices;
 	}
 
-	public void setTd(TdDTO td) {
-		this.td = td;
-	}
-
-	public QuizDTO getQuiz() {
-		return quiz;
-	}
-
-	public void setQuiz(QuizDTO quiz) {
-		this.quiz = quiz;
+	public void setExercices(ExercicesDTO exercices) {
+		this.exercices = exercices;
 	}
 
 	public ExamDTO getExam() {

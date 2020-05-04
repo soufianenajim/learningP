@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.learning.dto.UserDTO;
 import com.learning.exceptions.BusinessException;
+import com.learning.model.RoleName;
 import com.learning.model.User;
 import com.learning.security.services.UserDetailsImpl;
 
@@ -22,6 +23,8 @@ public interface UserService extends CrudService<User, UserDTO> {
 	List<UserDTO> findByLevelAndBranch(Long idLevel, Long idBranch);
 	
 	List<UserDTO> findByGroup(Long idGroup);
+	
+	List<UserDTO> findByGroupAndRole(Long idGroup,RoleName role);
 
 	UserDTO convertFromUserDetailsToDTO(UserDetailsImpl userDetail,String token);
 	

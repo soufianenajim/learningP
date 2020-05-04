@@ -12,26 +12,28 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "td")
-public class Td extends Historized {
+@Table(name = "exercices")
+public class Exercices extends Historized {
 
 	private static final long serialVersionUID = -8858004000210805400L;
 
 	@Column(name = "name", length = 100)
 	private String name;
 
+	private TypeEnum type;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cour_id")
 	private Cour cour;
-
-	@OneToMany(mappedBy = "td", fetch = FetchType.LAZY, cascade = CascadeType.DETACH )
+	
+	@OneToMany(mappedBy = "exercices", fetch = FetchType.LAZY, cascade = CascadeType.DETACH )
 	private List<Question> questions;
 
-	public Td() {
+	public Exercices() {
 		super();
 	}
 
-	public Td(String name) {
+	public Exercices(String name) {
 		super();
 		this.name = name;
 	}
@@ -52,6 +54,8 @@ public class Td extends Historized {
 		this.name = name;
 	}
 
+	
+
 	public Cour getCour() {
 		return cour;
 	}
@@ -68,9 +72,18 @@ public class Td extends Historized {
 		this.questions = questions;
 	}
 
+	public TypeEnum getType() {
+		return type;
+	}
+
+	public void setType(TypeEnum type) {
+		this.type = type;
+	}
+
 	@Override
 	public String toString() {
-		return "Td [name=" + name + ", cour=" + cour + "]";
+		return "Td [name=" + name + ", type=" + type + ", questions=" + questions + "]";
 	}
+
 
 }

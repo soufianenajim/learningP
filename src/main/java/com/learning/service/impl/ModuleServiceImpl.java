@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.learning.dao.ModuleRepository;
 import com.learning.dto.ModuleDTO;
-import com.learning.dto.UserDTO;
 import com.learning.model.Group;
 import com.learning.model.Module;
 import com.learning.model.User;
@@ -19,7 +18,6 @@ import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.GroupService;
 import com.learning.service.ModuleService;
-import com.learning.service.ProgressionModuleService;
 import com.learning.service.UserService;
 
 @Service
@@ -32,20 +30,13 @@ public class ModuleServiceImpl implements ModuleService {
 	@Autowired
 	private GroupService groupService;
 	
-	@Autowired
-	private ProgressionModuleService progressionModuleService;
+
 
 	@Override
 	public ModuleDTO save(ModuleDTO moduleDTO) {
 		Module module = convertDTOtoModel(moduleDTO);
 		module = moduleRepository.save(module);
 		// get student by level and branch
-		if (moduleDTO.getId() == null) {
-			List<UserDTO> students = userService.findByGroup(moduleDTO.getGroup().getId());
-			// save progressionModule with module and students
-			progressionModuleService.saveByModuleAndStudents(module, students);
-		}
-
 		return convertModelToDTO(module);
 	}
 
@@ -89,6 +80,7 @@ public class ModuleServiceImpl implements ModuleService {
 		Module module = new Module();
 		module.setId(moduleDTO.getId());
 		module.setName(moduleDTO.getName());
+		module.setLaunched(moduleDTO.isLaunched());
 
 		if (moduleDTO.getProfessor() != null) {
 			module.setProfessor(userService.convertDTOtoModel(moduleDTO.getProfessor()));
@@ -106,6 +98,7 @@ public class ModuleServiceImpl implements ModuleService {
 		ModuleDTO moduleDTO = new ModuleDTO();
 		moduleDTO.setId(module.getId());
 		moduleDTO.setName(module.getName());
+		moduleDTO.setLaunched(module.isLaunched());
 		User user = module.getProfessor();
 		Group group = module.getGroup();
 	

@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.learning.dao.ProgressionCourRepository;
+import com.learning.dto.CourDTO;
 import com.learning.dto.ProgressionCourDTO;
 import com.learning.dto.UserDTO;
 import com.learning.model.Cour;
@@ -163,13 +164,15 @@ public class ProgressionCourServiceImpl implements ProgressionCourService {
 
 	@Override
 	public void saveByCourAndStudents(Cour cour, List<UserDTO> students) {
+		
 		for (UserDTO student : students) {
 			ProgressionCour progressionCour = new ProgressionCour();
 			progressionCour.setCour(cour);
 			progressionCour.setStudent(userService.convertDTOtoModel(student));
 			progressionCour.setProgression(0.0);
-
 			progressionCourRepository.save(progressionCour);
+			
+			progressionModuleService.updateProgressionModule(cour.getModule().getId(), student.getId());
 		}
 
 	}
@@ -178,6 +181,21 @@ public class ProgressionCourServiceImpl implements ProgressionCourService {
 	public List<Double> listOfProgressionByModuleAndStudent(Long idModule, Long idStudent) {
 
 		return progressionCourRepository.listOfProgressionByModuleAndStudent(idModule, idStudent);
+	}
+
+	@Override
+	public void saveByStudentAndCours(User student, List<CourDTO> cours) {
+		for (CourDTO cour : cours) {
+			ProgressionCour progressionCour = new ProgressionCour();
+			progressionCour.setCour(courService.convertDTOtoModel(cour));
+			progressionCour.setStudent(student);
+			progressionCour.setProgression(0.0);
+			progressionCourRepository.save(progressionCour);
+			
+			
+		}
+
+		
 	}
 
 }

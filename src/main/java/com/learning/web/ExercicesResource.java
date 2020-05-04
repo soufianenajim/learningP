@@ -13,26 +13,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.learning.dto.CourDTO;
+import com.learning.dto.ExercicesDTO;
 import com.learning.model.base.ConstantBase;
 import com.learning.model.base.Demande;
 import com.learning.security.SecurityConstants;
-import com.learning.service.CourService;
+import com.learning.service.ExercicesService;
 
 @RestController
-@RequestMapping("/cour")
-public class CourResource {
+@RequestMapping("/exercices")
+public class ExercicesResource {
 
-	private static Logger LOGGER = LogManager.getLogger("CourResource");
+	private static Logger LOGGER = LogManager.getLogger("ExercicesResource");
 	@Autowired
-	CourService courService;
+	ExercicesService exercicesService;
 
 	@PostMapping(ConstantBase.CRUD_REST_FIND_BY_CRITERE)
-	public ResponseEntity<?> findByCriteres(@RequestBody Demande<CourDTO> demande) {
+	public ResponseEntity<?> findByCriteres(@RequestBody Demande<ExercicesDTO> demande) {
 		try {
-			return new ResponseEntity<>(courService.findByCriteres(demande), HttpStatus.OK);
+			return new ResponseEntity<>(exercicesService.findByCriteres(demande), HttpStatus.OK);
 		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_FIND_BY_CRITERE + " : {} ", e);
+			LOGGER.error("Problem occored in api/exercices" + ConstantBase.CRUD_REST_FIND_BY_CRITERE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -40,9 +40,9 @@ public class CourResource {
 	@GetMapping(ConstantBase.CRUD_REST_FIND_BY_ID + "/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id) {
 		try {
-			return new ResponseEntity<>(courService.findById(id), HttpStatus.OK);
+			return new ResponseEntity<>(exercicesService.findById(id), HttpStatus.OK);
 		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			LOGGER.error("Problem occored in api/exercices" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
@@ -51,57 +51,53 @@ public class CourResource {
 	@DeleteMapping(ConstantBase.CRUD_REST_DELETE + "/{id}")
 	public ResponseEntity<?> deleteById(@PathVariable Long id) {
 		try {
-			courService.deleteById(id);
+			exercicesService.deleteById(id);
 			return new ResponseEntity<>(SecurityConstants.convertObjectToJson(ConstantBase.DONE), HttpStatus.OK);
 		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_DELETE + " : {} ", e);
+			LOGGER.error("Problem occored in api/exercices" + ConstantBase.CRUD_REST_DELETE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@PostMapping(ConstantBase.CRUD_REST_SAVE_OR_UPDATE)
-	public ResponseEntity<?> save(@RequestBody CourDTO courDTO) {
+	public ResponseEntity<?> save(@RequestBody ExercicesDTO exercicesDTO) {
 		try {
 
-			return new ResponseEntity<>(courService.save(courDTO), HttpStatus.OK);
+			return new ResponseEntity<>(exercicesService.save(exercicesDTO), HttpStatus.OK);
 		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
+			LOGGER.error("Problem occored in api/exercices" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-	}
-
-	@GetMapping(ConstantBase.CRUD_REST_FIND_ALL)
-	public ResponseEntity<?> findAll() {
-		try {
-
-			return new ResponseEntity<>(courService.findAll(), HttpStatus.OK);
-		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
-			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-	@GetMapping("find-by-module" + "/{id}")
-	public ResponseEntity<?> findByModule(@PathVariable Long id) {
-		try {
-			return new ResponseEntity<>(courService.findByModule(id), HttpStatus.OK);
-		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
-			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-
 	}
 	
-	@GetMapping("launch" + "/{id}")
-	public ResponseEntity<?> launch(@PathVariable Long id) {
+	@GetMapping("find-by-module-type/{id}/{type}")
+	public ResponseEntity<?> findByModule(@PathVariable Long id,@PathVariable String type) {
 		try {
-			courService.launch(id);
-			return new ResponseEntity<>(SecurityConstants.convertObjectToJson(ConstantBase.DONE), HttpStatus.OK);
+			return new ResponseEntity<>(exercicesService.findByModuleAndType(id,type), HttpStatus.OK);
 		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			LOGGER.error("Problem occored in api/exercices" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 	}
+	@GetMapping("find-by-cour-type/{id}/{type}")
+	public ResponseEntity<?> findByCourAndType(@PathVariable Long id,@PathVariable String type) {
+		try {
+			return new ResponseEntity<>(exercicesService.findByCourAndType(id,type), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/exercices" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
+	}
+	@GetMapping("find-by-question/{id}")
+	public ResponseEntity<?> findByQuestion(@PathVariable Long id) {
+		try {
+			return new ResponseEntity<>(exercicesService.findByQuestion(id), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/exercices" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
+	}
 }

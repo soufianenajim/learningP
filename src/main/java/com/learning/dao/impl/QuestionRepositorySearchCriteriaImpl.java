@@ -13,30 +13,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import com.learning.dao.GroupRepositorySearchCriteria;
-import com.learning.dto.GroupDTO;
-import com.learning.model.Group;
+import com.learning.dao.QuestionRepositorySearchCriteria;
+import com.learning.dto.QuestionDTO;
+import com.learning.model.Question;
 import com.learning.model.base.Demande;
 import com.learning.model.base.SortOrder;
 
 @Repository
-public class GroupRepositorySearchCriteriaImpl implements GroupRepositorySearchCriteria {
+public class QuestionRepositorySearchCriteriaImpl implements QuestionRepositorySearchCriteria {
 	
 	@Autowired
 	private EntityManager em;
 	
 	private CriteriaBuilder cb = null;
 
-	private Root<Group> question = null;
+	private Root<Question> question = null;
 
 	private List<Predicate> predicates = null;
 
 	@Override
-	public List<Group> findByCriteres(Demande<GroupDTO> demande) {
+	public List<Question> findByCriteres(Demande<QuestionDTO> demande) {
 		cb = em.getCriteriaBuilder();
-		CriteriaQuery<Group> cq = cb.createQuery(Group.class);
+		CriteriaQuery<Question> cq = cb.createQuery(Question.class);
 
-		question = cq.from(Group.class);
+		question = cq.from(Question.class);
 		predicates = getPredicate(demande);
 		int page = demande.getPage();
 		int size = demande.getSize();
@@ -56,11 +56,11 @@ public class GroupRepositorySearchCriteriaImpl implements GroupRepositorySearchC
 	}
 
 	@Override
-	public Long countByCriteres(Demande<GroupDTO> demande) {
+	public Long countByCriteres(Demande<QuestionDTO> demande) {
 		 cb = em.getCriteriaBuilder();
 		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
 
-		question = cq.from(Group.class);
+		question = cq.from(Question.class);
 		cq.select(cb.count(question));
 		predicates = getPredicate(demande);
 
@@ -69,21 +69,26 @@ public class GroupRepositorySearchCriteriaImpl implements GroupRepositorySearchC
 		return em.createQuery(cq).getSingleResult();
 	}
 
-	private List<Predicate> getPredicate(Demande<GroupDTO> demande) {
+	private List<Predicate> getPredicate(Demande<QuestionDTO> demande) {
 		List<Predicate> predicates = new ArrayList<>();
-		GroupDTO questionDTO = demande.getModel();
+		QuestionDTO questionDTO = demande.getModel();
 
+		if (!StringUtils.isEmpty(questionDTO.getCode())) {
+			predicates.add(
+					cb.like(cb.lower(question.<String>get("code")), "%" + questionDTO.getCode().toLowerCase() + "%"));
+		}
 		if (!StringUtils.isEmpty(questionDTO.getName())) {
 			predicates.add(
 					cb.like(cb.lower(question.<String>get("name")), "%" + questionDTO.getName().toLowerCase() + "%"));
 		}
 
-		if (!StringUtils.isEmpty(questionDTO.getLevel()) && questionDTO.getLevel() != null) {
-			predicates.add(cb.equal(question.<Long>get("level"), questionDTO.getLevel().getId()));
+		if (!StringUtils.isEmpty(questionDTO.getExam()) && questionDTO.getExam() != null) {
+			predicates.add(cb.equal(question.<Long>get("exam"), questionDTO.getExam().getId()));
 		}
-		if (!StringUtils.isEmpty(questionDTO.getBranch()) && questionDTO.getBranch() != null) {
-			predicates.add(cb.equal(question.<Long>get("branch"), questionDTO.getBranch().getId()));
+		if (!StringUtils.isEmpty(questionDTO.getExercices()) && questionDTO.getExercices() != null) {
+			predicates.add(cb.equal(question.<Long>get("quiz"), questionDTO.getExercices().getId()));
 		}
+		
 
 		return predicates;
 	}

@@ -5,24 +5,21 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.learning.dao.QuestionRepository;
+import com.learning.dao.QuestionRepositorySearchCriteria;
 import com.learning.dto.QuestionDTO;
 import com.learning.model.Exam;
+import com.learning.model.Exercices;
 import com.learning.model.Question;
-import com.learning.model.Quiz;
 import com.learning.model.Suggestion;
-import com.learning.model.Td;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.ExamService;
+import com.learning.service.ExercicesService;
 import com.learning.service.QuestionService;
-import com.learning.service.QuizService;
 import com.learning.service.SuggestionService;
-import com.learning.service.TdService;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
@@ -30,15 +27,15 @@ public class QuestionServiceImpl implements QuestionService {
 	@Autowired
 	private QuestionRepository questionRepository;
 	@Autowired
-	private TdService tdService;
-
-	@Autowired
-	private QuizService quizService;
+	private ExercicesService exercicesService;
 
 	@Autowired
 	private ExamService examService;
+
 	@Autowired
 	private SuggestionService suggestionService;
+	@Autowired
+	private QuestionRepositorySearchCriteria questionRepositorySearchCriteria;
 
 	@Override
 	public QuestionDTO save(QuestionDTO questionDTO) {
@@ -69,18 +66,9 @@ public class QuestionServiceImpl implements QuestionService {
 	@Override
 	public PartialList<QuestionDTO> findByCriteres(Demande<QuestionDTO> demande) {
 
-		QuestionDTO question = demande.getModel();
-		int page = demande.getPage();
-		int size = demande.getSize();
-		String code = question.getCode();
-		String name = question.getName();
-		Page<Question> pageQuestion = null;
-		pageQuestion = questionRepository.findByCodeAndName(code, name, PageRequest.of(page, size));
-
-		List<QuestionDTO> list = convertEntitiesToDtos(pageQuestion.getContent());
-		Long totalElement = pageQuestion.getTotalElements();
-
-		return new PartialList<QuestionDTO>(totalElement, list);
+		List<Question> questions = questionRepositorySearchCriteria.findByCriteres(demande);
+		Long count = questionRepositorySearchCriteria.countByCriteres(demande);
+		return new PartialList<QuestionDTO>(count, convertEntitiesToDtos(questions));
 	}
 
 	@Override
@@ -91,12 +79,10 @@ public class QuestionServiceImpl implements QuestionService {
 		question.setCode(questionDTO.getCode());
 		question.setCorrectComment(questionDTO.getCorrectComment());
 
-		if (questionDTO.getTd() != null) {
-			question.setTd(tdService.convertDTOtoModel(questionDTO.getTd()));
+		if (questionDTO.getExercices() != null) {
+			question.setExercices(exercicesService.convertDTOtoModel(questionDTO.getExercices()));
 		}
-		if (questionDTO.getQuiz() != null) {
-			question.setQuiz(quizService.convertDTOtoModel(questionDTO.getQuiz()));
-		}
+
 		if (questionDTO.getExam() != null) {
 			question.setExam(examService.convertDTOtoModel(questionDTO.getExam()));
 		}
@@ -110,16 +96,8 @@ public class QuestionServiceImpl implements QuestionService {
 		questionDTO.setName(question.getName());
 		questionDTO.setCode(question.getCode());
 		questionDTO.setCorrectComment(question.getCorrectComment());
-		Td td = question.getTd();
 		Exam exam = question.getExam();
-		Quiz quiz = question.getQuiz();
 		List<Suggestion> suggestion = question.getSuggestions();
-		if (td != null) {
-			questionDTO.setTd(tdService.convertModelToDTO(td));
-		}
-		if (quiz != null) {
-			questionDTO.setQuiz(quizService.convertModelToDTO(quiz));
-		}
 		if (exam != null) {
 			questionDTO.setExam(examService.convertModelToDTO(exam));
 		}
@@ -163,19 +141,8 @@ public class QuestionServiceImpl implements QuestionService {
 	}
 
 	@Override
-	public void saveQuestionsByQuiz(List<QuestionDTO> questions, Quiz quiz) {
-		 detachQuiz(quiz.getId());
-		for (QuestionDTO questionDTO : questions) {
-			Question question = convertDTOtoModel(questionDTO);
-			question.setQuiz(quiz);
-			questionRepository.save(question);
-		}
-
-	}
-
-	@Override
-	public List<QuestionDTO> findByQuiz(Long quizId) {
-		return convertEntitiesToDtos(questionRepository.findByQuiz(quizId));
+	public List<QuestionDTO> findByExercices(Long exercicesId) {
+		return convertEntitiesToDtos(questionRepository.findByExercices(exercicesId));
 	}
 
 	@Override
@@ -186,7 +153,7 @@ public class QuestionServiceImpl implements QuestionService {
 			question.setExam(exam);
 			questionRepository.save(question);
 		}
-		
+
 	}
 
 	@Override
@@ -197,36 +164,25 @@ public class QuestionServiceImpl implements QuestionService {
 	@Override
 	public void detachExam(Long examId) {
 		questionRepository.detacheExam(examId);
-		
-	}
-	@Override
-	public void detachQuiz(Long quizId) {
-		questionRepository.detacheQuiz(quizId);
-		
+
 	}
 
 	@Override
-	public List<QuestionDTO> findByTd(Long tdId) {
-		
-		return convertEntitiesToDtos(questionRepository.findByTd(tdId));
+	public void detachExercices(Long exercicesId) {
+		questionRepository.detacheExercices(exercicesId);
+
 	}
 
 	@Override
-	public void saveQuestionsByTd(List<QuestionDTO> questions, Td td) {
-		
-		detachTd(td.getId());
+	public void saveQuestionsByExercices(List<QuestionDTO> questions, Exercices exercices) {
+
+		detachExercices(exercices.getId());
 		for (QuestionDTO questionDTO : questions) {
 			Question question = convertDTOtoModel(questionDTO);
-			question.setTd(td);
+			question.setExercices(exercices);
 			questionRepository.save(question);
 		}
-		
-	}
 
-	@Override
-	public void detachTd(Long tdId) {
-		questionRepository.detacheTd(tdId);
-		
 	}
 
 }

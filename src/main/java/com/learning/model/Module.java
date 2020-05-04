@@ -29,6 +29,8 @@ public class Module extends Historized {
 	private Group group;
 	
 	
+	private boolean isLaunched;
+
 	
 
 	@OneToMany(mappedBy = "module", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
@@ -108,6 +110,15 @@ public class Module extends Historized {
 
 	public void setProgressionModules(List<ProgressionModule> progressionModules) {
 		this.progressionModules = progressionModules;
+	}
+
+	
+	public boolean isLaunched() {
+		return isLaunched;
+	}
+
+	public void setLaunched(boolean isLaunched) {
+		this.isLaunched = isLaunched;
 	}
 
 	@Override

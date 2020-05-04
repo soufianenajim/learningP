@@ -10,6 +10,8 @@ public class ModuleDTO extends HistorizedDTO {
 
 	private GroupDTO group;
 	
+	private boolean isLaunched;
+	
 	private List<CourDTO> cours;
 
 	private List<ExamDTO> exams;
@@ -70,6 +72,14 @@ public class ModuleDTO extends HistorizedDTO {
 
 	public void setGroup(GroupDTO group) {
 		this.group = group;
+	}
+
+	public boolean isLaunched() {
+		return isLaunched;
+	}
+
+	public void setLaunched(boolean isLaunched) {
+		this.isLaunched = isLaunched;
 	}
 
 	

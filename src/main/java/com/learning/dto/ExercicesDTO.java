@@ -2,28 +2,23 @@ package com.learning.dto;
 
 import java.util.List;
 
-public class QuizDTO extends HistorizedDTO {
+
+public class ExercicesDTO extends HistorizedDTO {
 
 	private String name;
 
+	private String type;
 	
+     private CourDTO cour;
 	private List<QuestionDTO> questions;
 
-	public QuizDTO() {
+	public ExercicesDTO() {
 		super();
 	}
 
-	public QuizDTO(String name) {
+	public ExercicesDTO(String name) {
 		super();
 		this.name = name;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getName() {
@@ -34,7 +29,21 @@ public class QuizDTO extends HistorizedDTO {
 		this.name = name;
 	}
 
-	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public CourDTO getCour() {
+		return cour;
+	}
+
+	public void setCour(CourDTO cour) {
+		this.cour = cour;
+	}
 
 	public List<QuestionDTO> getQuestions() {
 		return questions;
@@ -43,5 +52,7 @@ public class QuizDTO extends HistorizedDTO {
 	public void setQuestions(List<QuestionDTO> questions) {
 		this.questions = questions;
 	}
+
+	
 
 }

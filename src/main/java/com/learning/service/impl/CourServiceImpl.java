@@ -13,14 +13,16 @@ import com.learning.dao.CourRepository;
 import com.learning.dto.CourDTO;
 import com.learning.dto.UserDTO;
 import com.learning.model.Cour;
+import com.learning.model.Exercices;
 import com.learning.model.Module;
-import com.learning.model.Quiz;
+import com.learning.model.RoleName;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.CourService;
+import com.learning.service.ExercicesService;
 import com.learning.service.ModuleService;
 import com.learning.service.ProgressionCourService;
-import com.learning.service.QuizService;
+import com.learning.service.ProgressionModuleService;
 import com.learning.service.UserService;
 
 @Service
@@ -34,8 +36,12 @@ public class CourServiceImpl implements CourService {
 	private UserService userService;
 	@Autowired
 	private ProgressionCourService progressionCourService;
+
 	@Autowired
-	private QuizService quizService;
+	private ExercicesService exercicesService;
+	
+	@Autowired
+	private ProgressionModuleService progressionModuleService;
 
 	// save or update
 	@Override
@@ -92,12 +98,13 @@ public class CourServiceImpl implements CourService {
 		cour.setId(courDTO.getId());
 		cour.setName(courDTO.getName());
 		cour.setContent(courDTO.getContent());
-
+        cour.setLaunched(courDTO.isLaunched());
 		if (courDTO.getModule() != null) {
 			cour.setModule(moduleService.convertDTOtoModel(courDTO.getModule()));
 		}
-		if (courDTO.getQuiz() != null) {
-			cour.setQuiz(quizService.convertDTOtoModel(courDTO.getQuiz()));
+
+		if (courDTO.getExercices() != null) {
+			cour.setExercices(exercicesService.convertDtosToEntities(courDTO.getExercices()));
 		}
 
 		return cour;
@@ -109,14 +116,12 @@ public class CourServiceImpl implements CourService {
 		courDTO.setId(cour.getId());
 		courDTO.setName(cour.getName());
 		courDTO.setContent(cour.getContent());
+		courDTO.setLaunched(cour.isLaunched());
 		Module module = cour.getModule();
-		Quiz quiz = cour.getQuiz();
+
 		if (module != null) {
 			courDTO.setModule(moduleService.convertModelToDTO(cour.getModule()));
 
-		}
-		if (quiz != null) {
-			courDTO.setQuiz(quizService.convertModelToDTO(quiz));
 		}
 
 		courDTO.setCreatedAt(cour.getCreatedAt());
@@ -194,9 +199,9 @@ public class CourServiceImpl implements CourService {
 		courDTO.setId(cour.getId());
 		courDTO.setName(cour.getName());
 		courDTO.setContent(cour.getContent());
-		Quiz quiz = cour.getQuiz();
-		if (quiz != null) {
-			courDTO.setQuiz(quizService.convertModelToDTOWithQuestion(quiz));
+		List<Exercices> exercices = cour.getExercices();
+		if (exercices != null) {
+			courDTO.setExercices(exercicesService.convertEntitiesToDtos(exercices));
 		}
 		courDTO.setCreatedAt(cour.getCreatedAt());
 		courDTO.setUpdatedAt(cour.getUpdatedAt());
@@ -227,5 +232,32 @@ public class CourServiceImpl implements CourService {
 
 		return convertEntitiesToDtosWithOutModule(list);
 	}
+
+	@Override
+	public void launch(Long idCour) {
+		Optional<Cour> optional = courRepository.findById(idCour);
+		if (optional.isPresent()) {
+			Cour cour=optional.get();
+			cour.setLaunched(true);
+			courRepository.save(cour);
+			Module module = cour.getModule();
+			Long idGroup = module.getGroup().getId();
+			List<UserDTO> students = userService.findByGroupAndRole(idGroup,RoleName.ROLE_STUDENT);
+			progressionCourService.saveByCourAndStudents(cour, students);
+			if (module.getId()!= null && !module.isLaunched()) {
+				module.setLaunched(true);
+				moduleService.save(moduleService.convertModelToDTO(module));
+				progressionModuleService.saveByModuleAndStudents(module, students);
+			}
+		}
+
+	}
+
+	@Override
+	public List<CourDTO> findByModuleAndLaunched(Long idModule,boolean isLaunched) {
+		List<Cour> list = courRepository.findByModuleAndLaunched(idModule,isLaunched);
+
+		return convertEntitiesToDtosWithOutModule(list);
+	}					
 
 }

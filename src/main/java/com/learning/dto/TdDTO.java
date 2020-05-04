@@ -5,7 +5,6 @@ import java.util.List;
 public class TdDTO extends HistorizedDTO {
 	private String name;
 
-	private CourDTO cour;
 
 	private List<QuestionDTO> questions;
 
@@ -32,14 +31,6 @@ public class TdDTO extends HistorizedDTO {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public CourDTO getCour() {
-		return cour;
-	}
-
-	public void setCour(CourDTO cour) {
-		this.cour = cour;
 	}
 
 	public List<QuestionDTO> getQuestions() {

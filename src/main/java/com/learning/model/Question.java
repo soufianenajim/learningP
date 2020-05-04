@@ -28,12 +28,9 @@ public class Question extends Historized {
 	private String correctComment;
 
 	@ManyToOne(fetch=FetchType.LAZY,cascade = {CascadeType.DETACH})
-	@JoinColumn(name = "td_id")
-	private Td td;
+	@JoinColumn(name = "exercices_id")
+	private Exercices exercices;
 
-	@ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.DETACH})
-	@JoinColumn(name = "quiz_id")
-	private Quiz quiz;
 
 	@ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.DETACH})
 	@JoinColumn(name = "exam_id")
@@ -83,20 +80,14 @@ public class Question extends Historized {
 		this.correctComment = correctComment;
 	}
 
-	public Td getTd() {
-		return td;
+
+
+	public Exercices getExercices() {
+		return exercices;
 	}
 
-	public void setTd(Td td) {
-		this.td = td;
-	}
-
-	public Quiz getQuiz() {
-		return quiz;
-	}
-
-	public void setQuiz(Quiz quiz) {
-		this.quiz = quiz;
+	public void setExercices(Exercices exercices) {
+		this.exercices = exercices;
 	}
 
 	public Exam getExam() {
@@ -117,8 +108,8 @@ public class Question extends Historized {
 
 	@Override
 	public String toString() {
-		return "Question [name=" + name + ", code=" + code + ", correctComment=" + correctComment + ", td=" + td
-				+ ", quiz=" + quiz + ", exam=" + exam + "]";
+		return "Question [name=" + name + ", code=" + code + ", correctComment=" + correctComment 
+				+ ", exercices=" + exercices + ", exam=" + exam + "]";
 	}
 
 }

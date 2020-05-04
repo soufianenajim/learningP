@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.learning.dao.RoleRepository;
 import com.learning.dao.UserRepository;
 import com.learning.dao.UserRepositorySearchCriteria;
+import com.learning.dto.ModuleDTO;
 import com.learning.dto.UserDTO;
 import com.learning.exceptions.BusinessException;
 import com.learning.model.Group;
@@ -23,7 +24,9 @@ import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.security.services.UserDetailsImpl;
 import com.learning.service.GroupService;
+import com.learning.service.ModuleService;
 import com.learning.service.OrganizationService;
+import com.learning.service.ProgressionModuleService;
 import com.learning.service.RoleService;
 import com.learning.service.UserService;
 
@@ -43,7 +46,11 @@ public class UserServiceImpl implements UserService {
 	private OrganizationService organizationService;
 	@Autowired
 	private GroupService groupService;
+	@Autowired
+	private ModuleService moduleService;
 
+	@Autowired
+	private ProgressionModuleService progressionModuleService;
 	@Autowired
 	private UserRepositorySearchCriteria userRepositorySearchCriteria;
 
@@ -80,6 +87,10 @@ public class UserServiceImpl implements UserService {
 		User user = convertDTOtoModel(userDTO);
 		user.setPassword(passwordEncoder.encode("Afak@1234"));
 		user = userRepository.saveAndFlush(user);
+		if (userDTO.getRefRole().getName().equals("ROLE_STUDENT")) {
+			List<ModuleDTO> modules = moduleService.findByGroup(user.getGroups().get(0).getId());
+			progressionModuleService.saveByStudentAndModules(user, modules);
+		}
 		return userDTO;
 	}
 
@@ -262,6 +273,12 @@ public class UserServiceImpl implements UserService {
 	public List<UserDTO> findByGroup(Long idGroup) {
 
 		return convertEntitiesToDtosWithOutRelation(userRepository.findByGroup(idGroup));
+	}
+
+	@Override
+	public List<UserDTO> findByGroupAndRole(Long idGroup, RoleName role) {
+
+		return convertEntitiesToDtosWithOutRelation(userRepository.findByGroupAndRole(idGroup, role));
 	}
 
 }

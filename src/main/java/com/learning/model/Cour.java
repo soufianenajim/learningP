@@ -10,7 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -24,6 +23,8 @@ public class Cour extends Historized {
 
 	@Lob
 	private String content;
+	
+	private boolean isLaunched;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "module_id")
@@ -33,11 +34,8 @@ public class Cour extends Historized {
 	private List<ProgressionCour> progressionCours;
 
 	@OneToMany(mappedBy = "cour", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-	private List<Td> tds;
+	private List<Exercices> exercices;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "quiz_id", referencedColumnName = "id")
-	private Quiz quiz;
 
 	public Cour() {
 		super();
@@ -72,13 +70,7 @@ public class Cour extends Historized {
 		this.module = module;
 	}
 
-	public List<Td> getTds() {
-		return tds;
-	}
 
-	public void setTds(List<Td> tds) {
-		this.tds = tds;
-	}
 
 	public String getContent() {
 		return content;
@@ -89,17 +81,31 @@ public class Cour extends Historized {
 	}
 	
 
-	public Quiz getQuiz() {
-		return quiz;
+
+	
+
+	public List<Exercices> getExercices() {
+		return exercices;
 	}
 
-	public void setQuiz(Quiz quiz) {
-		this.quiz = quiz;
+	public void setExercices(List<Exercices> exercices) {
+		this.exercices = exercices;
+	}
+	
+	
+
+	
+	public boolean isLaunched() {
+		return isLaunched;
+	}
+
+	public void setLaunched(boolean isLaunched) {
+		this.isLaunched = isLaunched;
 	}
 
 	@Override
 	public String toString() {
-		return "Cour [name=" + name + ", content=" + content + ", module=" + module + ", tds=" + tds + "]";
+		return "Cour [name=" + name + ", content=" + content + ", module=" + module + ", exercices" + exercices + "]";
 	}
 
 }

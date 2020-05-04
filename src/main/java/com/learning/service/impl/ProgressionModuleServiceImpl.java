@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.learning.dao.ProgressionModuleRepository;
+import com.learning.dto.CourDTO;
+import com.learning.dto.ModuleDTO;
 import com.learning.dto.ProgressionModuleDTO;
 import com.learning.dto.UserDTO;
 import com.learning.model.Module;
@@ -17,6 +19,7 @@ import com.learning.model.ProgressionModule;
 import com.learning.model.User;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
+import com.learning.service.CourService;
 import com.learning.service.ModuleService;
 import com.learning.service.ProgressionCourService;
 import com.learning.service.ProgressionModuleService;
@@ -33,6 +36,9 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 	private ModuleService moduleService;
 	@Autowired
 	private ProgressionCourService progressionCourService;
+	
+	@Autowired 
+	private CourService courService;
 
 	// save or update
 	@Override
@@ -166,18 +172,38 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 
 	@Override
 	public void updateProgressionModule(Long idModule, Long idStudent) {
-		List<Double> listProgressionCour = progressionCourService.listOfProgressionByModuleAndStudent(idModule,
-				idStudent);
-		Double progressionTemp = 0.0;
-		Double result = 0.0;
-		for (Double progressionCour : listProgressionCour) {
+		ProgressionModule progressionModule = progressionModuleRepository.findByModuleAndStudent(idModule, idStudent);
+		if (progressionModule != null) {
+			List<Double> listProgressionCour = progressionCourService.listOfProgressionByModuleAndStudent(idModule,
+					idStudent);
 
-			progressionTemp += progressionCour;
+			Double progressionTemp = 0.0;
+			Double result = 0.0;
+			for (Double progressionCour : listProgressionCour) {
+
+				progressionTemp += progressionCour;
+			}
+			result = progressionTemp / listProgressionCour.size();
+
+			progressionModule.setProgressionCour(result);
+			progressionModuleRepository.save(progressionModule);
 		}
-		result = progressionTemp / listProgressionCour.size();
-		ProgressionModule progressionModule=progressionModuleRepository.findByModuleAndStudent(idModule, idStudent);
-		progressionModule.setProgressionCour(result);
-		progressionModuleRepository.save(progressionModule);
+	}
+
+	@Override
+	public void saveByStudentAndModules(User student, List<ModuleDTO> modules) {
+		for (ModuleDTO module : modules) {
+			ProgressionModule progressionModule = new ProgressionModule();
+			progressionModule.setModule(moduleService.convertDTOtoModel(module));
+			progressionModule.setStudent(student);
+			progressionModule.setProgressionCour(0.0);
+			progressionModule.setProgressionExam(0.0);
+			progressionModuleRepository.save(progressionModule);
+			final List<CourDTO> cours=courService.findByModuleAndLaunched(module.getId(),true);
+			progressionCourService.saveByStudentAndCours(student, cours);
+			
+		}
+		
 	}
 
 }

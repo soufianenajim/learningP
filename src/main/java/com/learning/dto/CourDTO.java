@@ -12,7 +12,11 @@ public class CourDTO extends HistorizedDTO {
 
 	private List<ChapitreDTO> chapitres;
 
-	private QuizDTO quiz;
+	private List<ExercicesDTO> exercices;
+	
+	private ExercicesDTO td;
+	
+	private boolean isLaunched;
 
 	public CourDTO() {
 		super();
@@ -64,13 +68,33 @@ public class CourDTO extends HistorizedDTO {
 		this.content = content;
 	}
 
-	public QuizDTO getQuiz() {
-		return quiz;
+	
+
+	public List<ExercicesDTO> getExercices() {
+		return exercices;
 	}
 
-	public void setQuiz(QuizDTO quiz) {
-		this.quiz = quiz;
+	public void setExercices(List<ExercicesDTO> exercices) {
+		this.exercices = exercices;
 	}
+
+	public ExercicesDTO getTd() {
+		return td;
+	}
+
+	public void setTd(ExercicesDTO td) {
+		this.td = td;
+	}
+
+	public boolean isLaunched() {
+		return isLaunched;
+	}
+
+	public void setLaunched(boolean isLaunched) {
+		this.isLaunched = isLaunched;
+	}
+	
+	
 
 	
 
