@@ -13,39 +13,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import com.learning.dao.GroupRepositorySearchCriteria;
-import com.learning.dto.GroupDTO;
-import com.learning.model.Group;
+import com.learning.dao.ModuleRepositorySearchCriteria;
+import com.learning.dto.ModuleDTO;
+import com.learning.model.Module;
 import com.learning.model.base.Demande;
 import com.learning.model.base.SortOrder;
 
 @Repository
-public class GroupRepositorySearchCriteriaImpl implements GroupRepositorySearchCriteria {
+public class ModuleRepositorySearchCriteriaImpl implements ModuleRepositorySearchCriteria {
 	
 	@Autowired
 	private EntityManager em;
 	
 	private CriteriaBuilder cb = null;
 
-	private Root<Group> group = null;
+	private Root<Module> module = null;
 
 	private List<Predicate> predicates = null;
 
 	@Override
-	public List<Group> findByCriteres(Demande<GroupDTO> demande) {
+	public List<Module> findByCriteres(Demande<ModuleDTO> demande) {
 		cb = em.getCriteriaBuilder();
-		CriteriaQuery<Group> cq = cb.createQuery(Group.class);
+		CriteriaQuery<Module> cq = cb.createQuery(Module.class);
 
-		group = cq.from(Group.class);
+		module = cq.from(Module.class);
 		predicates = getPredicate(demande);
 		int page = demande.getPage();
 		int size = demande.getSize();
 		if (!StringUtils.isEmpty(demande.getSortField()) && !StringUtils.isEmpty(demande.getSortOrder())
 				&& !demande.getSortOrder().equals(SortOrder.NONE)) {
 			if (demande.getSortOrder().equals(SortOrder.ASCENDING)) {
-				cq.orderBy(cb.asc(group.get(demande.getSortField())));
+				cq.orderBy(cb.asc(module.get(demande.getSortField())));
 			} else {
-				cq.orderBy(cb.desc(group.get(demande.getSortField())));
+				cq.orderBy(cb.desc(module.get(demande.getSortField())));
 			}
 		}
 		cq.where(predicates.toArray(new Predicate[0]));
@@ -56,12 +56,12 @@ public class GroupRepositorySearchCriteriaImpl implements GroupRepositorySearchC
 	}
 
 	@Override
-	public Long countByCriteres(Demande<GroupDTO> demande) {
+	public Long countByCriteres(Demande<ModuleDTO> demande) {
 		 cb = em.getCriteriaBuilder();
 		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
 
-		group = cq.from(Group.class);
-		cq.select(cb.count(group));
+		module = cq.from(Module.class);
+		cq.select(cb.count(module));
 		predicates = getPredicate(demande);
 
 		cq.where(predicates.toArray(new Predicate[0]));
@@ -69,20 +69,20 @@ public class GroupRepositorySearchCriteriaImpl implements GroupRepositorySearchC
 		return em.createQuery(cq).getSingleResult();
 	}
 
-	private List<Predicate> getPredicate(Demande<GroupDTO> demande) {
+	private List<Predicate> getPredicate(Demande<ModuleDTO> demande) {
 		List<Predicate> predicates = new ArrayList<>();
-		GroupDTO groupDTO = demande.getModel();
+		ModuleDTO moduleDTO = demande.getModel();
 
-		if (!StringUtils.isEmpty(groupDTO.getName())) {
+		if (!StringUtils.isEmpty(moduleDTO.getName())) {
 			predicates.add(
-					cb.like(cb.lower(group.<String>get("name")), "%" + groupDTO.getName().toLowerCase() + "%"));
+					cb.like(cb.lower(module.<String>get("name")), "%" + moduleDTO.getName().toLowerCase() + "%"));
 		}
 
-		if (!StringUtils.isEmpty(groupDTO.getLevel()) && groupDTO.getLevel() != null) {
-			predicates.add(cb.equal(group.<Long>get("level"), groupDTO.getLevel().getId()));
+		if (!StringUtils.isEmpty(moduleDTO.getProfessor()) && moduleDTO.getProfessor() != null) {
+			predicates.add(cb.equal(module.<Long>get("professor"), moduleDTO.getProfessor().getId()));
 		}
-		if (!StringUtils.isEmpty(groupDTO.getBranch()) && groupDTO.getBranch() != null) {
-			predicates.add(cb.equal(group.<Long>get("branch"), groupDTO.getBranch().getId()));
+		if (!StringUtils.isEmpty(moduleDTO.getIdOrganization()) && moduleDTO.getIdOrganization() != null) {
+			predicates.add(cb.equal(module.<Long>get("group").get("level").get("organization"), moduleDTO.getIdOrganization()));
 		}
 
 		return predicates;

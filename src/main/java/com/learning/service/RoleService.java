@@ -7,4 +7,5 @@ import com.learning.model.Role;
 
 public interface RoleService extends CrudService<Role, RoleDTO> {
 	List<RoleDTO> findAll();
+	List<RoleDTO> findAllClient();
 }

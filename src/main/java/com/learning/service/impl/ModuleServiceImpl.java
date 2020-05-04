@@ -5,11 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.learning.dao.ModuleRepository;
+import com.learning.dao.ModuleRepositorySearchCriteria;
 import com.learning.dto.ModuleDTO;
 import com.learning.model.Group;
 import com.learning.model.Module;
@@ -30,6 +29,8 @@ public class ModuleServiceImpl implements ModuleService {
 	@Autowired
 	private GroupService groupService;
 	
+	@Autowired
+	private ModuleRepositorySearchCriteria moduleRepositorySearchCriteria;
 
 
 	@Override
@@ -59,20 +60,9 @@ public class ModuleServiceImpl implements ModuleService {
 	@Override
 	public PartialList<ModuleDTO> findByCriteres(Demande<ModuleDTO> demande) {
 
-		ModuleDTO module = demande.getModel();
-		int page = demande.getPage();
-		int size = demande.getSize();
-		Page<Module> pageModule = null;
-		String name = module.getName();
-		Long idProf = module.getProfessor() != null ? module.getProfessor().getId() : null;
-
-		pageModule = idProf != null ? moduleRepository.findByNameAndUser(name, idProf, PageRequest.of(page, size))
-				: moduleRepository.findByName(name, PageRequest.of(page, size));
-
-		List<ModuleDTO> list = convertEntitiesToDtos(pageModule.getContent());
-		Long totalElement = pageModule.getTotalElements();
-
-		return new PartialList<ModuleDTO>(totalElement, list);
+		List<Module> modules = moduleRepositorySearchCriteria.findByCriteres(demande);
+		Long count = moduleRepositorySearchCriteria.countByCriteres(demande);
+		return new PartialList<ModuleDTO>(count, convertEntitiesToDtos(modules));
 	}
 
 	@Override

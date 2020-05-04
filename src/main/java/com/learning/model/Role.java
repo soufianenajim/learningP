@@ -18,6 +18,9 @@ public class Role extends Historized {
 	@NaturalId
 	@Column(length = 60)
 	private RoleName name;
+	
+	@Column(name="is_client")
+	private boolean isClient;
 
 	public Role() {
 		super();
@@ -42,6 +45,15 @@ public class Role extends Historized {
 
 	public void setName(RoleName name) {
 		this.name = name;
+	}
+	
+
+	public boolean isClient() {
+		return isClient;
+	}
+
+	public void setClient(boolean isClient) {
+		this.isClient = isClient;
 	}
 
 	@Override

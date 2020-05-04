@@ -105,4 +105,10 @@ public class RoleServiceImpl implements RoleService {
 		return convertEntitiesToDtos(roleRepository.findAll());
 	}
 
+	@Override
+	public List<RoleDTO> findAllClient() {
+	return	convertEntitiesToDtos(	roleRepository.findAllClient(true));
+	
+	}
+
 }

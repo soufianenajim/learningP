@@ -80,4 +80,15 @@ public class RoleResource {
 		}
 
 	}
+	
+	@GetMapping("/find-all-client")
+	public ResponseEntity<?> findAllByClientAdmin() {
+		try {
+			return new ResponseEntity<>(roleService.findAllClient(), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/role" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
 }
