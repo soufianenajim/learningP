@@ -27,4 +27,10 @@ public interface LevelRepository extends JpaRepository<Level,Long > {
 	
 	@Query("SELECT l FROM Level l WHERE  l.organization.id=?1 ")
 	List<Level> findByOrganization(Long idOrganization);
+	 
+	
+	 @Query("SELECT l FROM Level l WHERE LOWER(l.name) like lower(?1) and l.organization.id=?2 ")
+	Level findByNameAndOrganization(String name,Long idOrganization);
+	
+	
 }

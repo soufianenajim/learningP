@@ -23,18 +23,22 @@ public class LevelServiceImpl implements LevelService {
 
 	@Autowired
 	private LevelRepository levelRepository;
-	
+
 	@Autowired
 	private OrganizationService courService;
 
 	// save or update
 	@Override
 	public LevelDTO save(LevelDTO levelDTO) {
+		if (levelDTO.getId() != null) {
+			if (!existingLevelById(levelDTO.getId(), levelDTO.getName(), levelDTO.getOrganization().getId()))
+				return null;
+		} else if (!existingLevel(levelDTO.getName(), levelDTO.getOrganization().getId()))
+			return null;
 		Level level = convertDTOtoModel(levelDTO);
 		level = levelRepository.save(level);
 		return convertModelToDTO(level);
 	}
-	
 
 	@Override
 	public LevelDTO findById(long idOut) {
@@ -62,7 +66,8 @@ public class LevelServiceImpl implements LevelService {
 		String name = level.getName();
 		Long idOrganization = level.getOrganization() != null ? level.getOrganization().getId() : null;
 
-		pageLevel = idOrganization != null ? levelRepository.findByNameAndOrganization(name, idOrganization, PageRequest.of(page, size))
+		pageLevel = idOrganization != null
+				? levelRepository.findByNameAndOrganization(name, idOrganization, PageRequest.of(page, size))
 				: levelRepository.findByName(name, PageRequest.of(page, size));
 
 		List<LevelDTO> list = convertEntitiesToDtos(pageLevel.getContent());
@@ -90,9 +95,9 @@ public class LevelServiceImpl implements LevelService {
 		Organization cour = level.getOrganization();
 		if (cour != null) {
 			levelDTO.setOrganization(courService.convertModelToDTO(level.getOrganization()));
-			
+
 		}
-		
+
 		levelDTO.setCreatedAt(level.getCreatedAt());
 		levelDTO.setUpdatedAt(level.getUpdatedAt());
 		return levelDTO;
@@ -182,16 +187,26 @@ public class LevelServiceImpl implements LevelService {
 
 	@Override
 	public void deleteByOrganizationId(Long id) {
-	levelRepository.deleteByOrganisation(id);
-		
-	}
+		levelRepository.deleteByOrganisation(id);
 
+	}
 
 	@Override
 	public List<LevelDTO> findByOrganization(Long id) {
-		
+
 		return convertEntitiesToDtosWithOutOrganization(levelRepository.findByOrganization(id));
 	}
 
-	
+	@Override
+	public boolean existingLevel(String name, Long idOrganization) {
+		Level existLevel = levelRepository.findByNameAndOrganization(name, idOrganization);
+		return existLevel == null || existLevel.getId() == null;
+	}
+
+	@Override
+	public boolean existingLevelById(Long id, String name, Long idOrganization) {
+		Level existLevel = levelRepository.findByNameAndOrganization(name, idOrganization);
+		return existLevel == null || existLevel.getId().equals(id);
+	}
+
 }

@@ -28,7 +28,7 @@ public class Module extends Historized {
 	@JoinColumn(name = "group_id")
 	private Group group;
 	
-	
+	@Column(name = "is_launched", columnDefinition = "boolean default false", nullable = false)
 	private boolean isLaunched;
 
 	

@@ -62,8 +62,14 @@ public class GroupResource {
 	@PostMapping(ConstantBase.CRUD_REST_SAVE_OR_UPDATE)
 	public ResponseEntity<?> save(@RequestBody GroupDTO groupDTO) {
 		try {
+			
+			GroupDTO group = groupService.save(groupDTO);
+			if(group !=null) {
+				return new ResponseEntity<>(group, HttpStatus.CREATED); 
+			}
+			return new ResponseEntity<>(HttpStatus.CONFLICT); 
 
-			return new ResponseEntity<>(groupService.save(groupDTO), HttpStatus.OK);
+			
 		} catch (Exception e) {
 			LOGGER.error("Problem occored in api/group" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);

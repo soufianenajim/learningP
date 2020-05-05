@@ -28,13 +28,20 @@ public class ModuleServiceImpl implements ModuleService {
 	private UserService userService;
 	@Autowired
 	private GroupService groupService;
-	
+
 	@Autowired
 	private ModuleRepositorySearchCriteria moduleRepositorySearchCriteria;
 
-
 	@Override
 	public ModuleDTO save(ModuleDTO moduleDTO) {
+
+		if (moduleDTO.getId() != null) {
+			if (!existingModuleById(moduleDTO.getId(), moduleDTO.getName(), moduleDTO.getProfessor().getId(),
+					moduleDTO.getGroup().getId()))
+				return null;
+		} else if (!existingModule(moduleDTO.getName(), moduleDTO.getProfessor().getId(), moduleDTO.getGroup().getId()))
+			return null;
+
 		Module module = convertDTOtoModel(moduleDTO);
 		module = moduleRepository.save(module);
 		// get student by level and branch
@@ -79,7 +86,7 @@ public class ModuleServiceImpl implements ModuleService {
 		if (moduleDTO.getGroup() != null) {
 			module.setGroup(groupService.convertDTOtoModel(moduleDTO.getGroup()));
 		}
-		
+
 		return module;
 	}
 
@@ -91,7 +98,7 @@ public class ModuleServiceImpl implements ModuleService {
 		moduleDTO.setLaunched(module.isLaunched());
 		User user = module.getProfessor();
 		Group group = module.getGroup();
-	
+
 		if (user != null) {
 			moduleDTO.setProfessor(userService.convertModelToDTO(module.getProfessor()));
 
@@ -99,7 +106,7 @@ public class ModuleServiceImpl implements ModuleService {
 		if (group != null) {
 			moduleDTO.setGroup(groupService.convertModelToDTO(group));
 		}
-		
+
 		moduleDTO.setCreatedAt(module.getCreatedAt());
 		moduleDTO.setUpdatedAt(module.getUpdatedAt());
 		return moduleDTO;
@@ -158,8 +165,8 @@ public class ModuleServiceImpl implements ModuleService {
 		moduleDTO.setName(module.getName());
 		moduleDTO.setCreatedAt(module.getCreatedAt());
 		moduleDTO.setUpdatedAt(module.getUpdatedAt());
-		User professor=module.getProfessor();
-		if(professor!=null) {
+		User professor = module.getProfessor();
+		if (professor != null) {
 			moduleDTO.setProfessor(userService.convertModelToDTOWithOutRelation(professor));
 		}
 		return moduleDTO;
@@ -191,8 +198,20 @@ public class ModuleServiceImpl implements ModuleService {
 
 	@Override
 	public List<ModuleDTO> findByProfessor(Long idProfessor) {
-		
+
 		return convertEntitiesToDtosWithOutRelation(moduleRepository.findByProfessor(idProfessor));
+	}
+
+	@Override
+	public boolean existingModule(String name, Long idProfessor, Long idGroup) {
+		Module existModule = moduleRepository.findByNameAndProfessorAndGroup(name, idProfessor, idGroup);
+		return existModule == null || existModule.getId() == null;
+	}
+
+	@Override
+	public boolean existingModuleById(Long id, String name, Long idProfessor, Long idGroup) {
+		Module existModule = moduleRepository.findByNameAndProfessorAndGroup(name, idProfessor, idGroup);
+		return existModule == null || existModule.getId().equals(id);
 	}
 
 }

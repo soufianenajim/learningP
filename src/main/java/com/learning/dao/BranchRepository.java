@@ -27,4 +27,7 @@ public interface BranchRepository extends JpaRepository<Branch,Long > {
 	@Query("SELECT b FROM Branch b WHERE b.organization.id=?1 ")
 	List<Branch> findByOrganization(Long id);
 	
+	 @Query("SELECT l FROM Branch l WHERE LOWER(l.name) like lower(?1) and l.organization.id=?2 ")
+		Branch findByNameAndOrganization(String name,Long idOrganization);
+	
 }

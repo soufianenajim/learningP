@@ -64,7 +64,11 @@ public class ModuleResource {
 	public ResponseEntity<?> save(@RequestBody ModuleDTO moduleDTO) {
 		try {
 
-			return new ResponseEntity<>(moduleService.save(moduleDTO), HttpStatus.OK);
+			ModuleDTO module = moduleService.save(moduleDTO);
+			if (module != null) {
+				return new ResponseEntity<>(module, HttpStatus.CREATED);
+			}
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		} catch (Exception e) {
 			LOGGER.error("Problem occored in api/module" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);

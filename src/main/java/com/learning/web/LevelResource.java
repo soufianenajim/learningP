@@ -62,8 +62,11 @@ public class LevelResource {
 	@PostMapping(ConstantBase.CRUD_REST_SAVE_OR_UPDATE)
 	public ResponseEntity<?> save(@RequestBody LevelDTO levelDTO) {
 		try {
-
-			return new ResponseEntity<>(levelService.save(levelDTO), HttpStatus.OK);
+			LevelDTO level = levelService.save(levelDTO);
+			if (level != null) {
+				return new ResponseEntity<>(level, HttpStatus.CREATED);
+			}
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		} catch (Exception e) {
 			LOGGER.error("Problem occored in api/level" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);

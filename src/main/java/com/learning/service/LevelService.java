@@ -23,6 +23,10 @@ public interface LevelService extends CrudService<Level, LevelDTO> {
    void deleteByOrganizationId(Long id);
 	
    List<LevelDTO> findByOrganization(Long id);
+   
+   boolean existingLevel(String name, Long idOrganization);
+
+	boolean existingLevelById( Long id,String name, Long idOrganization);
 	
 
 }

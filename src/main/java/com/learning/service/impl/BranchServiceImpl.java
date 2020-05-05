@@ -30,6 +30,11 @@ public class BranchServiceImpl implements BranchService {
 	// save or update
 	@Override
 	public BranchDTO save(BranchDTO branchDTO) {
+		if (branchDTO.getId() != null) {
+			if (!existingBranchById(branchDTO.getId(), branchDTO.getName(), branchDTO.getOrganization().getId()))
+				return null;
+		} else if (!existingBranch(branchDTO.getName(), branchDTO.getOrganization().getId()))
+			return null;
 		Branch branch = convertDTOtoModel(branchDTO);
 		branch = branchRepository.save(branch);
 		return convertModelToDTO(branch);
@@ -182,15 +187,26 @@ public class BranchServiceImpl implements BranchService {
 
 	@Override
 	public void deleteByOrganizationId(Long id) {
-	branchRepository.deleteByOrganisation(id);
-		
+		branchRepository.deleteByOrganisation(id);
+
 	}
 
 	@Override
 	public List<BranchDTO> findByOrganization(Long id) {
-	
+
 		return convertEntitiesToDtosWithOutOrganization(branchRepository.findByOrganization(id));
 	}
 
+	@Override
+	public boolean existingBranch(String name, Long idOrganization) {
+		Branch existBranch = branchRepository.findByNameAndOrganization(name, idOrganization);
+		return existBranch == null || existBranch.getId() == null;
+	}
+
+	@Override
+	public boolean existingBranchById(Long id, String name, Long idOrganization) {
+		Branch existBranch = branchRepository.findByNameAndOrganization(name, idOrganization);
+		return existBranch == null || existBranch.getId().equals(id);
+	}
 
 }

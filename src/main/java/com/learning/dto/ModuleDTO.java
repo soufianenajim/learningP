@@ -10,7 +10,7 @@ public class ModuleDTO extends HistorizedDTO {
 
 	private GroupDTO group;
 	
-	private boolean isLaunched;
+	private boolean launched;
 	
 	private List<CourDTO> cours;
 
@@ -77,11 +77,11 @@ public class ModuleDTO extends HistorizedDTO {
 	}
 
 	public boolean isLaunched() {
-		return isLaunched;
+		return launched;
 	}
 
 	public void setLaunched(boolean isLaunched) {
-		this.isLaunched = isLaunched;
+		this.launched = isLaunched;
 	}
 
 	public Long getIdOrganization() {

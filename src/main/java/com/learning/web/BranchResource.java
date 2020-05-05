@@ -63,7 +63,11 @@ public class BranchResource {
 	public ResponseEntity<?> save(@RequestBody BranchDTO branchDTO) {
 		try {
 
-			return new ResponseEntity<>(branchService.save(branchDTO), HttpStatus.OK);
+			BranchDTO branch = branchService.save(branchDTO);
+			if (branch != null) {
+				return new ResponseEntity<>(branch, HttpStatus.CREATED);
+			}
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		} catch (Exception e) {
 			LOGGER.error("Problem occored in api/branch" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);

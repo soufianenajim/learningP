@@ -22,4 +22,8 @@ public interface BranchService extends CrudService<Branch, BranchDTO> {
    void deleteByOrganizationId(Long id);
    
    List<BranchDTO> findByOrganization(Long id);
+   
+   boolean existingBranch(String name, Long idOrganization);
+
+	boolean existingBranchById( Long id,String name, Long idOrganization);
 }
