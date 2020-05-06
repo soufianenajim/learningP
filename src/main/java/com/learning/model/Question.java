@@ -26,15 +26,16 @@ public class Question extends Historized {
 
 	@Lob
 	private String correctComment;
-	
+
 	private double note;
 
-	@ManyToOne(fetch=FetchType.LAZY,cascade = {CascadeType.DETACH})
+	private int indexNumerator;
+
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.DETACH })
 	@JoinColumn(name = "exercices_id")
 	private Exercices exercices;
 
-
-	@ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.DETACH})
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.DETACH })
 	@JoinColumn(name = "exam_id")
 	private Exam exam;
 
@@ -82,8 +83,6 @@ public class Question extends Historized {
 		this.correctComment = correctComment;
 	}
 
-
-
 	public Exercices getExercices() {
 		return exercices;
 	}
@@ -115,11 +114,21 @@ public class Question extends Historized {
 	public void setNote(double note) {
 		this.note = note;
 	}
+       
+
+
+	public int getIndexNumerator() {
+		return indexNumerator;
+	}
+
+	public void setIndexNumerator(int indexNumerator) {
+		this.indexNumerator = indexNumerator;
+	}
 
 	@Override
 	public String toString() {
-		return "Question [name=" + name + ", code=" + code + ", correctComment=" + correctComment 
-				+ ", exercices=" + exercices + ", exam=" + exam + "]";
+		return "Question [name=" + name + ", code=" + code + ", correctComment=" + correctComment + ", exercices="
+				+ exercices + ", exam=" + exam + "]";
 	}
 
 }

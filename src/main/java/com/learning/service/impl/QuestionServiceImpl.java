@@ -48,9 +48,9 @@ public class QuestionServiceImpl implements QuestionService {
 		}
 		TypeEnum.valueOf(questionDTO.getExercices().getType());
 		if (questionDTO.getId() != null) {
-			if (!existingQuestionById(questionDTO.getId(),type, questionDTO.getName(), idExercices, idExam))
+			if (!existingQuestionById(questionDTO.getId(), type, questionDTO.getName(), idExercices, idExam))
 				return null;
-		} else if (!existingQuestion(questionDTO.getName(),type, idExercices, idExam))
+		} else if (!existingQuestion(questionDTO.getName(), type, idExercices, idExam))
 			return null;
 		Question question = convertDTOtoModel(questionDTO);
 		question = questionRepository.save(question);
@@ -92,7 +92,7 @@ public class QuestionServiceImpl implements QuestionService {
 		question.setCode(questionDTO.getCode());
 		question.setCorrectComment(questionDTO.getCorrectComment());
 		question.setNote(questionDTO.getNote());
-
+		question.setIndexNumerator(questionDTO.getIndexNumerator());
 		if (questionDTO.getExercices() != null) {
 			question.setExercices(exercicesService.convertDTOtoModel(questionDTO.getExercices()));
 		}
@@ -111,6 +111,7 @@ public class QuestionServiceImpl implements QuestionService {
 		questionDTO.setCode(question.getCode());
 		questionDTO.setCorrectComment(question.getCorrectComment());
 		questionDTO.setNote(question.getNote());
+		questionDTO.setIndexNumerator(question.getIndexNumerator());
 		Exam exam = question.getExam();
 		List<Suggestion> suggestion = question.getSuggestions();
 		if (exam != null) {
@@ -191,7 +192,7 @@ public class QuestionServiceImpl implements QuestionService {
 	@Override
 	public void saveQuestionsByExercices(List<QuestionDTO> questions, Exercices exercices) {
 
-	//	detachExercices(exercices.getId());
+		// detachExercices(exercices.getId());
 		for (QuestionDTO questionDTO : questions) {
 			Question question = convertDTOtoModel(questionDTO);
 			question.setExercices(exercices);

@@ -15,6 +15,8 @@ public class QuestionDTO extends HistorizedDTO {
 	private ExamDTO exam;
 
 	private double note;
+	
+	private int indexNumerator;
 
 	private List<SuggestionDTO> suggestions;
 
@@ -89,6 +91,14 @@ public class QuestionDTO extends HistorizedDTO {
 
 	public void setNote(double note) {
 		this.note = note;
+	}
+
+	public int getIndexNumerator() {
+		return indexNumerator;
+	}
+
+	public void setIndexNumerator(int indexNumerator) {
+		this.indexNumerator = indexNumerator;
 	}
 	
 	
