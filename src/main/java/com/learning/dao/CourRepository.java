@@ -31,4 +31,7 @@ public interface CourRepository extends JpaRepository<Cour, Long> {
 	@Query("SELECT c FROM Cour c WHERE  c.module.id = ?1 and c.isLaunched=?2")
 	List<Cour> findByModuleAndLaunched(Long idModule, boolean launched);
 
+	@Query("SELECT c FROM Cour c WHERE LOWER(c.name) like lower(?1) and c.module.id=?2 ")
+	Cour findByNameAndModule(String name, Long idModule);
+
 }

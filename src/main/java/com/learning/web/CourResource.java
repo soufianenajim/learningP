@@ -63,7 +63,11 @@ public class CourResource {
 	public ResponseEntity<?> save(@RequestBody CourDTO courDTO) {
 		try {
 
-			return new ResponseEntity<>(courService.save(courDTO), HttpStatus.OK);
+			CourDTO cour = courService.save(courDTO);
+			if (cour != null) {
+				return new ResponseEntity<>(cour, HttpStatus.CREATED);
+			}
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		} catch (Exception e) {
 			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);

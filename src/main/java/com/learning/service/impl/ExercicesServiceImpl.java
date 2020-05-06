@@ -84,6 +84,9 @@ public class ExercicesServiceImpl implements ExercicesService {
 		Exercices exercices = new Exercices();
 		exercices.setId(exercicesDTO.getId());
 		exercices.setName(exercicesDTO.getName());
+		exercices.setStartDateTime(exercicesDTO.getStartDateTime());
+		exercices.setEndDateTime(exercicesDTO.getEndDateTime());
+		exercices.setScale(exercicesDTO.getScale());
 		if (exercicesDTO.getType() != null && !StringUtils.isEmpty(exercicesDTO.getType())) {
 			exercices.setType(TypeEnum.valueOf(exercicesDTO.getType()));
 		}
@@ -99,6 +102,9 @@ public class ExercicesServiceImpl implements ExercicesService {
 		ExercicesDTO exercicesDTO = new ExercicesDTO();
 		exercicesDTO.setId(exercices.getId());
 		exercicesDTO.setName(exercices.getName());
+		exercicesDTO.setStartDateTime(exercices.getStartDateTime());
+		exercicesDTO.setEndDateTime(exercices.getEndDateTime());
+		exercicesDTO.setScale(exercices.getScale());
 		Cour cour = exercices.getCour();
 		TypeEnum type = exercices.getType();
 		List<Question> questions = exercices.getQuestions();
@@ -194,6 +200,18 @@ public class ExercicesServiceImpl implements ExercicesService {
 	public ExercicesDTO findByQuestion(Long questionId) {
 		Exercices exercices = exercicesRepository.findByQuestion(questionId);
 		return exercices != null ? convertModelToDTO(exercices) : null;
+	}
+
+	@Override
+	public boolean existingExam(String name, TypeEnum type, Long idModule) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean existingExamById(Long id, String name, TypeEnum type, Long idModule) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

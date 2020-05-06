@@ -26,6 +26,8 @@ public class Question extends Historized {
 
 	@Lob
 	private String correctComment;
+	
+	private double note;
 
 	@ManyToOne(fetch=FetchType.LAZY,cascade = {CascadeType.DETACH})
 	@JoinColumn(name = "exercices_id")
@@ -104,6 +106,14 @@ public class Question extends Historized {
 
 	public void setSuggestions(List<Suggestion> suggestions) {
 		this.suggestions = suggestions;
+	}
+
+	public double getNote() {
+		return note;
+	}
+
+	public void setNote(double note) {
+		this.note = note;
 	}
 
 	@Override

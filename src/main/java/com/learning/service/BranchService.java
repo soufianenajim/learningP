@@ -23,7 +23,7 @@ public interface BranchService extends CrudService<Branch, BranchDTO> {
    
    List<BranchDTO> findByOrganization(Long id);
    
-   boolean existingBranch(String name, Long idOrganization);
+	boolean existingBranch(String name, Long idOrganization);
 
-	boolean existingBranchById( Long id,String name, Long idOrganization);
+	boolean existingBranchById(Long id, String name, Long idOrganization);
 }

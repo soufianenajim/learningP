@@ -80,8 +80,8 @@ public class ExamServiceImpl implements ExamService {
 		Exam exam = new Exam();
 		exam.setId(examDTO.getId());
 		exam.setName(examDTO.getName());
-		exam.setStartDateTime(examDTO.getStartDateTime().withSecond(0));
-		exam.setEndDateTime(examDTO.getEndDateTime().withSecond(0));
+		exam.setStartDateTime(examDTO.getStartDateTime()!=null?examDTO.getStartDateTime().withSecond(0):null);
+		exam.setEndDateTime(examDTO.getEndDateTime()!=null?examDTO.getEndDateTime().withSecond(0):null);
 
 		if (examDTO.getModule() != null) {
 			exam.setModule(moduleService.convertDTOtoModel(examDTO.getModule()));

@@ -1,15 +1,21 @@
 package com.learning.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
-
 
 public class ExercicesDTO extends HistorizedDTO {
 
 	private String name;
 
 	private String type;
+
+	private CourDTO cour;
+	private LocalDateTime startDateTime;
+
+	private LocalDateTime endDateTime;
 	
-     private CourDTO cour;
+	private double scale;
+	
 	private List<QuestionDTO> questions;
 
 	public ExercicesDTO() {
@@ -53,6 +59,30 @@ public class ExercicesDTO extends HistorizedDTO {
 		this.questions = questions;
 	}
 
+	public LocalDateTime getStartDateTime() {
+		return startDateTime;
+	}
+
+	public void setStartDateTime(LocalDateTime startDateTime) {
+		this.startDateTime = startDateTime;
+	}
+
+	public LocalDateTime getEndDateTime() {
+		return endDateTime;
+	}
+
+	public void setEndDateTime(LocalDateTime endDateTime) {
+		this.endDateTime = endDateTime;
+	}
+
+	public double getScale() {
+		return scale;
+	}
+
+	public void setScale(double scale) {
+		this.scale = scale;
+	}
+	
 	
 
 }

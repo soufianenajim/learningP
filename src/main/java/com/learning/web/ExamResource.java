@@ -63,12 +63,17 @@ public class ExamResource {
 	public ResponseEntity<?> save(@RequestBody ExamDTO examDTO) {
 		try {
 
-			return new ResponseEntity<>(examService.save(examDTO), HttpStatus.OK);
+			ExamDTO exam = examService.save(examDTO);
+			if (exam != null) {
+				return new ResponseEntity<>(exam, HttpStatus.CREATED);
+			}
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		} catch (Exception e) {
 			LOGGER.error("Problem occored in api/exam" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
 	@GetMapping("find-by-module" + "/{id}")
 	public ResponseEntity<?> findByModule(@PathVariable Long id) {
 		try {

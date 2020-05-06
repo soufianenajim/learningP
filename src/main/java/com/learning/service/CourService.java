@@ -25,4 +25,8 @@ public interface CourService extends CrudService<Cour, CourDTO> {
 	List<CourDTO> findByModuleAndLaunched(Long idModule,boolean isLaunched);
 
 	void launch(Long idCour);
+	
+	boolean existingCour(String name, Long idModule);
+
+	boolean existingCourById(Long id, String name, Long idModule);
 }

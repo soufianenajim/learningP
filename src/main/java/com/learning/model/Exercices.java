@@ -1,5 +1,6 @@
 package com.learning.model;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -25,6 +26,15 @@ public class Exercices extends Historized {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cour_id")
 	private Cour cour;
+	
+
+	@Column(name="start_date_time")
+	private LocalDateTime startDateTime;
+	
+	@Column(name="end_date_time")
+	private LocalDateTime endDateTime;
+	
+	private double scale;
 	
 	@OneToMany(mappedBy = "exercices", fetch = FetchType.LAZY, cascade = CascadeType.DETACH )
 	private List<Question> questions;
@@ -79,11 +89,38 @@ public class Exercices extends Historized {
 	public void setType(TypeEnum type) {
 		this.type = type;
 	}
+	
+
+	public LocalDateTime getStartDateTime() {
+		return startDateTime;
+	}
+
+	public void setStartDateTime(LocalDateTime startDateTime) {
+		this.startDateTime = startDateTime;
+	}
+
+	public LocalDateTime getEndDateTime() {
+		return endDateTime;
+	}
+
+	public void setEndDateTime(LocalDateTime endDateTime) {
+		this.endDateTime = endDateTime;
+	}
+
+	public double getScale() {
+		return scale;
+	}
+
+	public void setScale(double scale) {
+		this.scale = scale;
+	}
 
 	@Override
 	public String toString() {
-		return "Td [name=" + name + ", type=" + type + ", questions=" + questions + "]";
+		return "Exercices [name=" + name + ", type=" + type + ", cour=" + cour + ", startDateTime=" + startDateTime
+				+ ", endDateTime=" + endDateTime + ", questions=" + questions + "]";
 	}
+
 
 
 }

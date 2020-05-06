@@ -63,7 +63,11 @@ public class ExercicesResource {
 	public ResponseEntity<?> save(@RequestBody ExercicesDTO exercicesDTO) {
 		try {
 
-			return new ResponseEntity<>(exercicesService.save(exercicesDTO), HttpStatus.OK);
+			ExercicesDTO exercices = exercicesService.save(exercicesDTO);
+			if (exercices != null) {
+				return new ResponseEntity<>(exercices, HttpStatus.CREATED);
+			}
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		} catch (Exception e) {
 			LOGGER.error("Problem occored in api/exercices" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -88,7 +92,7 @@ public class ExercicesResource {
 			LOGGER.error("Problem occored in api/exercices" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
+	
 	}
 	@GetMapping("find-by-question/{id}")
 	public ResponseEntity<?> findByQuestion(@PathVariable Long id) {

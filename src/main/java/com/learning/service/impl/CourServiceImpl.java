@@ -46,6 +46,11 @@ public class CourServiceImpl implements CourService {
 	// save or update
 	@Override
 	public CourDTO save(CourDTO courDTO) {
+			if (courDTO.getId() != null) {
+				if (!existingCourById(courDTO.getId(), courDTO.getName(), courDTO.getModule().getId()))
+					return null;
+			} else if (!existingCour(courDTO.getName(), courDTO.getModule().getId()))
+				return null;
 		Cour cour = convertDTOtoModel(courDTO);
 		cour = courRepository.save(cour);
 		
@@ -253,6 +258,18 @@ public class CourServiceImpl implements CourService {
 		List<Cour> list = courRepository.findByModuleAndLaunched(idModule,isLaunched);
 
 		return convertEntitiesToDtosWithOutModule(list);
+	}
+
+	@Override
+	public boolean existingCour(String name, Long idModule) {
+		Cour existCour = courRepository.findByNameAndModule(name, idModule);
+		return existCour == null || existCour.getId() == null;
+	}
+
+	@Override
+	public boolean existingCourById(Long id, String name, Long idModule) {
+		Cour existCour = courRepository.findByNameAndModule(name, idModule);
+		return existCour == null ||  existCour.getId().equals(id);
 	}					
 
 }

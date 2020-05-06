@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.learning.dto.ExercicesDTO;
 import com.learning.dto.QuestionDTO;
 import com.learning.model.base.ConstantBase;
 import com.learning.model.base.Demande;
@@ -63,14 +64,16 @@ public class QuestionResource {
 	@PostMapping(ConstantBase.CRUD_REST_SAVE_OR_UPDATE)
 	public ResponseEntity<?> save(@RequestBody QuestionDTO questionDTO) {
 		try {
-
-			return new ResponseEntity<>(questionService.save(questionDTO), HttpStatus.OK);
+			QuestionDTO question = questionService.save(questionDTO);
+			if (question != null) {
+				return new ResponseEntity<>(question, HttpStatus.CREATED);
+			}
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		} catch (Exception e) {
 			LOGGER.error("Problem occored in api/question" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
 
 	@GetMapping("/find-by-exercices/{id}")
 	public ResponseEntity<?> findByTd(@PathVariable Long id) {
