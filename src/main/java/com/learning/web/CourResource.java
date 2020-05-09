@@ -94,6 +94,16 @@ public class CourResource {
 		}
 
 	}
+	@GetMapping("find-by-module-and-not-launched" + "/{id}")
+	public ResponseEntity<?> findByModuleAndNotLaunched(@PathVariable Long id) {
+		try {
+			return new ResponseEntity<>(courService.findByModuleAndNotLaunched(id), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
 	
 	@GetMapping("launch" + "/{id}")
 	public ResponseEntity<?> launch(@PathVariable Long id) {

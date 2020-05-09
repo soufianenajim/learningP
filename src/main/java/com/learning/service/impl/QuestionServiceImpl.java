@@ -93,12 +93,16 @@ public class QuestionServiceImpl implements QuestionService {
 		question.setCorrectComment(questionDTO.getCorrectComment());
 		question.setNote(questionDTO.getNote());
 		question.setIndexNumerator(questionDTO.getIndexNumerator());
+		
 		if (questionDTO.getExercices() != null) {
 			question.setExercices(exercicesService.convertDTOtoModel(questionDTO.getExercices()));
 		}
 
 		if (questionDTO.getExam() != null) {
 			question.setExam(examService.convertDTOtoModel(questionDTO.getExam()));
+		}
+		if(questionDTO.getSuggestions()!=null) {
+			question.setSuggestions(suggestionService.convertDtosToEntities(questionDTO.getSuggestions()));
 		}
 		return question;
 	}
@@ -113,12 +117,16 @@ public class QuestionServiceImpl implements QuestionService {
 		questionDTO.setNote(question.getNote());
 		questionDTO.setIndexNumerator(question.getIndexNumerator());
 		Exam exam = question.getExam();
+		Exercices exercices=question.getExercices();
 		List<Suggestion> suggestion = question.getSuggestions();
 		if (exam != null) {
 			questionDTO.setExam(examService.convertModelToDTO(exam));
 		}
 		if (suggestion != null) {
 			questionDTO.setSuggestions(suggestionService.convertEntitiesToDtos(suggestion));
+		}
+		if(exercices!=null) {
+			questionDTO.setExercices(exercicesService.convertModelToDTOWithoutQuestion(exercices));
 		}
 		questionDTO.setCreatedAt(question.getCreatedAt());
 		questionDTO.setUpdatedAt(question.getUpdatedAt());
@@ -194,9 +202,11 @@ public class QuestionServiceImpl implements QuestionService {
 
 		// detachExercices(exercices.getId());
 		for (QuestionDTO questionDTO : questions) {
-			Question question = convertDTOtoModel(questionDTO);
-			question.setExercices(exercices);
-			questionRepository.save(question);
+//			Question question = convertDTOtoModel(questionDTO);
+//			question.setExercices(exercices);
+//			questionRepository.save(question);
+			questionDTO.setExercices(exercicesService.convertModelToDTOWithoutQuestion(exercices));
+			save(questionDTO);
 		}
 
 	}

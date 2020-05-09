@@ -270,6 +270,12 @@ public class CourServiceImpl implements CourService {
 	public boolean existingCourById(Long id, String name, Long idModule) {
 		Cour existCour = courRepository.findByNameAndModule(name, idModule);
 		return existCour == null ||  existCour.getId().equals(id);
+	}
+
+	@Override
+	public List<CourDTO> findByModuleAndNotLaunched(Long idModule) {
+		
+		return convertEntitiesToDtos(courRepository.findByModuleAndNotLaunched(idModule));
 	}					
 
 }

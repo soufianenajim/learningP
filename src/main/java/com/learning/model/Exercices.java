@@ -36,7 +36,7 @@ public class Exercices extends Historized {
 	
 	private double scale;
 	
-	@OneToMany(mappedBy = "exercices", fetch = FetchType.LAZY, cascade = CascadeType.DETACH )
+	@OneToMany(mappedBy = "exercices", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE )
 	private List<Question> questions;
 
 	public Exercices() {

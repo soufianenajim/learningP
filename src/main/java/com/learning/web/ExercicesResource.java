@@ -104,4 +104,19 @@ public class ExercicesResource {
 		}
 
 	}
+	
+	@PostMapping("is_exist")
+	public ResponseEntity<?> existingExercice(@RequestBody ExercicesDTO exercicesDTO) {
+		try {
+
+			boolean isExist = exercicesService.existingExercice(exercicesDTO);
+			if (isExist) {
+				return new ResponseEntity<>(isExist, HttpStatus.CREATED);
+			}
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/exercices" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

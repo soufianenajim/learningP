@@ -31,7 +31,7 @@ public class Question extends Historized {
 
 	private int indexNumerator;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.DETACH })
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "exercices_id")
 	private Exercices exercices;
 
@@ -39,7 +39,7 @@ public class Question extends Historized {
 	@JoinColumn(name = "exam_id")
 	private Exam exam;
 
-	@OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+	@OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<Suggestion> suggestions;
 
 	public Question() {

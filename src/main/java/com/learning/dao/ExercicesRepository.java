@@ -23,9 +23,11 @@ public interface ExercicesRepository extends JpaRepository<Exercices, Long> {
 	@Query("SELECT e FROM Exercices e WHERE e.cour.id=?1 and e.type=?2 ")
 	Exercices findByCourAndType(Long courId,TypeEnum type);
 	
-	@Query("SELECT q.exercices FROM Question q WHERE q.id=?1  ")
-	Exercices findByQuestion(Long questionId);
+	@Query("SELECT e FROM Exercices e JOIN e.questions eq WHERE eq.id=?1  ")
+	List<Exercices> findByQuestion(Long questionId);
 	
 	@Query("SELECT e FROM Exercices e WHERE e.cour.module.id=?1 and e.type=?2")
 	List<Exercices> findByModuleAndType(Long idModule,TypeEnum type);
+	
+	
 }

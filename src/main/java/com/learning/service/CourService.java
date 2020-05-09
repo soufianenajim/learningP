@@ -21,11 +21,13 @@ public interface CourService extends CrudService<Cour, CourDTO> {
 	List<Cour> convertDtosToEntitiesWithOutModule(List<CourDTO> list);
 
 	List<CourDTO> findByModule(Long idModule);
-	
-	List<CourDTO> findByModuleAndLaunched(Long idModule,boolean isLaunched);
+
+	List<CourDTO> findByModuleAndNotLaunched(Long idModule);
+
+	List<CourDTO> findByModuleAndLaunched(Long idModule, boolean isLaunched);
 
 	void launch(Long idCour);
-	
+
 	boolean existingCour(String name, Long idModule);
 
 	boolean existingCourById(Long id, String name, Long idModule);

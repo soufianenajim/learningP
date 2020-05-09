@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.learning.dao.ExercicesRepository;
+import com.learning.dao.QuestionRepository;
 import com.learning.dto.ExercicesDTO;
+import com.learning.dto.QuestionDTO;
 import com.learning.model.Cour;
 import com.learning.model.Exercices;
 import com.learning.model.Question;
@@ -29,12 +31,21 @@ public class ExercicesServiceImpl implements ExercicesService {
 	private ExercicesRepository exercicesRepository;
 
 	@Autowired
+	private QuestionRepository questionRepository;
+
+	@Autowired
 	private QuestionService questionService;
 	@Autowired
 	private CourService courService;
 
 	@Override
 	public ExercicesDTO save(ExercicesDTO exercicesDTO) {
+		TypeEnum type = TypeEnum.valueOf(exercicesDTO.getType());
+		if (exercicesDTO.getId() != null) {
+			if (!existingExerciceById(exercicesDTO.getId(), exercicesDTO.getCour().getId(), type))
+				return null;
+		} else if (!existingExercice(exercicesDTO.getCour().getId(), type))
+			return null;
 		Exercices exercices = convertDTOtoModel(exercicesDTO);
 		exercices = exercicesRepository.save(exercices);
 		if (exercicesDTO.getQuestions() != null) {
@@ -87,6 +98,7 @@ public class ExercicesServiceImpl implements ExercicesService {
 		exercices.setStartDateTime(exercicesDTO.getStartDateTime());
 		exercices.setEndDateTime(exercicesDTO.getEndDateTime());
 		exercices.setScale(exercicesDTO.getScale());
+
 		if (exercicesDTO.getType() != null && !StringUtils.isEmpty(exercicesDTO.getType())) {
 			exercices.setType(TypeEnum.valueOf(exercicesDTO.getType()));
 		}
@@ -117,6 +129,29 @@ public class ExercicesServiceImpl implements ExercicesService {
 		if (questions != null) {
 			exercicesDTO.setQuestions(questionService.convertEntitiesToDtos(questions));
 		}
+		exercicesDTO.setCreatedAt(exercices.getCreatedAt());
+		exercicesDTO.setUpdatedAt(exercices.getUpdatedAt());
+		return exercicesDTO;
+	}
+
+	@Override
+	public ExercicesDTO convertModelToDTOWithoutQuestion(Exercices exercices) {
+		ExercicesDTO exercicesDTO = new ExercicesDTO();
+		exercicesDTO.setId(exercices.getId());
+		exercicesDTO.setName(exercices.getName());
+		exercicesDTO.setStartDateTime(exercices.getStartDateTime());
+		exercicesDTO.setEndDateTime(exercices.getEndDateTime());
+		exercicesDTO.setScale(exercices.getScale());
+		Cour cour = exercices.getCour();
+		TypeEnum type = exercices.getType();
+
+		if (cour != null) {
+			exercicesDTO.setCour(courService.convertModelToDTO(cour));
+		}
+		if (type != null) {
+			exercicesDTO.setType(type.toString());
+		}
+
 		exercicesDTO.setCreatedAt(exercices.getCreatedAt());
 		exercicesDTO.setUpdatedAt(exercices.getUpdatedAt());
 		return exercicesDTO;
@@ -155,23 +190,6 @@ public class ExercicesServiceImpl implements ExercicesService {
 		return list;
 	}
 
-	private ExercicesDTO convertModelToDTOWithQuestions(Exercices exercices) {
-		ExercicesDTO exercicesDTO = convertModelToDTO(exercices);
-		List<Question> questions = exercices.getQuestions();
-		if (questions != null) {
-			exercicesDTO.setQuestions(questionService.convertEntitiesToDtos(questions));
-		}
-		return exercicesDTO;
-	}
-
-	private List<ExercicesDTO> convertEntitiesToDTOsWithQuestions(List<Exercices> exercicess) {
-		List<ExercicesDTO> list = new ArrayList<ExercicesDTO>();
-		for (Exercices exercices : exercicess) {
-			list.add(convertModelToDTOWithQuestions(exercices));
-		}
-		return list;
-	}
-
 	@Override
 	public ExercicesDTO findByCourAndType(Long courId, String type) {
 		Exercices exercices = exercicesRepository.findByCourAndType(courId, TypeEnum.valueOf(type));
@@ -198,20 +216,30 @@ public class ExercicesServiceImpl implements ExercicesService {
 
 	@Override
 	public ExercicesDTO findByQuestion(Long questionId) {
-		Exercices exercices = exercicesRepository.findByQuestion(questionId);
+		Optional<Question> question = questionRepository.findById(questionId);
+		Exercices exercices = question.isPresent() ? question.get().getExercices() : null;
 		return exercices != null ? convertModelToDTO(exercices) : null;
 	}
 
 	@Override
-	public boolean existingExam(String name, TypeEnum type, Long idModule) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean existingExercice(Long idCour, TypeEnum type) {
+		Exercices existExercice = exercicesRepository.findByCourAndType(idCour, type);
+		return existExercice == null || existExercice.getId() == null;
 	}
 
 	@Override
-	public boolean existingExamById(Long id, String name, TypeEnum type, Long idModule) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean existingExerciceById(Long id, Long idCour, TypeEnum type) {
+		Exercices existExercice = exercicesRepository.findByCourAndType(idCour, type);
+		return existExercice == null || existExercice.getId().equals(id);
+	}
+
+	@Override
+	public boolean existingExercice(ExercicesDTO exercicesDTO) {
+		TypeEnum type = TypeEnum.valueOf(exercicesDTO.getType());
+		return exercicesDTO.getId() != null
+				? existingExerciceById(exercicesDTO.getId(), exercicesDTO.getCour().getId(), type)
+				: existingExercice(exercicesDTO.getCour().getId(), type);
+
 	}
 
 }

@@ -15,9 +15,11 @@ public interface ExercicesService extends CrudService<Exercices, ExercicesDTO> {
 	
 	ExercicesDTO convertModelToDTOWithQuestion(Exercices quiz);
 	
-	boolean existingExam(String name,TypeEnum type, Long idModule);
+	boolean existingExercice( Long idCour,TypeEnum type);
 
-	boolean existingExamById(Long id, String name,TypeEnum type, Long idModule);
+	boolean existingExerciceById(Long id, Long idCour,TypeEnum type);
 	
-	
+	 ExercicesDTO convertModelToDTOWithoutQuestion(Exercices exercices);
+	 
+	 boolean existingExercice(ExercicesDTO exercicesDTO);
 }
