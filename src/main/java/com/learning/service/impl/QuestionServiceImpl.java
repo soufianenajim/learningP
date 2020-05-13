@@ -200,7 +200,7 @@ public class QuestionServiceImpl implements QuestionService {
 	@Override
 	public void saveQuestionsByExercices(List<QuestionDTO> questions, Exercices exercices) {
 
-		// detachExercices(exercices.getId());
+		detachExercices(exercices.getId());
 		for (QuestionDTO questionDTO : questions) {
 //			Question question = convertDTOtoModel(questionDTO);
 //			question.setExercices(exercices);

@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "exercices")
+
 public class Exercices extends Historized {
 
 	private static final long serialVersionUID = -8858004000210805400L;
