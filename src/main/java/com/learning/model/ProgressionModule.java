@@ -17,36 +17,30 @@ public class ProgressionModule extends Historized {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "student_id")
 	private User student;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "module_id")
 	private Module module;
-	
-	private Double progressionCour;
-	
-	private Double progressionExam;
-	
-	private Double NoteFinal;
 
-	
+	private Double progressionCour;
+
+	private Double progressionExam;
+
+	private Double noteExam;
+	private Double noteFinal;
+
 	public ProgressionModule() {
 		super();
-		
-	}
 
-	
+	}
 
 	public User getStudent() {
 		return student;
 	}
 
-
-
 	public void setStudent(User student) {
 		this.student = student;
 	}
-
-
 
 	public Module getModule() {
 		return module;
@@ -64,8 +58,6 @@ public class ProgressionModule extends Historized {
 		this.progressionCour = progressionCour;
 	}
 
-	
-
 	public Double getProgressionExam() {
 		return progressionExam;
 	}
@@ -74,12 +66,22 @@ public class ProgressionModule extends Historized {
 		this.progressionExam = progressionExam;
 	}
 
+	public Double getNoteExam() {
+		return noteExam;
+	}
+
+	public void setNoteExam(Double noteExam) {
+		this.noteExam = noteExam;
+	}
+
 	public Double getNoteFinal() {
-		return NoteFinal;
+		return noteFinal;
 	}
 
 	public void setNoteFinal(Double noteFinal) {
-		NoteFinal = noteFinal;
+		this.noteFinal = noteFinal;
 	}
+
+	
 
 }

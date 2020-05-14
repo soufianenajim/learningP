@@ -12,6 +12,7 @@ public class ProgressionModuleDTO extends HistorizedDTO {
 	private Double progressionCour;
 
 	private Double progressionExam;
+	private Double noteExam;
 	private Double noteFinal;
 
 	public ProgressionModuleDTO() {
@@ -60,6 +61,15 @@ public class ProgressionModuleDTO extends HistorizedDTO {
 		this.noteFinal = noteFinal;
 	}
 
+	public Double getNoteExam() {
+		return noteExam;
+	}
+
+	public void setNoteExam(Double noteExam) {
+		this.noteExam = noteExam;
+	}
+
+	
 	
 
 

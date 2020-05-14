@@ -13,6 +13,7 @@ import com.learning.dao.ExamRepository;
 import com.learning.dto.ExamDTO;
 import com.learning.model.Exam;
 import com.learning.model.Module;
+import com.learning.model.Question;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.ExamService;
@@ -97,8 +98,12 @@ public class ExamServiceImpl implements ExamService {
 		examDTO.setStartDateTime(exam.getStartDateTime());
 		examDTO.setEndDateTime(exam.getEndDateTime());
 		Module module = exam.getModule();
+		List<Question> questions=exam.getQuestions();
 		if (module != null) {
 			examDTO.setModule(moduleService.convertModelToDTO(exam.getModule()));
+		}
+		if(questions!=null) {
+			examDTO.setQuestions(questionService.convertEntitiesToDtos(questions));
 		}
 		examDTO.setCreatedAt(exam.getCreatedAt());
 		examDTO.setUpdatedAt(exam.getUpdatedAt());
@@ -147,6 +152,25 @@ public class ExamServiceImpl implements ExamService {
 	public List<ExamDTO> findByModule(Long idModule) {
 		
 		return convertEntitiesToDtos(examRepository.findByModule(idModule));
+	}
+
+	@Override
+	public ExamDTO convertModelToDTOWithoutQuestion(Exam exam) {
+		
+		ExamDTO examDTO = new ExamDTO();
+		examDTO.setId(exam.getId());
+		examDTO.setName(exam.getName());
+		examDTO.setStartDateTime(exam.getStartDateTime());
+		examDTO.setEndDateTime(exam.getEndDateTime());
+		Module module = exam.getModule();
+		
+		if (module != null) {
+			examDTO.setModule(moduleService.convertModelToDTO(exam.getModule()));
+		}
+		
+		examDTO.setCreatedAt(exam.getCreatedAt());
+		examDTO.setUpdatedAt(exam.getUpdatedAt());
+		return examDTO;
 	}
 
 }

@@ -95,6 +95,7 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 		progressionModule.setProgressionCour(progressionModuleDTO.getProgressionCour());
 		progressionModule.setProgressionExam(progressionModuleDTO.getProgressionExam());
 		progressionModule.setNoteFinal(progressionModuleDTO.getNoteFinal());
+		progressionModule.setNoteExam(progressionModuleDTO.getNoteExam());
 		if (progressionModuleDTO.getModule() != null) {
 			progressionModule
 					.setModule(moduleService.convertDTOtoModelWithOutRelation(progressionModuleDTO.getModule()));
@@ -114,6 +115,7 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 		progressionModuleDTO.setProgressionCour(progressionModule.getProgressionCour());
 		progressionModuleDTO.setProgressionExam(progressionModule.getProgressionExam());
 		progressionModuleDTO.setNoteFinal(progressionModule.getNoteFinal());
+		progressionModuleDTO.setNoteExam(progressionModule.getNoteExam());
 		Module module = progressionModule.getModule();
 		User student = progressionModule.getStudent();
 		if (module != null) {
