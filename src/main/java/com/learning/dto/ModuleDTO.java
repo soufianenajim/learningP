@@ -17,6 +17,8 @@ public class ModuleDTO extends HistorizedDTO {
 	private List<ExamDTO> exams;
 	
 	private Long idOrganization;
+	
+	private boolean hasExam;
 
 	public ModuleDTO() {
 		super();
@@ -90,6 +92,14 @@ public class ModuleDTO extends HistorizedDTO {
 
 	public void setIdOrganization(Long idOrganization) {
 		this.idOrganization = idOrganization;
+	}
+
+	public boolean isHasExam() {
+		return hasExam;
+	}
+
+	public void setHasExam(boolean hasExam) {
+		this.hasExam = hasExam;
 	}
 	
 

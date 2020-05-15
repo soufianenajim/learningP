@@ -26,4 +26,8 @@ public interface ExamRepository extends JpaRepository<Exam,Long > {
 	
 	@Query("SELECT e FROM Exam e WHERE  e.module.id = ?1")
 	List<Exam> findByModule(Long idModule);
+	
+	@Query("SELECT count(e.id) FROM Exam e WHERE  e.module.id = ?1")
+	Long countExamByModule(Long idModule);
 }
+

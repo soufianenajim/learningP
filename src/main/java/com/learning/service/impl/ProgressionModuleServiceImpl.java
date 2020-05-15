@@ -20,6 +20,7 @@ import com.learning.model.User;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.CourService;
+import com.learning.service.ExamService;
 import com.learning.service.ModuleService;
 import com.learning.service.ProgressionCourService;
 import com.learning.service.ProgressionModuleService;
@@ -39,6 +40,9 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 	
 	@Autowired 
 	private CourService courService;
+	
+	@Autowired
+	private ExamService examService;
 
 	// save or update
 	@Override
@@ -116,10 +120,13 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 		progressionModuleDTO.setNoteFinal(progressionModule.getNoteFinal());
 		progressionModuleDTO.setExamFinished(progressionModule.isExamFinished());
 		progressionModuleDTO.setNoteExam(progressionModule.getNoteExam());
+		
 		Module module = progressionModule.getModule();
 		User student = progressionModule.getStudent();
 		if (module != null) {
-			progressionModuleDTO.setModule(moduleService.convertModelToDTOWithOutRelation(module));
+			ModuleDTO moduleDTO=moduleService.convertModelToDTOWithOutRelation(module);
+			moduleDTO.setHasExam(examService.countExamByModule(module.getId())>0);
+			progressionModuleDTO.setModule(moduleDTO);
 		}
 
 		if (student != null) {

@@ -173,4 +173,10 @@ public class ExamServiceImpl implements ExamService {
 		return examDTO;
 	}
 
+	@Override
+	public Long countExamByModule(Long idModule) {
+	
+		return examRepository.countExamByModule(idModule);
+	}
+
 }

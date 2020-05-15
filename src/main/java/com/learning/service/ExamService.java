@@ -11,5 +11,6 @@ public interface ExamService extends CrudService<Exam, ExamDTO> {
 	
 	ExamDTO convertModelToDTOWithoutQuestion(Exam exam);
 	List<ExamDTO> findByModule(Long idModule);
+	Long countExamByModule(Long idModule);
 	
 }
