@@ -16,6 +16,8 @@ public class ExercicesDTO extends HistorizedDTO {
 	
 	private double scale;
 	
+	private ModuleDTO module;
+	
 	private List<QuestionDTO> questions;
 
 	public ExercicesDTO() {
@@ -82,6 +84,15 @@ public class ExercicesDTO extends HistorizedDTO {
 	public void setScale(double scale) {
 		this.scale = scale;
 	}
+
+	public ModuleDTO getModule() {
+		return module;
+	}
+
+	public void setModule(ModuleDTO module) {
+		this.module = module;
+	}
+	
 	
 	
 

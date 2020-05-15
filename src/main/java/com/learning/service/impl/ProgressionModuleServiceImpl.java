@@ -93,7 +93,7 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 		ProgressionModule progressionModule = new ProgressionModule();
 		progressionModule.setId(progressionModuleDTO.getId());
 		progressionModule.setProgressionCour(progressionModuleDTO.getProgressionCour());
-		progressionModule.setProgressionExam(progressionModuleDTO.getProgressionExam());
+		progressionModule.setExamFinished(progressionModuleDTO.isExamFinished());
 		progressionModule.setNoteFinal(progressionModuleDTO.getNoteFinal());
 		progressionModule.setNoteExam(progressionModuleDTO.getNoteExam());
 		if (progressionModuleDTO.getModule() != null) {
@@ -113,8 +113,8 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 		ProgressionModuleDTO progressionModuleDTO = new ProgressionModuleDTO();
 		progressionModuleDTO.setId(progressionModule.getId());
 		progressionModuleDTO.setProgressionCour(progressionModule.getProgressionCour());
-		progressionModuleDTO.setProgressionExam(progressionModule.getProgressionExam());
 		progressionModuleDTO.setNoteFinal(progressionModule.getNoteFinal());
+		progressionModuleDTO.setExamFinished(progressionModule.isExamFinished());
 		progressionModuleDTO.setNoteExam(progressionModule.getNoteExam());
 		Module module = progressionModule.getModule();
 		User student = progressionModule.getStudent();
@@ -166,7 +166,7 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 			progressionModule.setModule(module);
 			progressionModule.setStudent(userService.convertDTOtoModel(student));
 			progressionModule.setProgressionCour(0.0);
-			progressionModule.setProgressionExam(0.0);
+	
 			progressionModuleRepository.save(progressionModule);
 		}
 
@@ -199,7 +199,6 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 			progressionModule.setModule(moduleService.convertDTOtoModel(module));
 			progressionModule.setStudent(student);
 			progressionModule.setProgressionCour(0.0);
-			progressionModule.setProgressionExam(0.0);
 			progressionModuleRepository.save(progressionModule);
 			final List<CourDTO> cours=courService.findByModuleAndLaunched(module.getId(),true);
 			progressionCourService.saveByStudentAndCours(student, cours);

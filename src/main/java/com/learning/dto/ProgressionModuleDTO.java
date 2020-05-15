@@ -11,7 +11,7 @@ public class ProgressionModuleDTO extends HistorizedDTO {
 	private ModuleDTO module;
 	private Double progressionCour;
 
-	private Double progressionExam;
+	private boolean examFinished;
 	private Double noteExam;
 	private Double noteFinal;
 
@@ -45,12 +45,14 @@ public class ProgressionModuleDTO extends HistorizedDTO {
 	}
 
 	
-	public Double getProgressionExam() {
-		return progressionExam;
+	
+
+	public boolean isExamFinished() {
+		return examFinished;
 	}
 
-	public void setProgressionExam(Double progressionExam) {
-		this.progressionExam = progressionExam;
+	public void setExamFinished(boolean examFinished) {
+		this.examFinished = examFinished;
 	}
 
 	public Double getNoteFinal() {

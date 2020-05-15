@@ -13,7 +13,6 @@ import org.springframework.util.StringUtils;
 import com.learning.dao.ExercicesRepository;
 import com.learning.dao.QuestionRepository;
 import com.learning.dto.ExercicesDTO;
-import com.learning.dto.QuestionDTO;
 import com.learning.model.Cour;
 import com.learning.model.Exercices;
 import com.learning.model.Question;
