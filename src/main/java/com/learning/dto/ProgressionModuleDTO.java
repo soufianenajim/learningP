@@ -14,6 +14,8 @@ public class ProgressionModuleDTO extends HistorizedDTO {
 	private boolean examFinished;
 	private Double noteExam;
 	private Double noteFinal;
+	
+	private ExamDTO exam;
 
 	public ProgressionModuleDTO() {
 		super();
@@ -69,6 +71,14 @@ public class ProgressionModuleDTO extends HistorizedDTO {
 
 	public void setNoteExam(Double noteExam) {
 		this.noteExam = noteExam;
+	}
+
+	public ExamDTO getExam() {
+		return exam;
+	}
+
+	public void setExam(ExamDTO exam) {
+		this.exam = exam;
 	}
 
 	

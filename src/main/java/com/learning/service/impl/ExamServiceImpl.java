@@ -1,8 +1,10 @@
 package com.learning.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -81,8 +83,8 @@ public class ExamServiceImpl implements ExamService {
 		Exam exam = new Exam();
 		exam.setId(examDTO.getId());
 		exam.setName(examDTO.getName());
-		exam.setStartDateTime(examDTO.getStartDateTime()!=null?examDTO.getStartDateTime().withSecond(0):null);
-		exam.setEndDateTime(examDTO.getEndDateTime()!=null?examDTO.getEndDateTime().withSecond(0):null);
+		exam.setStartDateTime(examDTO.getStartDateTime() != null ? examDTO.getStartDateTime().withSecond(0) : null);
+		exam.setEndDateTime(examDTO.getEndDateTime() != null ? examDTO.getEndDateTime().withSecond(0) : null);
 
 		if (examDTO.getModule() != null) {
 			exam.setModule(moduleService.convertDTOtoModel(examDTO.getModule()));
@@ -98,11 +100,11 @@ public class ExamServiceImpl implements ExamService {
 		examDTO.setStartDateTime(exam.getStartDateTime());
 		examDTO.setEndDateTime(exam.getEndDateTime());
 		Module module = exam.getModule();
-		List<Question> questions=exam.getQuestions();
+		List<Question> questions = exam.getQuestions();
 		if (module != null) {
 			examDTO.setModule(moduleService.convertModelToDTO(exam.getModule()));
 		}
-		if(questions!=null) {
+		if (questions != null) {
 			examDTO.setQuestions(questionService.convertEntitiesToDtos(questions));
 		}
 		examDTO.setCreatedAt(exam.getCreatedAt());
@@ -145,29 +147,29 @@ public class ExamServiceImpl implements ExamService {
 	@Override
 	public void deleteByModule(Long idModule) {
 		examRepository.deleteByModule(idModule);
-		
+
 	}
 
 	@Override
 	public List<ExamDTO> findByModule(Long idModule) {
-		
+
 		return convertEntitiesToDtos(examRepository.findByModule(idModule));
 	}
 
 	@Override
 	public ExamDTO convertModelToDTOWithoutQuestion(Exam exam) {
-		
+
 		ExamDTO examDTO = new ExamDTO();
 		examDTO.setId(exam.getId());
 		examDTO.setName(exam.getName());
 		examDTO.setStartDateTime(exam.getStartDateTime());
 		examDTO.setEndDateTime(exam.getEndDateTime());
 		Module module = exam.getModule();
-		
+
 		if (module != null) {
 			examDTO.setModule(moduleService.convertModelToDTO(exam.getModule()));
 		}
-		
+
 		examDTO.setCreatedAt(exam.getCreatedAt());
 		examDTO.setUpdatedAt(exam.getUpdatedAt());
 		return examDTO;
@@ -175,8 +177,21 @@ public class ExamServiceImpl implements ExamService {
 
 	@Override
 	public Long countExamByModule(Long idModule) {
-	
+
 		return examRepository.countExamByModule(idModule);
+	}
+
+	@Override
+	public List<ExamDTO> findByUser(Long idUser) {
+		LocalDateTime now = LocalDateTime.now();
+		
+		return convertEnititiesToDTOsWithoutQuestion(examRepository.findByUser(idUser,now));
+	}
+
+	@Override
+	public List<ExamDTO> convertEnititiesToDTOsWithoutQuestion(List<Exam> list) {
+
+		return list.stream().map(e -> convertModelToDTOWithoutQuestion(e)).collect(Collectors.toList());
 	}
 
 }

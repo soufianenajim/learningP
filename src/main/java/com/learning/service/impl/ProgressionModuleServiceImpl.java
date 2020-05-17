@@ -125,8 +125,10 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 		User student = progressionModule.getStudent();
 		if (module != null) {
 			ModuleDTO moduleDTO=moduleService.convertModelToDTOWithOutRelation(module);
-			moduleDTO.setHasExam(examService.countExamByModule(module.getId())>0);
+			
+			moduleDTO.setHasExam(examService.countExamByModule(moduleDTO.getId())>0);
 			progressionModuleDTO.setModule(moduleDTO);
+		
 		}
 
 		if (student != null) {

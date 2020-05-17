@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service;
 import com.learning.dao.RoleRepository;
 import com.learning.dao.UserRepository;
 import com.learning.dao.UserRepositorySearchCriteria;
+import com.learning.dto.ExamDTO;
+import com.learning.dto.ExercicesDTO;
 import com.learning.dto.ModuleDTO;
+import com.learning.dto.NotificationDTO;
 import com.learning.dto.UserDTO;
 import com.learning.exceptions.BusinessException;
 import com.learning.model.Group;
@@ -23,6 +26,8 @@ import com.learning.model.base.ConstantBase;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.security.services.UserDetailsImpl;
+import com.learning.service.ExamService;
+import com.learning.service.ExercicesService;
 import com.learning.service.GroupService;
 import com.learning.service.ModuleService;
 import com.learning.service.OrganizationService;
@@ -53,6 +58,11 @@ public class UserServiceImpl implements UserService {
 	private ProgressionModuleService progressionModuleService;
 	@Autowired
 	private UserRepositorySearchCriteria userRepositorySearchCriteria;
+
+	@Autowired
+	private ExamService examService;
+	@Autowired
+	private ExercicesService exercicesService;
 
 	@Override
 	public UserDTO saveU(UserDTO userDTO) throws BusinessException {
@@ -279,6 +289,17 @@ public class UserServiceImpl implements UserService {
 	public List<UserDTO> findByGroupAndRole(Long idGroup, RoleName role) {
 
 		return convertEntitiesToDtosWithOutRelation(userRepository.findByGroupAndRole(idGroup, role));
+	}
+
+	@Override
+	public NotificationDTO getNotificatonsById(Long id) {
+		NotificationDTO notificationDTO = new NotificationDTO();
+		List<ExamDTO> listExam = examService.findByUser(id);
+		List<ExercicesDTO> listQuiz = exercicesService.findQuizByUser(id);
+		notificationDTO.setExamList(listExam);
+		notificationDTO.setQuizList(listQuiz);
+		
+		return notificationDTO;
 	}
 
 }

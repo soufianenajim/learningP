@@ -1,5 +1,6 @@
 package com.learning.dao;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -29,5 +30,6 @@ public interface ExercicesRepository extends JpaRepository<Exercices, Long> {
 	@Query("SELECT e FROM Exercices e WHERE e.cour.module.id=?1 and e.type=?2")
 	List<Exercices> findByModuleAndType(Long idModule,TypeEnum type);
 	
-	
+	@Query("SELECT e FROM Exercices e ,ProgressionCour pc  WHERE e.cour.id=pc.cour.id and e.type=?2 and pc.student.id=?1 and   e.startDateTime>=?3")
+	List<Exercices> findByUserAndType(Long idUser,TypeEnum type,LocalDateTime localDateTime);
 }

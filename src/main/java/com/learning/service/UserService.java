@@ -2,6 +2,7 @@ package com.learning.service;
 
 import java.util.List;
 
+import com.learning.dto.NotificationDTO;
 import com.learning.dto.UserDTO;
 import com.learning.exceptions.BusinessException;
 import com.learning.model.RoleName;
@@ -29,4 +30,6 @@ public interface UserService extends CrudService<User, UserDTO> {
 	UserDTO convertFromUserDetailsToDTO(UserDetailsImpl userDetail,String token);
 	
 	 UserDTO saveU(UserDTO userDTO) throws BusinessException;
+	 
+	 NotificationDTO getNotificatonsById(Long id);
 }

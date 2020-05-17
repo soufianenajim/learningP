@@ -15,4 +15,6 @@ public interface ProgressionModuleService extends CrudService<ProgressionModule,
 	void saveByStudentAndModules(User student, List<ModuleDTO> modules);
 
 	void updateProgressionModule(Long idModule, Long idStudent);
+	
+	
 }

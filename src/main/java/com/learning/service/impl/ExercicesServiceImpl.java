@@ -1,8 +1,10 @@
 package com.learning.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -238,6 +240,19 @@ public class ExercicesServiceImpl implements ExercicesService {
 		return exercicesDTO.getId() != null
 				? existingExerciceById(exercicesDTO.getId(), exercicesDTO.getCour().getId(), type)
 				: existingExercice(exercicesDTO.getCour().getId(), type);
+
+	}
+
+	@Override
+	public List<ExercicesDTO> findQuizByUser(Long idUser) {
+		LocalDateTime now=LocalDateTime.now();
+		return convertEntitiesToDTOsWithQuestion(exercicesRepository.findByUserAndType(idUser, TypeEnum.QUIZ,now));
+	}
+
+	@Override
+	public List<ExercicesDTO> convertEntitiesToDTOsWithQuestion(List<Exercices> list) {
+		
+		return list.stream().map(e -> convertModelToDTOWithoutQuestion(e)).collect(Collectors.toList());
 
 	}
 

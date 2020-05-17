@@ -15,6 +15,9 @@ public interface ExercicesService extends CrudService<Exercices, ExercicesDTO> {
 	
 	ExercicesDTO convertModelToDTOWithQuestion(Exercices quiz);
 	
+
+	List<ExercicesDTO> convertEntitiesToDTOsWithQuestion(List<Exercices> list);
+	
 	boolean existingExercice( Long idCour,TypeEnum type);
 
 	boolean existingExerciceById(Long id, Long idCour,TypeEnum type);
@@ -22,4 +25,6 @@ public interface ExercicesService extends CrudService<Exercices, ExercicesDTO> {
 	 ExercicesDTO convertModelToDTOWithoutQuestion(Exercices exercices);
 	 
 	 boolean existingExercice(ExercicesDTO exercicesDTO);
+	 
+	 List<ExercicesDTO> findQuizByUser(Long idUser);
 }

@@ -81,4 +81,14 @@ public class UserResource {
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	@GetMapping("notifications/{id}")
+	public ResponseEntity<?> getNotifications(@PathVariable Long id) {
+		try {
+
+			return new ResponseEntity<>(userService.getNotificatonsById(id), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

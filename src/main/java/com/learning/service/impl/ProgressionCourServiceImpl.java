@@ -15,10 +15,12 @@ import com.learning.dto.ProgressionCourDTO;
 import com.learning.dto.UserDTO;
 import com.learning.model.Cour;
 import com.learning.model.ProgressionCour;
+import com.learning.model.TypeEnum;
 import com.learning.model.User;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.CourService;
+import com.learning.service.ExercicesService;
 import com.learning.service.ProgressionCourService;
 import com.learning.service.ProgressionModuleService;
 import com.learning.service.UserService;
@@ -34,6 +36,9 @@ public class ProgressionCourServiceImpl implements ProgressionCourService {
 	private CourService courService;
 	@Autowired
 	private ProgressionModuleService progressionModuleService;
+	
+	@Autowired
+	private ExercicesService exercicesService;
 
 	// save or update
 	@Override
@@ -122,7 +127,9 @@ public class ProgressionCourServiceImpl implements ProgressionCourService {
 		Cour cour = progressionCour.getCour();
 		User student = progressionCour.getStudent();
 		if (cour != null) {
-			progressionCourDTO.setCour(courService.convertModelToDTOWithOutModule(cour));
+			CourDTO courDTO=courService.convertModelToDTOWithOutModule(cour);
+			courDTO.setHasQuiz(!exercicesService.existingExercice(courDTO.getId(), TypeEnum.QUIZ));
+			progressionCourDTO.setCour(courDTO);
 		}
 
 		if (student != null) {

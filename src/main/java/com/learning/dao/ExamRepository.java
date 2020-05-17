@@ -1,5 +1,6 @@
 package com.learning.dao;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -29,5 +30,10 @@ public interface ExamRepository extends JpaRepository<Exam,Long > {
 	
 	@Query("SELECT count(e.id) FROM Exam e WHERE  e.module.id = ?1")
 	Long countExamByModule(Long idModule);
+	
+	
+
+	@Query("SELECT e FROM Exam e ,ProgressionModule pm  WHERE e.module.id=pm.module.id  and pm.student.id=?1 and e.startDateTime>=2")
+	List<Exam> findByUser(Long idUser,LocalDateTime localDateTime);
 }
 
