@@ -16,7 +16,7 @@ public class ExamDTO extends HistorizedDTO{
 	private LocalDateTime endDateTime;
 	
 	private ModuleDTO module;
-
+	private String type;
 	
 	
 	private List<QuestionDTO> questions;
@@ -82,5 +82,14 @@ public class ExamDTO extends HistorizedDTO{
 		this.endDateTime = endDateTime;
 	}
 
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	
 
 }

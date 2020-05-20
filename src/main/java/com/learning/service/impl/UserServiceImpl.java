@@ -12,7 +12,6 @@ import com.learning.dao.RoleRepository;
 import com.learning.dao.UserRepository;
 import com.learning.dao.UserRepositorySearchCriteria;
 import com.learning.dto.ExamDTO;
-import com.learning.dto.ExercicesDTO;
 import com.learning.dto.ModuleDTO;
 import com.learning.dto.NotificationDTO;
 import com.learning.dto.UserDTO;
@@ -233,6 +232,8 @@ public class UserServiceImpl implements UserService {
 		userDTO.setId(user.getId());
 		userDTO.setFirstName(user.getFirstName());
 		userDTO.setLastName(user.getLastName());
+		userDTO.setEmail(user.getEmail());
+		userDTO.setLastName(user.getLastName());
 		userDTO.setCreatedAt(user.getCreatedAt());
 		userDTO.setUpdatedAt(user.getUpdatedAt());
 
@@ -295,11 +296,17 @@ public class UserServiceImpl implements UserService {
 	public NotificationDTO getNotificatonsById(Long id) {
 		NotificationDTO notificationDTO = new NotificationDTO();
 		List<ExamDTO> listExam = examService.findByUser(id);
-		List<ExercicesDTO> listQuiz = exercicesService.findQuizByUser(id);
+		
 		notificationDTO.setExamList(listExam);
-		notificationDTO.setQuizList(listQuiz);
+		
 		
 		return notificationDTO;
+	}
+
+	@Override
+	public List<UserDTO> findByNameContainingByExam(String name,Long idExam) {
+	
+		return convertEntitiesToDtosWithOutRelation(userRepository.findByNameContainingByExam(name,idExam));
 	}
 
 }

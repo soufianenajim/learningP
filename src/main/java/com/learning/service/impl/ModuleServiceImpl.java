@@ -214,4 +214,10 @@ public class ModuleServiceImpl implements ModuleService {
 		return existModule == null || existModule.getId().equals(id);
 	}
 
+	@Override
+	public Long getGroupByModule(Long idModule) {
+		
+		return moduleRepository.getGroupByModule(idModule);
+	}
+
 }

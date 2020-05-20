@@ -7,20 +7,25 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.learning.dao.ExamRepository;
+import com.learning.dao.ExamRepositorySearchCriteria;
 import com.learning.dto.ExamDTO;
+import com.learning.dto.UserDTO;
 import com.learning.model.Exam;
 import com.learning.model.Module;
 import com.learning.model.Question;
+import com.learning.model.RoleName;
+import com.learning.model.TypeEnumExam;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.ExamService;
 import com.learning.service.ModuleService;
+import com.learning.service.NoteExamService;
 import com.learning.service.QuestionService;
+import com.learning.service.UserService;
 
 @Service
 public class ExamServiceImpl implements ExamService {
@@ -31,6 +36,13 @@ public class ExamServiceImpl implements ExamService {
 	private ExamRepository examRepository;
 	@Autowired
 	private QuestionService questionService;
+	@Autowired
+	private ExamRepositorySearchCriteria examRepositorySearchCriteria;
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private NoteExamService  noteExamService;
 
 	@Override
 	public ExamDTO save(ExamDTO examDTO) {
@@ -39,6 +51,7 @@ public class ExamServiceImpl implements ExamService {
 		if (examDTO.getQuestions() != null) {
 			questionService.saveQuestionsByExam(examDTO.getQuestions(), exam);
 		}
+		launchExam(exam);
 		return convertModelToDTO(exam);
 	}
 
@@ -62,19 +75,9 @@ public class ExamServiceImpl implements ExamService {
 	@Override
 	public PartialList<ExamDTO> findByCriteres(Demande<ExamDTO> demande) {
 
-		ExamDTO exam = demande.getModel();
-		int page = demande.getPage();
-		int size = demande.getSize();
-		Page<Exam> pageExam = null;
-		String name = exam.getName();
-		Long idModule = exam.getModule() != null ? exam.getModule().getId() : null;
-
-		pageExam = idModule != null ? examRepository.findByNameAndModule(name, idModule, PageRequest.of(page, size))
-				: examRepository.findByName(name, PageRequest.of(page, size));
-
-		List<ExamDTO> list = convertEntitiesToDtos(pageExam.getContent());
-		Long totalElement = pageExam.getTotalElements();
-		return new PartialList<ExamDTO>(totalElement, list);
+		List<Exam> exams = examRepositorySearchCriteria.findByCriteres(demande);
+		Long count = examRepositorySearchCriteria.countByCriteres(demande);
+		return new PartialList<ExamDTO>(count, convertEntitiesToDtos(exams));
 
 	}
 
@@ -89,6 +92,10 @@ public class ExamServiceImpl implements ExamService {
 		if (examDTO.getModule() != null) {
 			exam.setModule(moduleService.convertDTOtoModel(examDTO.getModule()));
 		}
+
+		if (examDTO.getType() != null && !StringUtils.isEmpty(examDTO.getType())) {
+			exam.setType(TypeEnumExam.valueOf(examDTO.getType()));
+		}
 		return exam;
 	}
 
@@ -101,11 +108,15 @@ public class ExamServiceImpl implements ExamService {
 		examDTO.setEndDateTime(exam.getEndDateTime());
 		Module module = exam.getModule();
 		List<Question> questions = exam.getQuestions();
+		TypeEnumExam type = exam.getType();
 		if (module != null) {
 			examDTO.setModule(moduleService.convertModelToDTO(exam.getModule()));
 		}
 		if (questions != null) {
 			examDTO.setQuestions(questionService.convertEntitiesToDtos(questions));
+		}
+		if (type != null) {
+			examDTO.setType(type.toString());
 		}
 		examDTO.setCreatedAt(exam.getCreatedAt());
 		examDTO.setUpdatedAt(exam.getUpdatedAt());
@@ -184,14 +195,25 @@ public class ExamServiceImpl implements ExamService {
 	@Override
 	public List<ExamDTO> findByUser(Long idUser) {
 		LocalDateTime now = LocalDateTime.now();
-		
-		return convertEnititiesToDTOsWithoutQuestion(examRepository.findByUser(idUser,now));
+
+		return convertEnititiesToDTOsWithoutQuestion(examRepository.findByUser(idUser, now));
 	}
 
 	@Override
 	public List<ExamDTO> convertEnititiesToDTOsWithoutQuestion(List<Exam> list) {
 
 		return list.stream().map(e -> convertModelToDTOWithoutQuestion(e)).collect(Collectors.toList());
+	}
+
+	void launchExam(Exam exam) {
+		exam.setLaunched(true);
+		examRepository.save(exam);
+		Module module = exam.getModule();
+		Long idGroup = moduleService.getGroupByModule(module.getId());
+		List<UserDTO> students = userService.findByGroupAndRole(idGroup, RoleName.ROLE_STUDENT);
+		if(students!=null) {
+			noteExamService.saveByExamAndStudent(exam, students);
+		}
 	}
 
 }

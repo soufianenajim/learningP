@@ -23,4 +23,6 @@ public interface ModuleService extends CrudService<Module, ModuleDTO> {
 	boolean existingModule(String name, Long idProfessor, Long idGroup);
 
 	boolean existingModuleById( Long id,String name,Long idProfessor,Long idGroup);
+	
+	Long getGroupByModule(Long idModule);
 }

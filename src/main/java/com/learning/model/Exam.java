@@ -33,6 +33,10 @@ public class Exam extends Historized {
 	@JoinColumn(name = "module_id")
 	private Module module;
 
+	private TypeEnumExam type;
+	
+	@Column(name = "launched", columnDefinition = "boolean default false", nullable = false)
+	private boolean launched;
 	
 	@OneToMany(mappedBy = "exam", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Question> questions;
@@ -99,6 +103,24 @@ public class Exam extends Historized {
 
 	public void setEndDateTime(LocalDateTime endDateTime) {
 		this.endDateTime = endDateTime;
+	}
+
+	
+	public TypeEnumExam getType() {
+		return type;
+	}
+
+	public void setType(TypeEnumExam type) {
+		this.type = type;
+	}
+	
+
+	public boolean isLaunched() {
+		return launched;
+	}
+
+	public void setLaunched(boolean launched) {
+		this.launched = launched;
 	}
 
 	@Override

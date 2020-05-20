@@ -91,4 +91,14 @@ public class UserResource {
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	@GetMapping("findbyNameContaining/{name}/{examId}")
+	public ResponseEntity<?> getNotifications(@PathVariable("name") String name,@PathVariable("examId") Long examId) {
+		try {
+
+			return new ResponseEntity<>(userService.findByNameContainingByExam(name,examId), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

@@ -7,20 +7,11 @@ public class NotificationDTO{
 	
 	
 
-	
-	private List<ExercicesDTO> quizList;
 
 	private List<ExamDTO> examList;
 
 	
 
-	public List<ExercicesDTO> getQuizList() {
-		return quizList;
-	}
-
-	public void setQuizList(List<ExercicesDTO> quizList) {
-		this.quizList = quizList;
-	}
 
 	public List<ExamDTO> getExamList() {
 		return examList;

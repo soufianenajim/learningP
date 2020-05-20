@@ -32,4 +32,6 @@ public interface UserService extends CrudService<User, UserDTO> {
 	 UserDTO saveU(UserDTO userDTO) throws BusinessException;
 	 
 	 NotificationDTO getNotificatonsById(Long id);
+	 
+	List<UserDTO> findByNameContainingByExam(String name,Long idExam);
 }

@@ -25,4 +25,7 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
 	
 	@Query("SELECT m FROM Module m WHERE LOWER(m.name) like lower(?1) and m.professor.id=?2 and m.group.id=?3 ")
 	Module findByNameAndProfessorAndGroup(String name, Long idProfessor, Long idGroup);
+	
+	@Query("SELECT m.group.id FROM Module m WHERE m.id=?1 ")
+	Long getGroupByModule(Long idModule);
 }

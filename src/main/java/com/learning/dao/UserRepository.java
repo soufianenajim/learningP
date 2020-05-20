@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import com.learning.dto.UserDTO;
 import com.learning.model.RoleName;
 import com.learning.model.User;
 
@@ -23,8 +24,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	@Query("select u from User u JOIN u.groups ug where ug.id=?1 ")
 	List<User> findByGroup(Long idGroup);
-	
+
 	@Query("select u from User u JOIN u.groups ug where ug.id=?1 and u.refRole.name=?2 ")
-	List<User> findByGroupAndRole(Long idGroup,RoleName roleName);
+	List<User> findByGroupAndRole(Long idGroup, RoleName roleName);
+
+	@Query("select distinct u from User u,NoteExam ne where ne.user.id=u.id and ne.exam.id =?2 and( (LOWER(u.firstName) LIKE CONCAT(lower(?1), '%')) or (LOWER(u.lastName) LIKE CONCAT(lower(?1), '%')) or (LOWER(u.email) LIKE CONCAT(lower(?1), '%')))")
+	List<User> findByNameContainingByExam(String name, Long idExam);
 
 }

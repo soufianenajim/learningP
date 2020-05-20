@@ -28,7 +28,7 @@ public class NoteExamResource {
 	NoteExamService noteExamService;
 
 	@PostMapping(ConstantBase.CRUD_REST_FIND_BY_CRITERE)
-	public ResponseEntity<?> findByCriteres(Demande<NoteExamDTO> demande) {
+	public ResponseEntity<?> findByCriteres(@RequestBody Demande<NoteExamDTO> demande) {
 		try {
 			return new ResponseEntity<>(noteExamService.findByCriteres(demande), HttpStatus.OK);
 		} catch (Exception e) {
