@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.learning.dao.ProgressionModuleRepository;
+import com.learning.dao.ProgressionModuleRepositorySearchCriteria;
 import com.learning.dto.CourDTO;
 import com.learning.dto.ModuleDTO;
 import com.learning.dto.ProgressionModuleDTO;
@@ -43,7 +44,9 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 	
 	@Autowired
 	private ExamService examService;
-
+    
+	@Autowired
+	private ProgressionModuleRepositorySearchCriteria progressionModuleRepositorySearchCriteria;
 	// save or update
 	@Override
 	public ProgressionModuleDTO save(ProgressionModuleDTO progressionModuleDTO) {
@@ -71,25 +74,28 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 	@Override
 	public PartialList<ProgressionModuleDTO> findByCriteres(Demande<ProgressionModuleDTO> demande) {
 
-		ProgressionModuleDTO progressionModule = demande.getModel();
-		int page = demande.getPage();
-		int size = demande.getSize();
-		Long idUser = progressionModule.getStudent() != null ? progressionModule.getStudent().getId() : null;
-		Long idModule = progressionModule.getModule() != null ? progressionModule.getModule().getId() : null;
-		Page<ProgressionModule> pageProgressionModule = idUser != null
-				? idModule != null
-						? progressionModuleRepository.findByUserAndModule(idUser, idModule, PageRequest.of(page, size))
-						: progressionModuleRepository.findByUser(idUser, PageRequest.of(page, size))
-				: null;
-
-		if (pageProgressionModule != null) {
-			List<ProgressionModuleDTO> list = convertEntitiesToDtos(pageProgressionModule.getContent());
-			Long totalElement = pageProgressionModule.getTotalElements();
-
-			return new PartialList<ProgressionModuleDTO>(totalElement, list);
-		} else {
-			return new PartialList<ProgressionModuleDTO>(0l, new ArrayList<ProgressionModuleDTO>());
-		}
+//		ProgressionModuleDTO progressionModule = demande.getModel();
+//		int page = demande.getPage();
+//		int size = demande.getSize();
+//		Long idUser = progressionModule.getStudent() != null ? progressionModule.getStudent().getId() : null;
+//		Long idModule = progressionModule.getModule() != null ? progressionModule.getModule().getId() : null;
+//		Page<ProgressionModule> pageProgressionModule = idUser != null
+//				? idModule != null
+//						? progressionModuleRepository.findByUserAndModule(idUser, idModule, PageRequest.of(page, size))
+//						: progressionModuleRepository.findByUser(idUser, PageRequest.of(page, size))
+//				: null;
+//		Page<ProgressionModule> pageProgressionModule=progressionModuleRepository.findAll(PageRequest.of(page, size));
+//		if (pageProgressionModule != null) {
+//			List<ProgressionModuleDTO> list = convertEntitiesToDtos(pageProgressionModule.getContent());
+//			Long totalElement = pageProgressionModule.getTotalElements();
+//
+//			return new PartialList<ProgressionModuleDTO>(totalElement, list);
+//		} else {
+//			return new PartialList<ProgressionModuleDTO>(0l, new ArrayList<ProgressionModuleDTO>());
+//		}
+		List<ProgressionModule> progressionModules = progressionModuleRepositorySearchCriteria.findByCriteres(demande);
+		Long count = progressionModuleRepositorySearchCriteria.countByCriteres(demande);
+		return new PartialList<ProgressionModuleDTO>(count, convertEntitiesToDtos(progressionModules));
 	}
 
 	@Override
@@ -97,9 +103,9 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 		ProgressionModule progressionModule = new ProgressionModule();
 		progressionModule.setId(progressionModuleDTO.getId());
 		progressionModule.setProgressionCour(progressionModuleDTO.getProgressionCour());
-		progressionModule.setExamFinished(progressionModuleDTO.isExamFinished());
+		
 		progressionModule.setNoteFinal(progressionModuleDTO.getNoteFinal());
-		progressionModule.setNoteExam(progressionModuleDTO.getNoteExam());
+		
 		if (progressionModuleDTO.getModule() != null) {
 			progressionModule
 					.setModule(moduleService.convertDTOtoModelWithOutRelation(progressionModuleDTO.getModule()));
@@ -118,8 +124,8 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 		progressionModuleDTO.setId(progressionModule.getId());
 		progressionModuleDTO.setProgressionCour(progressionModule.getProgressionCour());
 		progressionModuleDTO.setNoteFinal(progressionModule.getNoteFinal());
-		progressionModuleDTO.setExamFinished(progressionModule.isExamFinished());
-		progressionModuleDTO.setNoteExam(progressionModule.getNoteExam());
+		
+		
 		
 		Module module = progressionModule.getModule();
 		User student = progressionModule.getStudent();

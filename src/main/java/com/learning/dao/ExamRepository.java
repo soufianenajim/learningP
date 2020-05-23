@@ -33,7 +33,7 @@ public interface ExamRepository extends JpaRepository<Exam,Long > {
 	
 	
 
-	@Query("SELECT e FROM Exam e ,ProgressionModule pm  WHERE e.module.id=pm.module.id  and pm.student.id=?1 and e.startDateTime>=2")
-	List<Exam> findByUser(Long idUser,LocalDateTime localDateTime);
+	@Query("SELECT distinct e FROM Exam e,NoteExam ne WHERE ne.exam.id=e.id and e.startDateTime>=?1 ")
+	List<Exam> findByUser(LocalDateTime localDateTime);
 }
 

@@ -1,6 +1,5 @@
 package com.learning.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -25,10 +24,10 @@ public class ProgressionModule extends Historized {
 
 	private Double progressionCour;
 
-	@Column(name = "exam_finished", nullable = false, columnDefinition = "TINYINT(1)")
-	private boolean examFinished;
+	private Double progressionQuiz;
 
-	private Double noteExam;
+	private Double progressionExam;
+
 	private Double noteFinal;
 
 	public ProgressionModule() {
@@ -61,21 +60,7 @@ public class ProgressionModule extends Historized {
 	}
 
 
-	public boolean isExamFinished() {
-		return examFinished;
-	}
 
-	public void setExamFinished(boolean examFinished) {
-		this.examFinished = examFinished;
-	}
-
-	public Double getNoteExam() {
-		return noteExam;
-	}
-
-	public void setNoteExam(Double noteExam) {
-		this.noteExam = noteExam;
-	}
 
 	public Double getNoteFinal() {
 		return noteFinal;
@@ -83,6 +68,22 @@ public class ProgressionModule extends Historized {
 
 	public void setNoteFinal(Double noteFinal) {
 		this.noteFinal = noteFinal;
+	}
+
+	public Double getProgressionQuiz() {
+		return progressionQuiz;
+	}
+
+	public void setProgressionQuiz(Double progressionQuiz) {
+		this.progressionQuiz = progressionQuiz;
+	}
+
+	public Double getProgressionExam() {
+		return progressionExam;
+	}
+
+	public void setProgressionExam(Double progressionExam) {
+		this.progressionExam = progressionExam;
 	}
 
 	

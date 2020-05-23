@@ -40,9 +40,9 @@ public class ExamServiceImpl implements ExamService {
 	private ExamRepositorySearchCriteria examRepositorySearchCriteria;
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
-	private NoteExamService  noteExamService;
+	private NoteExamService noteExamService;
 
 	@Override
 	public ExamDTO save(ExamDTO examDTO) {
@@ -51,7 +51,8 @@ public class ExamServiceImpl implements ExamService {
 		if (examDTO.getQuestions() != null) {
 			questionService.saveQuestionsByExam(examDTO.getQuestions(), exam);
 		}
-		launchExam(exam);
+		if (examDTO.getId() != null)
+			launchExam(exam);
 		return convertModelToDTO(exam);
 	}
 
@@ -88,7 +89,7 @@ public class ExamServiceImpl implements ExamService {
 		exam.setName(examDTO.getName());
 		exam.setStartDateTime(examDTO.getStartDateTime() != null ? examDTO.getStartDateTime().withSecond(0) : null);
 		exam.setEndDateTime(examDTO.getEndDateTime() != null ? examDTO.getEndDateTime().withSecond(0) : null);
-
+		exam.setScale(examDTO.getScale());
 		if (examDTO.getModule() != null) {
 			exam.setModule(moduleService.convertDTOtoModel(examDTO.getModule()));
 		}
@@ -106,6 +107,8 @@ public class ExamServiceImpl implements ExamService {
 		examDTO.setName(exam.getName());
 		examDTO.setStartDateTime(exam.getStartDateTime());
 		examDTO.setEndDateTime(exam.getEndDateTime());
+		examDTO.setScale(exam.getScale());
+		examDTO.setLaunched(exam.isLaunched());
 		Module module = exam.getModule();
 		List<Question> questions = exam.getQuestions();
 		TypeEnumExam type = exam.getType();
@@ -175,6 +178,7 @@ public class ExamServiceImpl implements ExamService {
 		examDTO.setName(exam.getName());
 		examDTO.setStartDateTime(exam.getStartDateTime());
 		examDTO.setEndDateTime(exam.getEndDateTime());
+		examDTO.setLaunched(exam.isLaunched());
 		Module module = exam.getModule();
 
 		if (module != null) {
@@ -195,8 +199,8 @@ public class ExamServiceImpl implements ExamService {
 	@Override
 	public List<ExamDTO> findByUser(Long idUser) {
 		LocalDateTime now = LocalDateTime.now();
-
-		return convertEnititiesToDTOsWithoutQuestion(examRepository.findByUser(idUser, now));
+		List<Exam> exams = examRepository.findByUser(now);
+		return convertEnititiesToDTOsWithoutQuestion(exams);
 	}
 
 	@Override
@@ -211,7 +215,7 @@ public class ExamServiceImpl implements ExamService {
 		Module module = exam.getModule();
 		Long idGroup = moduleService.getGroupByModule(module.getId());
 		List<UserDTO> students = userService.findByGroupAndRole(idGroup, RoleName.ROLE_STUDENT);
-		if(students!=null) {
+		if (students != null) {
 			noteExamService.saveByExamAndStudent(exam, students);
 		}
 	}

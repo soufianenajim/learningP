@@ -28,7 +28,7 @@ public class ProgressionModuleResource {
 	@Autowired
 	ProgressionModuleService progressionModuleService;
 	
-	@PreAuthorize("hasRole('STUDENT')")
+
 	@PostMapping(ConstantBase.CRUD_REST_FIND_BY_CRITERE)
 	public ResponseEntity<?> findByCriteres(@RequestBody Demande<ProgressionModuleDTO> demande) {
 		try {

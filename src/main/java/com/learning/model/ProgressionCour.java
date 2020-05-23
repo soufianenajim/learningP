@@ -31,10 +31,7 @@ public class ProgressionCour extends Historized {
 	@Column(name = "td_finished", nullable = false, columnDefinition = "TINYINT(1)")
 	private boolean tdFinished;
 	
-	@Column(name = "quiz_finished", nullable = false, columnDefinition = "TINYINT(1)")
-	private boolean quizFinished;
 	
-	private Double scoreQuiz;
 
 	private Double progression;
 	
@@ -89,21 +86,7 @@ public class ProgressionCour extends Historized {
 		this.progression = progression;
 	}
 
-	public boolean isQuizFinished() {
-		return quizFinished;
-	}
-
-	public void setQuizFinished(boolean quizFinished) {
-		this.quizFinished = quizFinished;
-	}
-
-	public Double getScoreQuiz() {
-		return scoreQuiz;
-	}
-
-	public void setScoreQuiz(Double scoreQuiz) {
-		this.scoreQuiz = scoreQuiz;
-	}
+	
 
 	
 	

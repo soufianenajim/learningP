@@ -14,4 +14,7 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
 	
 	@Query("SELECT g FROM Group g WHERE LOWER(g.name) like lower(?1) and g.level.id=?2 and g.branch.id=?3 ")
 	Group findByNameAndLevelAndBranch(String name,Long idLevel,Long idBranch);
+	
+	@Query("select distinct g from  Group g ,User u join u.groups ug where ug.id=g.id and u.id=?1")
+	List<Group> findByUser(Long id);
 }

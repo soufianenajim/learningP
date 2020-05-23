@@ -96,9 +96,9 @@ public class UserRepositorySearchCriteriaImpl implements UserRepositorySearchCri
 			predicates.add(cb.equal(user.<Long>get("organization"), userDTO.getOrganization().getId()));
 		}
 		if (userDTO.getGroupId() != null) {
-			Join<User, Group> vulGroup = user.join("groups");
+			Join<User, Group> userGroup = user.join("groups");
 
-			predicates.add(cb.equal(vulGroup.<Long>get("id"), userDTO.getGroupId()));
+			predicates.add(cb.equal(userGroup.<Long>get("id"), userDTO.getGroupId()));
 		}
 
 		return predicates;

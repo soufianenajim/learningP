@@ -160,6 +160,11 @@ public class GroupServiceImpl implements GroupService {
 		return existGroup == null || existGroup.getId().equals(id);
 	}
 
+	@Override
+	public List<GroupDTO> findByUser(Long idUser) {
+		return convertEntitiesToDtos(groupRepository.findByUser(idUser));
+	}
+
 	
 
 }

@@ -99,9 +99,9 @@ public class ProgressionCourServiceImpl implements ProgressionCourService {
 		progressionCour.setCourFinished(progressionCourDTO.isCourFinished());
 
 		progressionCour.setTdFinished(progressionCourDTO.isTdFinished());
-		progressionCour.setQuizFinished(progressionCourDTO.isQuizFinished());
+	
 		progressionCour.setProgression(progressionCourDTO.getProgression());
-		progressionCour.setScoreQuiz(progressionCourDTO.getScoreQuiz());
+	
 
 		if (progressionCourDTO.getCour() != null) {
 			progressionCour.setCour(courService.convertDTOtoModelWithOutModule(progressionCourDTO.getCour()));
@@ -120,9 +120,9 @@ public class ProgressionCourServiceImpl implements ProgressionCourService {
 		progressionCourDTO.setCourFinished(progressionCour.isCourFinished());
 
 		progressionCourDTO.setTdFinished(progressionCour.isTdFinished());
-		progressionCourDTO.setQuizFinished(progressionCour.isQuizFinished());
+		
 		progressionCourDTO.setProgression(progressionCour.getProgression());
-		progressionCourDTO.setScoreQuiz(progressionCour.getScoreQuiz());
+	
 
 		Cour cour = progressionCour.getCour();
 		User student = progressionCour.getStudent();

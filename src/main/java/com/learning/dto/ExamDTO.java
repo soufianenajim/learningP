@@ -3,24 +3,21 @@ package com.learning.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class ExamDTO extends HistorizedDTO{
-	
-	
-	
+public class ExamDTO extends HistorizedDTO {
 
-	
 	private String name;
 
 	private LocalDateTime startDateTime;
-	
+
 	private LocalDateTime endDateTime;
-	
+
 	private ModuleDTO module;
 	private String type;
-	
-	
+	private double scale;
+
+	private boolean launched;
 	private List<QuestionDTO> questions;
-	
+
 	public ExamDTO() {
 		super();
 	}
@@ -37,8 +34,6 @@ public class ExamDTO extends HistorizedDTO{
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	
 
 	public String getName() {
 		return name;
@@ -55,8 +50,6 @@ public class ExamDTO extends HistorizedDTO{
 	public void setModule(ModuleDTO module) {
 		this.module = module;
 	}
-	
-	
 
 	public List<QuestionDTO> getQuestions() {
 		return questions;
@@ -90,6 +83,20 @@ public class ExamDTO extends HistorizedDTO{
 		this.type = type;
 	}
 
-	
+	public double getScale() {
+		return scale;
+	}
+
+	public void setScale(double scale) {
+		this.scale = scale;
+	}
+
+	public boolean isLaunched() {
+		return launched;
+	}
+
+	public void setLaunched(boolean launched) {
+		this.launched = launched;
+	}
 
 }

@@ -10,11 +10,10 @@ public class ProgressionCourDTO extends HistorizedDTO {
 
 	private boolean tdFinished;
 
-	private boolean quizFinished;
+	
 
 	private Double progression;
 
-	private Double scoreQuiz;
 
 	private Long moduleId;
 	
@@ -63,21 +62,6 @@ public class ProgressionCourDTO extends HistorizedDTO {
 		this.progression = progression;
 	}
 
-	public boolean isQuizFinished() {
-		return quizFinished;
-	}
-
-	public void setQuizFinished(boolean quizFinished) {
-		this.quizFinished = quizFinished;
-	}
-
-	public Double getScoreQuiz() {
-		return scoreQuiz;
-	}
-
-	public void setScoreQuiz(Double scoreQuiz) {
-		this.scoreQuiz = scoreQuiz;
-	}
 
 	public Long getModuleId() {
 		return moduleId;

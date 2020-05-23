@@ -86,4 +86,14 @@ public class GroupResource {
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	@GetMapping("find-by-user/{id}")
+	public ResponseEntity<?> findByUser(@PathVariable Long id) {
+		try {
+
+			return new ResponseEntity<>(groupService.findByUser(id), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/groupfind-by-organization" + id + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

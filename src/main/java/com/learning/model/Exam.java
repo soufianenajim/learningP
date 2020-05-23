@@ -38,6 +38,8 @@ public class Exam extends Historized {
 	@Column(name = "launched", columnDefinition = "boolean default false", nullable = false)
 	private boolean launched;
 	
+	private double scale;
+	
 	@OneToMany(mappedBy = "exam", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Question> questions;
 	
@@ -121,6 +123,14 @@ public class Exam extends Historized {
 
 	public void setLaunched(boolean launched) {
 		this.launched = launched;
+	}
+
+	public double getScale() {
+		return scale;
+	}
+
+	public void setScale(double scale) {
+		this.scale = scale;
 	}
 
 	@Override
