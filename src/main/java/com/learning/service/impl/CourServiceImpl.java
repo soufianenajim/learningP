@@ -5,11 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.learning.dao.CourRepository;
+import com.learning.dao.CourRepositorySearchCriteria;
 import com.learning.dto.CourDTO;
 import com.learning.dto.UserDTO;
 import com.learning.model.Cour;
@@ -42,6 +41,8 @@ public class CourServiceImpl implements CourService {
 	
 	@Autowired
 	private ProgressionModuleService progressionModuleService;
+	@Autowired
+	private CourRepositorySearchCriteria courRepositorySearchCriteria;
 
 	// save or update
 	@Override
@@ -76,20 +77,10 @@ public class CourServiceImpl implements CourService {
 	@Override
 	public PartialList<CourDTO> findByCriteres(Demande<CourDTO> demande) {
 
-		CourDTO cour = demande.getModel();
-		int page = demande.getPage();
-		int size = demande.getSize();
-		Page<Cour> pageCour = null;
-		String name = cour.getName();
-		Long idModule = cour.getModule() != null ? cour.getModule().getId() : null;
+		List<Cour> cours = courRepositorySearchCriteria.findByCriteres(demande);
+		Long count = courRepositorySearchCriteria.countByCriteres(demande);
+		return new PartialList<CourDTO>(count, convertEntitiesToDtos(cours));
 
-		pageCour = idModule != null ? courRepository.findByNameAndModule(name, idModule, PageRequest.of(page, size))
-				: courRepository.findByName(name, PageRequest.of(page, size));
-
-		List<CourDTO> list = convertEntitiesToDtos(pageCour.getContent());
-		Long totalElement = pageCour.getTotalElements();
-
-		return new PartialList<CourDTO>(totalElement, list);
 	}
 
 	@Override

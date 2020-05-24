@@ -10,6 +10,10 @@ public class ProgressionModuleDTO extends HistorizedDTO {
 
 	private ModuleDTO module;
 	private Double progressionCour;
+	
+	private Double progressionExamQuiz;
+	
+	private Double progressionAbsence;
 
 	private Double noteFinal;
 
@@ -60,6 +64,23 @@ public class ProgressionModuleDTO extends HistorizedDTO {
 		this.teacher = teacher;
 	}
 
+	public Double getProgressionExamQuiz() {
+		return progressionExamQuiz;
+	}
+
+	public void setProgressionExamQuiz(Double progressionExamQuiz) {
+		this.progressionExamQuiz = progressionExamQuiz;
+	}
+
+	public Double getProgressionAbsence() {
+		return progressionAbsence;
+	}
+
+	public void setProgressionAbsence(Double progressionAbsence) {
+		this.progressionAbsence = progressionAbsence;
+	}
+
+	
 
 	
 

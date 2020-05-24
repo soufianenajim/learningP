@@ -34,4 +34,5 @@ public interface UserService extends CrudService<User, UserDTO> {
 	 NotificationDTO getNotificatonsById(Long id);
 	 
 	List<UserDTO> findByNameContainingByExam(String name,Long idExam);
+
 }

@@ -13,7 +13,6 @@ public class UserDTO extends HistorizedDTO {
 	private String lastName;
 
 	private String phone;
-
 	private String token;
 
 	private String tokenDate;

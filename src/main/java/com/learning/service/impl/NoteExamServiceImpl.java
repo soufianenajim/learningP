@@ -14,11 +14,13 @@ import com.learning.dto.UserDTO;
 import com.learning.model.Exam;
 import com.learning.model.NoteExam;
 import com.learning.model.Suggestion;
+import com.learning.model.TypeEnumExam;
 import com.learning.model.User;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.ExamService;
 import com.learning.service.NoteExamService;
+import com.learning.service.ProgressionModuleService;
 import com.learning.service.SuggestionService;
 import com.learning.service.UserService;
 
@@ -35,12 +37,17 @@ public class NoteExamServiceImpl implements NoteExamService {
 	private SuggestionService suggestionService;
 	@Autowired
 	private NoteExamRepositorySearchCriteria noteExamRepositorySearchCriteria;
+	@Autowired
+	private ProgressionModuleService progressionModuleService;
 
 	// save or update
 	@Override
 	public NoteExamDTO save(NoteExamDTO noteExamDTO) {
 		NoteExam noteExam = convertDTOtoModel(noteExamDTO);
 		noteExam = noteExamRepository.save(noteExam);
+		Long idModule = noteExamDTO.getExam().getModule().getId();
+		Long idStudent = noteExamDTO.getUser().getId();
+		progressionModuleService.updateProgressionModule(idModule, idStudent);
 		return convertModelToDTO(noteExam);
 	}
 
@@ -73,9 +80,9 @@ public class NoteExamServiceImpl implements NoteExamService {
 		NoteExam noteExam = new NoteExam();
 		noteExam.setId(noteExamDTO.getId());
 		noteExam.setScore(noteExamDTO.getScore());
-        noteExam.setFinished(noteExamDTO.isFinished());
-    	noteExam.setShowScore(noteExamDTO.isShowScore());
-    	
+		noteExam.setFinished(noteExamDTO.isFinished());
+		noteExam.setShowScore(noteExamDTO.isShowScore());
+
 		if (noteExamDTO.getUser() != null) {
 			noteExam.setUser(userService.convertDTOtoModel(noteExamDTO.getUser()));
 		}
@@ -83,7 +90,7 @@ public class NoteExamServiceImpl implements NoteExamService {
 		if (noteExamDTO.getExam() != null) {
 			noteExam.setExam(examService.convertDTOtoModel(noteExamDTO.getExam()));
 		}
-		if(noteExamDTO.getAnswers()!=null) {
+		if (noteExamDTO.getAnswers() != null) {
 			noteExam.setAnswers(suggestionService.convertDtosToEntities(noteExamDTO.getAnswers()));
 		}
 		return noteExam;
@@ -97,18 +104,18 @@ public class NoteExamServiceImpl implements NoteExamService {
 		noteExamDTO.setFinished(noteExam.isFinished());
 		noteExamDTO.setShowScore(noteExam.isShowScore());
 		User user = noteExam.getUser();
-		Exam exam =noteExam.getExam();
-		List<Suggestion> answers=noteExam.getAnswers();
+		Exam exam = noteExam.getExam();
+		List<Suggestion> answers = noteExam.getAnswers();
 		if (user != null) {
 			noteExamDTO.setUser(userService.convertModelToDTO(user));
 
 		}
-		if(exam!=null) {
+		if (exam != null) {
 			noteExamDTO.setExam(examService.convertModelToDTO(exam));
 		}
-		if(answers!=null) {
+		if (answers != null) {
 			noteExamDTO.setAnswers(suggestionService.convertEntitiesToDtos(answers));
-		
+
 		}
 
 		noteExamDTO.setCreatedAt(noteExam.getCreatedAt());
@@ -150,13 +157,25 @@ public class NoteExamServiceImpl implements NoteExamService {
 	@Override
 	public void saveByExamAndStudent(Exam exam, List<UserDTO> students) {
 		for (UserDTO userDTO : students) {
-			NoteExam noteExam=new NoteExam();
+			NoteExam noteExam = new NoteExam();
 			noteExam.setUser(userService.convertDTOtoModel(userDTO));
 			noteExam.setExam(exam);
 			noteExam.setScore(0.0);
 			noteExamRepository.save(noteExam);
 		}
-		
+
+	}
+
+	@Override
+	public List<Boolean> findStatutByUserAndModule(Long idUser, Long idModule) {
+
+		return noteExamRepository.findStatutByUserAndModule(idUser, idModule);
+	}
+
+	@Override
+	public List<Double> findByUserAndModuleAndType(Long idUser, Long idModule, TypeEnumExam type) {
+		List<Double> notes = noteExamRepository.findByUserAndModuleAndType(idUser, idModule, type);
+		return notes;
 	}
 
 }

@@ -19,6 +19,8 @@ public class CourDTO extends HistorizedDTO {
 	private boolean isLaunched;
 	
 	private boolean hasQuiz;
+	
+	private Long idTeacher;
 
 	public CourDTO() {
 		super();
@@ -100,6 +102,15 @@ public class CourDTO extends HistorizedDTO {
 	public void setHasQuiz(boolean hasQuiz) {
 		this.hasQuiz = hasQuiz;
 	}
+
+	public Long getIdTeacher() {
+		return idTeacher;
+	}
+
+	public void setIdTeacher(Long idTeacher) {
+		this.idTeacher = idTeacher;
+	}
 	
 
+	
 }

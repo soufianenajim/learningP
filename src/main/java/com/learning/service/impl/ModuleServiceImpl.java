@@ -10,13 +10,16 @@ import org.springframework.stereotype.Service;
 import com.learning.dao.ModuleRepository;
 import com.learning.dao.ModuleRepositorySearchCriteria;
 import com.learning.dto.ModuleDTO;
+import com.learning.dto.UserDTO;
 import com.learning.model.Group;
 import com.learning.model.Module;
+import com.learning.model.RoleName;
 import com.learning.model.User;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.GroupService;
 import com.learning.service.ModuleService;
+import com.learning.service.ProgressionModuleService;
 import com.learning.service.UserService;
 
 @Service
@@ -31,6 +34,9 @@ public class ModuleServiceImpl implements ModuleService {
 
 	@Autowired
 	private ModuleRepositorySearchCriteria moduleRepositorySearchCriteria;
+
+	@Autowired
+	private ProgressionModuleService progressionModuleService;
 
 	@Override
 	public ModuleDTO save(ModuleDTO moduleDTO) {
@@ -78,7 +84,12 @@ public class ModuleServiceImpl implements ModuleService {
 		module.setId(moduleDTO.getId());
 		module.setName(moduleDTO.getName());
 		module.setLaunched(moduleDTO.isLaunched());
-
+		module.setCoefficient(moduleDTO.getCoefficient());
+		module.setPercentageAbsence(moduleDTO.getPercentageAbsence());
+		module.setPercentageCour(moduleDTO.getPercentageCour());
+		module.setPercentageExam(moduleDTO.getPercentageExam());
+		module.setPercentageQuiz(moduleDTO.getPercentageQuiz());
+		module.setScale(moduleDTO.getScale());
 		if (moduleDTO.getProfessor() != null) {
 			module.setProfessor(userService.convertDTOtoModel(moduleDTO.getProfessor()));
 		}
@@ -96,6 +107,12 @@ public class ModuleServiceImpl implements ModuleService {
 		moduleDTO.setId(module.getId());
 		moduleDTO.setName(module.getName());
 		moduleDTO.setLaunched(module.isLaunched());
+		moduleDTO.setCoefficient(module.getCoefficient());
+		moduleDTO.setPercentageAbsence(module.getPercentageAbsence());
+		moduleDTO.setPercentageCour(module.getPercentageCour());
+		moduleDTO.setPercentageExam(module.getPercentageExam());
+		moduleDTO.setPercentageQuiz(module.getPercentageQuiz());
+		moduleDTO.setScale(module.getScale());
 		User user = module.getProfessor();
 		Group group = module.getGroup();
 
@@ -165,6 +182,13 @@ public class ModuleServiceImpl implements ModuleService {
 		moduleDTO.setName(module.getName());
 		moduleDTO.setCreatedAt(module.getCreatedAt());
 		moduleDTO.setUpdatedAt(module.getUpdatedAt());
+		moduleDTO.setLaunched(module.isLaunched());
+		moduleDTO.setCoefficient(module.getCoefficient());
+		moduleDTO.setPercentageAbsence(module.getPercentageAbsence());
+		moduleDTO.setPercentageCour(module.getPercentageCour());
+		moduleDTO.setPercentageExam(module.getPercentageExam());
+		moduleDTO.setPercentageQuiz(module.getPercentageQuiz());
+		moduleDTO.setScale(module.getScale());
 		User professor = module.getProfessor();
 		if (professor != null) {
 			moduleDTO.setProfessor(userService.convertModelToDTOWithOutRelation(professor));
@@ -216,8 +240,16 @@ public class ModuleServiceImpl implements ModuleService {
 
 	@Override
 	public Long getGroupByModule(Long idModule) {
-		
+
 		return moduleRepository.getGroupByModule(idModule);
+	}
+
+	@Override
+	public void calculate(ModuleDTO module) {
+		Long idGroup = module.getGroup().getId();
+		List<UserDTO> students = userService.findByGroupAndRole(idGroup, RoleName.ROLE_STUDENT);
+		progressionModuleService.calculateNoteFinal(module.getId(), students);
+
 	}
 
 }

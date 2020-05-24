@@ -27,7 +27,7 @@ public class ModuleResource {
 	private static Logger LOGGER = LogManager.getLogger("ModuleResource");
 	@Autowired
 	ModuleService moduleService;
-//  http://localhost:8080/learning_backEnd/module/find-by-critere methode post 
+
 	@PostMapping(ConstantBase.CRUD_REST_FIND_BY_CRITERE)
 	public ResponseEntity<?> findByCriteres(@RequestBody Demande<ModuleDTO> demande) {
 		try {
@@ -101,6 +101,16 @@ public class ModuleResource {
 		try {
 
 			return new ResponseEntity<>(moduleService.findByProfessor(idProfessor), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	@PostMapping("calculate")
+	public ResponseEntity<?> calculate(@RequestBody ModuleDTO module) {
+		try {
+			moduleService.calculate(module);
+			return new ResponseEntity<>(SecurityConstants.convertObjectToJson(ConstantBase.DONE), HttpStatus.OK);
 		} catch (Exception e) {
 			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);

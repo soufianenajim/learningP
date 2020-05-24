@@ -20,6 +20,17 @@ public class ModuleDTO extends HistorizedDTO {
 	
 	private boolean hasExam;
 
+	private double coefficient;
+
+	private double percentageExam;
+
+	private double percentageQuiz;
+
+	private double percentageCour;
+
+	private double percentageAbsence;
+	
+	private double scale;
 	public ModuleDTO() {
 		super();
 	}
@@ -101,7 +112,56 @@ public class ModuleDTO extends HistorizedDTO {
 	public void setHasExam(boolean hasExam) {
 		this.hasExam = hasExam;
 	}
+
+	public double getCoefficient() {
+		return coefficient;
+	}
+
+	public void setCoefficient(double coefficient) {
+		this.coefficient = coefficient;
+	}
+
+	public double getPercentageExam() {
+		return percentageExam;
+	}
+
+	public void setPercentageExam(double percentageExam) {
+		this.percentageExam = percentageExam;
+	}
+
+	public double getPercentageQuiz() {
+		return percentageQuiz;
+	}
+
+	public void setPercentageQuiz(double percentageQuiz) {
+		this.percentageQuiz = percentageQuiz;
+	}
+
+	public double getPercentageCour() {
+		return percentageCour;
+	}
+
+	public void setPercentageCour(double percentageCour) {
+		this.percentageCour = percentageCour;
+	}
+
+	public double getPercentageAbsence() {
+		return percentageAbsence;
+	}
+
+	public void setPercentageAbsence(double percentageAbsence) {
+		this.percentageAbsence = percentageAbsence;
+	}
+
+	public double getScale() {
+		return scale;
+	}
+
+	public void setScale(double scale) {
+		this.scale = scale;
+	}
 	
 
+	
 	
 }

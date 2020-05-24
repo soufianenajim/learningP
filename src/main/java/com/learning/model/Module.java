@@ -23,25 +23,36 @@ public class Module extends Historized {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "professor_id")
 	private User professor;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "group_id")
 	private Group group;
-	
+
 	@Column(name = "is_launched", columnDefinition = "boolean default false", nullable = false)
+
 	private boolean isLaunched;
 
+	private double coefficient;
+
+	private double percentageExam;
+
+	private double percentageQuiz;
+
+	private double percentageCour;
+
+	private double percentageAbsence;
 	
+	private double scale;
 
 	@OneToMany(mappedBy = "module", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<Cour> cours;
-	
+
 	@OneToMany(mappedBy = "module", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Exam> exams;
-	
+
 	@OneToMany(mappedBy = "module", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<ProgressionModule> progressionModules;
-	
+
 	public Module() {
 		super();
 	}
@@ -58,7 +69,6 @@ public class Module extends Historized {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
 
 	public String getName() {
 		return name;
@@ -67,8 +77,6 @@ public class Module extends Historized {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	
 
 	public User getProfessor() {
 		return professor;
@@ -85,7 +93,6 @@ public class Module extends Historized {
 	public void setCours(List<Cour> cours) {
 		this.cours = cours;
 	}
-	
 
 	public List<Exam> getExams() {
 		return exams;
@@ -94,7 +101,6 @@ public class Module extends Historized {
 	public void setExams(List<Exam> exams) {
 		this.exams = exams;
 	}
-	
 
 	public Group getGroup() {
 		return group;
@@ -112,7 +118,6 @@ public class Module extends Historized {
 		this.progressionModules = progressionModules;
 	}
 
-	
 	public boolean isLaunched() {
 		return isLaunched;
 	}
@@ -120,15 +125,61 @@ public class Module extends Historized {
 	public void setLaunched(boolean isLaunched) {
 		this.isLaunched = isLaunched;
 	}
+	
 
-	@Override
-	public String toString() {
-		return "Module [name=" + name + ", user=" + professor + ", group=" + group  + ", cours="
-				+ cours + ", exams=" + exams + "]";
+	public double getCoefficient() {
+		return coefficient;
+	}
+
+	public void setCoefficient(double coefficient) {
+		this.coefficient = coefficient;
+	}
+
+	public double getPercentageExam() {
+		return percentageExam;
+	}
+
+	public void setPercentageExam(double percentageExam) {
+		this.percentageExam = percentageExam;
+	}
+
+	public double getPercentageQuiz() {
+		return percentageQuiz;
+	}
+
+	public void setPercentageQuiz(double percentageQuiz) {
+		this.percentageQuiz = percentageQuiz;
+	}
+
+	public double getPercentageCour() {
+		return percentageCour;
+	}
+
+	public void setPercentageCour(double percentageCour) {
+		this.percentageCour = percentageCour;
+	}
+
+	public double getPercentageAbsence() {
+		return percentageAbsence;
+	}
+
+	public void setPercentageAbsence(double percentageAbsence) {
+		this.percentageAbsence = percentageAbsence;
 	}
 
 	
+	public double getScale() {
+		return scale;
+	}
 
+	public void setScale(double scale) {
+		this.scale = scale;
+	}
 
+	@Override
+	public String toString() {
+		return "Module [name=" + name + ", user=" + professor + ", group=" + group + ", cours=" + cours + ", exams="
+				+ exams + "]";
+	}
 
 }

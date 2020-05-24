@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.learning.dao.ProgressionModuleRepository;
@@ -17,12 +15,14 @@ import com.learning.dto.ProgressionModuleDTO;
 import com.learning.dto.UserDTO;
 import com.learning.model.Module;
 import com.learning.model.ProgressionModule;
+import com.learning.model.TypeEnumExam;
 import com.learning.model.User;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.CourService;
 import com.learning.service.ExamService;
 import com.learning.service.ModuleService;
+import com.learning.service.NoteExamService;
 import com.learning.service.ProgressionCourService;
 import com.learning.service.ProgressionModuleService;
 import com.learning.service.UserService;
@@ -38,15 +38,18 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 	private ModuleService moduleService;
 	@Autowired
 	private ProgressionCourService progressionCourService;
-	
-	@Autowired 
+
+	@Autowired
 	private CourService courService;
-	
+
 	@Autowired
 	private ExamService examService;
-    
+
+	@Autowired
+	private NoteExamService noteExamService;
 	@Autowired
 	private ProgressionModuleRepositorySearchCriteria progressionModuleRepositorySearchCriteria;
+
 	// save or update
 	@Override
 	public ProgressionModuleDTO save(ProgressionModuleDTO progressionModuleDTO) {
@@ -74,25 +77,6 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 	@Override
 	public PartialList<ProgressionModuleDTO> findByCriteres(Demande<ProgressionModuleDTO> demande) {
 
-//		ProgressionModuleDTO progressionModule = demande.getModel();
-//		int page = demande.getPage();
-//		int size = demande.getSize();
-//		Long idUser = progressionModule.getStudent() != null ? progressionModule.getStudent().getId() : null;
-//		Long idModule = progressionModule.getModule() != null ? progressionModule.getModule().getId() : null;
-//		Page<ProgressionModule> pageProgressionModule = idUser != null
-//				? idModule != null
-//						? progressionModuleRepository.findByUserAndModule(idUser, idModule, PageRequest.of(page, size))
-//						: progressionModuleRepository.findByUser(idUser, PageRequest.of(page, size))
-//				: null;
-//		Page<ProgressionModule> pageProgressionModule=progressionModuleRepository.findAll(PageRequest.of(page, size));
-//		if (pageProgressionModule != null) {
-//			List<ProgressionModuleDTO> list = convertEntitiesToDtos(pageProgressionModule.getContent());
-//			Long totalElement = pageProgressionModule.getTotalElements();
-//
-//			return new PartialList<ProgressionModuleDTO>(totalElement, list);
-//		} else {
-//			return new PartialList<ProgressionModuleDTO>(0l, new ArrayList<ProgressionModuleDTO>());
-//		}
 		List<ProgressionModule> progressionModules = progressionModuleRepositorySearchCriteria.findByCriteres(demande);
 		Long count = progressionModuleRepositorySearchCriteria.countByCriteres(demande);
 		return new PartialList<ProgressionModuleDTO>(count, convertEntitiesToDtos(progressionModules));
@@ -103,9 +87,10 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 		ProgressionModule progressionModule = new ProgressionModule();
 		progressionModule.setId(progressionModuleDTO.getId());
 		progressionModule.setProgressionCour(progressionModuleDTO.getProgressionCour());
-		
+		progressionModule.setProgressionExamQuiz(progressionModuleDTO.getProgressionExamQuiz());
+		progressionModule.setProgressionAbsence(progressionModuleDTO.getProgressionAbsence());
 		progressionModule.setNoteFinal(progressionModuleDTO.getNoteFinal());
-		
+
 		if (progressionModuleDTO.getModule() != null) {
 			progressionModule
 					.setModule(moduleService.convertDTOtoModelWithOutRelation(progressionModuleDTO.getModule()));
@@ -123,18 +108,18 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 		ProgressionModuleDTO progressionModuleDTO = new ProgressionModuleDTO();
 		progressionModuleDTO.setId(progressionModule.getId());
 		progressionModuleDTO.setProgressionCour(progressionModule.getProgressionCour());
+		progressionModuleDTO.setProgressionExamQuiz(progressionModule.getProgressionExamQuiz());
+		progressionModuleDTO.setProgressionAbsence(progressionModule.getProgressionAbsence());
 		progressionModuleDTO.setNoteFinal(progressionModule.getNoteFinal());
-		
-		
-		
+
 		Module module = progressionModule.getModule();
 		User student = progressionModule.getStudent();
 		if (module != null) {
-			ModuleDTO moduleDTO=moduleService.convertModelToDTOWithOutRelation(module);
-			
-			moduleDTO.setHasExam(examService.countExamByModule(moduleDTO.getId())>0);
+			ModuleDTO moduleDTO = moduleService.convertModelToDTOWithOutRelation(module);
+
+			moduleDTO.setHasExam(examService.countExamByModule(moduleDTO.getId()) > 0);
 			progressionModuleDTO.setModule(moduleDTO);
-		
+
 		}
 
 		if (student != null) {
@@ -181,7 +166,7 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 			progressionModule.setModule(module);
 			progressionModule.setStudent(userService.convertDTOtoModel(student));
 			progressionModule.setProgressionCour(0.0);
-	
+
 			progressionModuleRepository.save(progressionModule);
 		}
 
@@ -191,18 +176,34 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 	public void updateProgressionModule(Long idModule, Long idStudent) {
 		ProgressionModule progressionModule = progressionModuleRepository.findByModuleAndStudent(idModule, idStudent);
 		if (progressionModule != null) {
-			List<Double> listProgressionCour = progressionCourService.listOfProgressionByModuleAndStudent(idModule,
-					idStudent);
-
+			final List<Double> listProgressionCour = progressionCourService
+					.listOfProgressionByModuleAndStudent(idModule, idStudent);
+			final List<Boolean> listStatutNoteExam = noteExamService.findStatutByUserAndModule(idStudent, idModule);
+			// calculate progression Cour
 			Double progressionTemp = 0.0;
-			Double result = 0.0;
+			Double resultProgressionCour = 0.0;
 			for (Double progressionCour : listProgressionCour) {
 
 				progressionTemp += progressionCour;
 			}
-			result = progressionTemp / listProgressionCour.size();
+			resultProgressionCour = progressionTemp / listProgressionCour.size();
+			// calculate progression Exam and quiz
+			Double progressionExamQuiz = 0.0;
+			Double resultProgressionExamQuiz = 0.0;
+			if (listStatutNoteExam != null && listStatutNoteExam.size() > 0) {
+				for (Boolean finished : listStatutNoteExam) {
+					if (finished) {
+						progressionExamQuiz++;
+					}
 
-			progressionModule.setProgressionCour(result);
+				}
+				resultProgressionExamQuiz = (progressionExamQuiz * 100) / listStatutNoteExam.size();
+				resultProgressionExamQuiz = Math.floor(resultProgressionExamQuiz * 100) / 100;
+
+				progressionModule.setProgressionExamQuiz(resultProgressionExamQuiz);
+
+			}
+			progressionModule.setProgressionCour(resultProgressionCour);
 			progressionModuleRepository.save(progressionModule);
 		}
 	}
@@ -215,11 +216,54 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 			progressionModule.setStudent(student);
 			progressionModule.setProgressionCour(0.0);
 			progressionModuleRepository.save(progressionModule);
-			final List<CourDTO> cours=courService.findByModuleAndLaunched(module.getId(),true);
+			final List<CourDTO> cours = courService.findByModuleAndLaunched(module.getId(), true);
 			progressionCourService.saveByStudentAndCours(student, cours);
-			
+
 		}
-		
+
+	}
+
+	@Override
+	public void calculateNoteFinal(Long idModule, List<UserDTO> students) {
+
+		for (UserDTO student : students) {
+			calculateNoteFinalByStudent(idModule, student.getId());
+		}
+	}
+
+	private void calculateNoteFinalByStudent(Long idModule, Long idStudent) {
+		Double noteExam = 0.0, noteQuiz = 0.0, noteFinal = 0.0;
+		ProgressionModule progressionModule = progressionModuleRepository.findByModuleAndStudent(idModule, idStudent);
+		List<Double> notesExam = noteExamService.findByUserAndModuleAndType(idStudent, idModule, TypeEnumExam.EXAM);
+		List<Double> notesQuiz = noteExamService.findByUserAndModuleAndType(idStudent, idModule, TypeEnumExam.QUIZ);
+		Double noteCour = progressionModule.getProgressionCour();
+		Double noteAbsence = progressionModule.getProgressionAbsence();
+		Double percentageAbsence = progressionModule.getModule().getPercentageAbsence();
+		Double percentageCour = progressionModule.getModule().getPercentageCour();
+		Double percentageExam = progressionModule.getModule().getPercentageExam();
+		Double percentageQuiz = progressionModule.getModule().getPercentageQuiz();
+
+		if (notesExam != null && notesExam.size() > 0) {
+			for (Double noteE : notesExam) {
+
+				noteExam += noteE;
+			}
+			noteExam = noteExam / notesExam.size();
+		}
+
+		if (noteQuiz != null && notesQuiz.size() > 0) {
+			for (Double noteQ : notesQuiz) {
+
+				noteQuiz += noteQ;
+			}
+			noteQuiz = noteQuiz / notesQuiz.size();
+		}
+
+		noteFinal = (noteAbsence * percentageAbsence + noteCour * percentageCour + noteExam * percentageExam
+				+ noteQuiz * percentageQuiz) / 100;
+		progressionModule.setNoteFinal(noteFinal);
+		progressionModuleRepository.save(progressionModule);
+
 	}
 
 }
