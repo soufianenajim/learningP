@@ -38,7 +38,7 @@ public class CourServiceImpl implements CourService {
 
 	@Autowired
 	private ExercicesService exercicesService;
-	
+
 	@Autowired
 	private ProgressionModuleService progressionModuleService;
 	@Autowired
@@ -47,14 +47,14 @@ public class CourServiceImpl implements CourService {
 	// save or update
 	@Override
 	public CourDTO save(CourDTO courDTO) {
-			if (courDTO.getId() != null) {
-				if (!existingCourById(courDTO.getId(), courDTO.getName(), courDTO.getModule().getId()))
-					return null;
-			} else if (!existingCour(courDTO.getName(), courDTO.getModule().getId()))
+		if (courDTO.getId() != null) {
+			if (!existingCourById(courDTO.getId(), courDTO.getName(), courDTO.getModule().getId()))
 				return null;
+		} else if (!existingCour(courDTO.getName(), courDTO.getModule().getId()))
+			return null;
 		Cour cour = convertDTOtoModel(courDTO);
 		cour = courRepository.save(cour);
-		
+
 		return convertModelToDTO(cour);
 	}
 
@@ -89,7 +89,7 @@ public class CourServiceImpl implements CourService {
 		cour.setId(courDTO.getId());
 		cour.setName(courDTO.getName());
 		cour.setContent(courDTO.getContent());
-        cour.setLaunched(courDTO.isLaunched());
+		cour.setLaunched(courDTO.isLaunched());
 		if (courDTO.getModule() != null) {
 			cour.setModule(moduleService.convertDTOtoModel(courDTO.getModule()));
 		}
@@ -228,14 +228,14 @@ public class CourServiceImpl implements CourService {
 	public void launch(Long idCour) {
 		Optional<Cour> optional = courRepository.findById(idCour);
 		if (optional.isPresent()) {
-			Cour cour=optional.get();
+			Cour cour = optional.get();
 			cour.setLaunched(true);
 			courRepository.save(cour);
 			Module module = cour.getModule();
 			Long idGroup = module.getGroup().getId();
-			List<UserDTO> students = userService.findByGroupAndRole(idGroup,RoleName.ROLE_STUDENT);
+			List<UserDTO> students = userService.findByGroupAndRole(idGroup, RoleName.ROLE_STUDENT);
 			progressionCourService.saveByCourAndStudents(cour, students);
-			if (module.getId()!= null && !module.isLaunched()) {
+			if (module.getId() != null && !module.isLaunched()) {
 				module.setLaunched(true);
 				moduleService.save(moduleService.convertModelToDTO(module));
 				progressionModuleService.saveByModuleAndStudents(module, students);
@@ -245,8 +245,8 @@ public class CourServiceImpl implements CourService {
 	}
 
 	@Override
-	public List<CourDTO> findByModuleAndLaunched(Long idModule,boolean isLaunched) {
-		List<Cour> list = courRepository.findByModuleAndLaunched(idModule,isLaunched);
+	public List<CourDTO> findByModuleAndLaunched(Long idModule, boolean isLaunched) {
+		List<Cour> list = courRepository.findByModuleAndLaunched(idModule, isLaunched);
 
 		return convertEntitiesToDtosWithOutModule(list);
 	}
@@ -260,13 +260,20 @@ public class CourServiceImpl implements CourService {
 	@Override
 	public boolean existingCourById(Long id, String name, Long idModule) {
 		Cour existCour = courRepository.findByNameAndModule(name, idModule);
-		return existCour == null ||  existCour.getId().equals(id);
+		return existCour == null || existCour.getId().equals(id);
 	}
 
 	@Override
 	public List<CourDTO> findByModuleAndNotLaunched(Long idModule) {
-		
+
 		return convertEntitiesToDtos(courRepository.findByModuleAndNotLaunched(idModule));
-	}					
+	}
+
+	@Override
+	public Long countCourByTeacherAndGroup(Long idTeacher, Long idGroup) {
+
+		return idGroup > 0 ? courRepository.countCourByTeacherAndGroup(idTeacher, idGroup)
+				: courRepository.countCourByTeacher(idTeacher);
+	}
 
 }

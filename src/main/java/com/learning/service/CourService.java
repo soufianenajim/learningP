@@ -31,4 +31,6 @@ public interface CourService extends CrudService<Cour, CourDTO> {
 	boolean existingCour(String name, Long idModule);
 
 	boolean existingCourById(Long id, String name, Long idModule);
+	
+	Long countCourByTeacherAndGroup(Long idTeacher,Long idGroup);
 }

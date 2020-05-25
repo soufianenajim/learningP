@@ -220,4 +220,13 @@ public class ExamServiceImpl implements ExamService {
 		}
 	}
 
+	@Override
+	public Long countExamByTeacherAndGroupAndType(Long idTeacher, Long idGroup, String type) {
+		TypeEnumExam typeEnumExam = TypeEnumExam.valueOf(type);
+
+		Long count = idGroup > 0 ? examRepository.countExamByTeacherAndGroupAndType(idTeacher, idGroup, typeEnumExam)
+				: examRepository.countExamByTeacherAndType(idTeacher, typeEnumExam);
+		return count;
+	}
+
 }

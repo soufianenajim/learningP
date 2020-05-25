@@ -12,6 +12,7 @@ import com.learning.dao.RoleRepository;
 import com.learning.dao.UserRepository;
 import com.learning.dao.UserRepositorySearchCriteria;
 import com.learning.dto.ExamDTO;
+import com.learning.dto.GroupDTO;
 import com.learning.dto.ModuleDTO;
 import com.learning.dto.NotificationDTO;
 import com.learning.dto.UserDTO;
@@ -296,17 +297,27 @@ public class UserServiceImpl implements UserService {
 	public NotificationDTO getNotificatonsById(Long id) {
 		NotificationDTO notificationDTO = new NotificationDTO();
 		List<ExamDTO> listExam = examService.findByUser(id);
-		
+
 		notificationDTO.setExamList(listExam);
-		
-		
+
 		return notificationDTO;
 	}
 
 	@Override
-	public List<UserDTO> findByNameContainingByExam(String name,Long idExam) {
-	
-		return convertEntitiesToDtosWithOutRelation(userRepository.findByNameContainingByExam(name,idExam));
+	public List<UserDTO> findByNameContainingByExam(String name, Long idExam) {
+
+		return convertEntitiesToDtosWithOutRelation(userRepository.findByNameContainingByExam(name, idExam));
+	}
+
+	@Override
+	public Long countStudentByTeacherAndGroup(Long idTeacher, Long idGroup) {
+		if (idGroup == 0) {
+			List<GroupDTO> groups = groupService.findByUser(idTeacher);
+			return userRepository.countStudentByTeacher(groupService.convertDtosToEntities(groups),
+					RoleName.ROLE_STUDENT);
+		} else {
+			return userRepository.countByGroupAndType(idGroup,RoleName.ROLE_STUDENT);
+		}
 	}
 
 }

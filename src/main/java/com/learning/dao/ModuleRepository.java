@@ -28,4 +28,10 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
 	
 	@Query("SELECT m.group.id FROM Module m WHERE m.id=?1 ")
 	Long getGroupByModule(Long idModule);
+	
+	@Query("SELECT count(m.id) FROM Module m WHERE m.professor.id=?1 ")
+	Long countModuleByTeacher(Long idTeacher);
+	
+	@Query("SELECT count(m.id) FROM Module m WHERE m.professor.id=?1 and m.group.id=?2 ")
+	Long countModuleByTeacherAndGroup(Long idTeacher,Long idGroup);
 }

@@ -252,4 +252,10 @@ public class ModuleServiceImpl implements ModuleService {
 
 	}
 
+	@Override
+	public Long countModuleByTeacherAndGroup(Long idTeacher, Long idGroup) {
+		
+		return idGroup>0?moduleRepository.countModuleByTeacherAndGroup(idTeacher, idGroup):moduleRepository.countModuleByTeacher(idTeacher);
+	}
+
 }

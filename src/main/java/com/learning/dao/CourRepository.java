@@ -37,5 +37,9 @@ public interface CourRepository extends JpaRepository<Cour, Long> {
 	@Query("SELECT c FROM Cour c WHERE LOWER(c.name) like lower(?1) and c.module.id=?2 ")
 	Cour findByNameAndModule(String name, Long idModule);
 	
+	@Query("SELECT count(c.id) FROM Cour c where c.module.professor.id=?1")
+	Long countCourByTeacher(Long idTeacher);
+	@Query("SELECT count(c.id) FROM Cour c where c.module.professor.id=?1 and c.module.group.id=?2")
+	Long countCourByTeacherAndGroup(Long idTeacher,Long idGroup);
 
 }
