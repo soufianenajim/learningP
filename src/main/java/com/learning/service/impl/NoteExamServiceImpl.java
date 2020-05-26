@@ -178,4 +178,23 @@ public class NoteExamServiceImpl implements NoteExamService {
 		return notes;
 	}
 
+	@Override
+	public List<Object> getAverageGoodAndBadGrades(Long idTeacher, Long idGroup,Long idModule) {
+		List<Object> list=null;
+		if(idGroup>0&&idModule>0) {
+			list= noteExamRepository.countSuccessByTeacherAndGroupAndModule(idTeacher, idGroup,idModule);
+		}
+		else if(idGroup>0) {
+			list=noteExamRepository.countSuccessByTeacherAndGroup(idTeacher, idGroup);
+		}
+		else if(idModule>0) {
+			list=noteExamRepository.countSuccessByTeacherAndModule(idTeacher, idModule);
+		}
+		else {
+			list=noteExamRepository.countSuccessByTeacher(idTeacher);
+		}
+		
+		return list;
+	}
+
 }

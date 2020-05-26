@@ -61,8 +61,7 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private ExamService examService;
-	@Autowired
-	private ExercicesService exercicesService;
+	
 
 	@Override
 	public UserDTO saveU(UserDTO userDTO) throws BusinessException {

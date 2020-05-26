@@ -258,4 +258,10 @@ public class ModuleServiceImpl implements ModuleService {
 		return idGroup>0?moduleRepository.countModuleByTeacherAndGroup(idTeacher, idGroup):moduleRepository.countModuleByTeacher(idTeacher);
 	}
 
+	@Override
+	public List<ModuleDTO> findByProfessorAndGroup(Long idProfessor, Long idGroup) {
+		
+		return convertEntitiesToDtos(moduleRepository.findByProfessorAndGroup(idProfessor, idGroup));
+	}
+
 }

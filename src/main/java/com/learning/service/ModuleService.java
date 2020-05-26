@@ -20,6 +20,8 @@ public interface ModuleService extends CrudService<Module, ModuleDTO> {
 
 	List<ModuleDTO> findByProfessor(Long idProfessor);
 
+	List<ModuleDTO> findByProfessorAndGroup(Long idProfessor, Long idGroup);
+
 	boolean existingModule(String name, Long idProfessor, Long idGroup);
 
 	boolean existingModuleById(Long id, String name, Long idProfessor, Long idGroup);
