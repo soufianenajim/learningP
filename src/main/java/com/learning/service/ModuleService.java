@@ -4,31 +4,26 @@ import java.util.List;
 
 import com.learning.dto.ModuleDTO;
 import com.learning.model.Module;
+import com.learning.model.Organization;
 
 public interface ModuleService extends CrudService<Module, ModuleDTO> {
 	List<ModuleDTO> findAll();
 
-	Module convertDTOtoModelWithOutRelation(ModuleDTO dto);
+	void saveModulesByOrganization(List<ModuleDTO> modules, Organization organization);
 
-	ModuleDTO convertModelToDTOWithOutRelation(final Module model);
+	Module convertDTOtoModelWithOutOrganization(ModuleDTO dto);
 
-	List<ModuleDTO> convertEntitiesToDtosWithOutRelation(List<Module> list);
+	ModuleDTO convertModelToDTOWithOutOrganization(final Module model);
 
-	List<Module> convertDtosToEntitiesWithOutRelation(List<ModuleDTO> list);
+	List<ModuleDTO> convertEntitiesToDtosWithOutOrganization(List<Module> list);
 
-	List<ModuleDTO> findByGroup(Long idGroup);
+	List<Module> convertDtosToEntitiesWithOutOrganization(List<ModuleDTO> list);
+	
+   void deleteByOrganizationId(Long id);
+   
+   List<ModuleDTO> findByOrganization(Long id);
+   
+	boolean existingModule(String name, Long idOrganization);
 
-	List<ModuleDTO> findByProfessor(Long idProfessor);
-
-	List<ModuleDTO> findByProfessorAndGroup(Long idProfessor, Long idGroup);
-
-	boolean existingModule(String name, Long idProfessor, Long idGroup);
-
-	boolean existingModuleById(Long id, String name, Long idProfessor, Long idGroup);
-
-	Long getGroupByModule(Long idModule);
-
-	void calculate(ModuleDTO module);
-
-	Long countModuleByTeacherAndGroup(Long idTeacher, Long idGroup);
+	boolean existingModuleById(Long id, String name, Long idOrganization);
 }

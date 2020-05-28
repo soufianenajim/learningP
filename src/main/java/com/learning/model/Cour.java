@@ -28,7 +28,7 @@ public class Cour extends Historized {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "module_id")
-	private Module module;
+	private ModuleAffected module;
 
 	@OneToMany(mappedBy = "cour", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<ProgressionCour> progressionCours;
@@ -62,11 +62,11 @@ public class Cour extends Historized {
 		this.name = name;
 	}
 
-	public Module getModule() {
+	public ModuleAffected getModule() {
 		return module;
 	}
 
-	public void setModule(Module module) {
+	public void setModule(ModuleAffected module) {
 		this.module = module;
 	}
 

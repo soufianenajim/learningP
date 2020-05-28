@@ -13,7 +13,7 @@ import com.learning.dao.UserRepository;
 import com.learning.dao.UserRepositorySearchCriteria;
 import com.learning.dto.ExamDTO;
 import com.learning.dto.GroupDTO;
-import com.learning.dto.ModuleDTO;
+import com.learning.dto.ModuleAffectedDTO;
 import com.learning.dto.NotificationDTO;
 import com.learning.dto.UserDTO;
 import com.learning.exceptions.BusinessException;
@@ -27,9 +27,8 @@ import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.security.services.UserDetailsImpl;
 import com.learning.service.ExamService;
-import com.learning.service.ExercicesService;
 import com.learning.service.GroupService;
-import com.learning.service.ModuleService;
+import com.learning.service.ModuleAffectedService;
 import com.learning.service.OrganizationService;
 import com.learning.service.ProgressionModuleService;
 import com.learning.service.RoleService;
@@ -52,7 +51,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private GroupService groupService;
 	@Autowired
-	private ModuleService moduleService;
+	private ModuleAffectedService moduleService;
 
 	@Autowired
 	private ProgressionModuleService progressionModuleService;
@@ -97,7 +96,7 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(passwordEncoder.encode("Afak@1234"));
 		user = userRepository.saveAndFlush(user);
 		if (userDTO.getRefRole().getName().equals("ROLE_STUDENT")) {
-			List<ModuleDTO> modules = moduleService.findByGroup(user.getGroups().get(0).getId());
+			List<ModuleAffectedDTO> modules = moduleService.findByGroup(user.getGroups().get(0).getId());
 			progressionModuleService.saveByStudentAndModules(user, modules);
 		}
 		return userDTO;

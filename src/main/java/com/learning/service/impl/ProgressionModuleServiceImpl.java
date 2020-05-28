@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import com.learning.dao.ProgressionModuleRepository;
 import com.learning.dao.ProgressionModuleRepositorySearchCriteria;
 import com.learning.dto.CourDTO;
-import com.learning.dto.ModuleDTO;
+import com.learning.dto.ModuleAffectedDTO;
 import com.learning.dto.ProgressionModuleDTO;
 import com.learning.dto.UserDTO;
-import com.learning.model.Module;
+import com.learning.model.ModuleAffected;
 import com.learning.model.ProgressionModule;
 import com.learning.model.TypeEnumExam;
 import com.learning.model.User;
@@ -21,7 +21,7 @@ import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.CourService;
 import com.learning.service.ExamService;
-import com.learning.service.ModuleService;
+import com.learning.service.ModuleAffectedService;
 import com.learning.service.NoteExamService;
 import com.learning.service.ProgressionCourService;
 import com.learning.service.ProgressionModuleService;
@@ -35,7 +35,7 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 	@Autowired
 	private UserService userService;
 	@Autowired
-	private ModuleService moduleService;
+	private ModuleAffectedService moduleService;
 	@Autowired
 	private ProgressionCourService progressionCourService;
 
@@ -112,10 +112,10 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 		progressionModuleDTO.setProgressionAbsence(progressionModule.getProgressionAbsence());
 		progressionModuleDTO.setNoteFinal(progressionModule.getNoteFinal());
 
-		Module module = progressionModule.getModule();
+		ModuleAffected module = progressionModule.getModule();
 		User student = progressionModule.getStudent();
 		if (module != null) {
-			ModuleDTO moduleDTO = moduleService.convertModelToDTOWithOutRelation(module);
+			ModuleAffectedDTO moduleDTO = moduleService.convertModelToDTOWithOutRelation(module);
 
 			moduleDTO.setHasExam(examService.countExamByModule(moduleDTO.getId()) > 0);
 			progressionModuleDTO.setModule(moduleDTO);
@@ -160,7 +160,7 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 	}
 
 	@Override
-	public void saveByModuleAndStudents(Module module, List<UserDTO> students) {
+	public void saveByModuleAndStudents(ModuleAffected module, List<UserDTO> students) {
 		for (UserDTO student : students) {
 			ProgressionModule progressionModule = new ProgressionModule();
 			progressionModule.setModule(module);
@@ -209,8 +209,8 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 	}
 
 	@Override
-	public void saveByStudentAndModules(User student, List<ModuleDTO> modules) {
-		for (ModuleDTO module : modules) {
+	public void saveByStudentAndModules(User student, List<ModuleAffectedDTO> modules) {
+		for (ModuleAffectedDTO module : modules) {
 			ProgressionModule progressionModule = new ProgressionModule();
 			progressionModule.setModule(moduleService.convertDTOtoModel(module));
 			progressionModule.setStudent(student);
@@ -264,6 +264,25 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 		progressionModule.setNoteFinal(noteFinal);
 		progressionModuleRepository.save(progressionModule);
 
+	}
+
+	@Override
+	public List<Object> getAverageSuccessStudent(Long idTeacher, Long idGroup, Long idModule) {
+		List<Object> list=null;
+		if(idGroup>0&&idModule>0) {
+			list= progressionModuleRepository.countSuccessByTeacherAndGroupAndModule(idTeacher, idGroup,idModule);
+		}
+		else if(idGroup>0) {
+			list=progressionModuleRepository.countSuccessByTeacherAndGroup(idTeacher, idGroup);
+		}
+		else if(idModule>0) {
+			list=progressionModuleRepository.countSuccessByTeacherAndModule(idTeacher, idModule);
+		}
+		else {
+			list=progressionModuleRepository.countSuccessByTeacher(idTeacher);
+		}
+		
+		return list;
 	}
 
 }

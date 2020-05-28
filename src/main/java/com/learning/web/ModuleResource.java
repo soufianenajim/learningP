@@ -21,7 +21,6 @@ import com.learning.service.ModuleService;
 
 @RestController
 @RequestMapping("/module")
-
 public class ModuleResource {
 
 	private static Logger LOGGER = LogManager.getLogger("ModuleResource");
@@ -74,58 +73,23 @@ public class ModuleResource {
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@GetMapping(ConstantBase.CRUD_REST_FIND_ALL)
 	public ResponseEntity<?> findAll() {
 		try {
-
 			return new ResponseEntity<>(moduleService.findAll(), HttpStatus.OK);
 		} catch (Exception e) {
 			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	@GetMapping("find-by-group/{idGroup}")
-	public ResponseEntity<?> findByLevelAndBranch(@PathVariable Long idGroup) {
+	@GetMapping("find-by-organization/{id}")
+	public ResponseEntity<?> findByOrganization(@PathVariable Long id) {
 		try {
-
-			return new ResponseEntity<>(moduleService.findByGroup(idGroup), HttpStatus.OK);
+			return new ResponseEntity<>(moduleService.findByOrganization(id), HttpStatus.OK);
 		} catch (Exception e) {
 			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	@GetMapping("find-by-professor/{idProfessor}")
-	public ResponseEntity<?> findByProfessor(@PathVariable Long idProfessor) {
-		try {
-
-			return new ResponseEntity<>(moduleService.findByProfessor(idProfessor), HttpStatus.OK);
-		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
-			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-	@GetMapping("find-by-professor-group/{idProfessor}/{idGroup}")
-	public ResponseEntity<?> findByProfessorAndGroup(@PathVariable Long idProfessor,@PathVariable Long idGroup) {
-		try {
-
-			return new ResponseEntity<>(moduleService.findByProfessorAndGroup(idProfessor, idGroup), HttpStatus.OK);
-		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
-			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-	@PostMapping("calculate")
-	public ResponseEntity<?> calculate(@RequestBody ModuleDTO module) {
-		try {
-			moduleService.calculate(module);
-			return new ResponseEntity<>(SecurityConstants.convertObjectToJson(ConstantBase.DONE), HttpStatus.OK);
-		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
-			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
-	
 }

@@ -11,12 +11,14 @@ public class ExamDTO extends HistorizedDTO {
 
 	private LocalDateTime endDateTime;
 
-	private ModuleDTO module;
+	private ModuleAffectedDTO module;
 	private String type;
 	private double scale;
 
 	private boolean launched;
 	private List<QuestionDTO> questions;
+
+	private boolean afterCurrentDate;
 
 	public ExamDTO() {
 		super();
@@ -43,11 +45,11 @@ public class ExamDTO extends HistorizedDTO {
 		this.name = name;
 	}
 
-	public ModuleDTO getModule() {
+	public ModuleAffectedDTO getModule() {
 		return module;
 	}
 
-	public void setModule(ModuleDTO module) {
+	public void setModule(ModuleAffectedDTO module) {
 		this.module = module;
 	}
 
@@ -98,5 +100,14 @@ public class ExamDTO extends HistorizedDTO {
 	public void setLaunched(boolean launched) {
 		this.launched = launched;
 	}
+
+	public boolean isAfterCurrentDate() {
+		return afterCurrentDate;
+	}
+
+	public void setAfterCurrentDate(boolean afterCurrentDate) {
+		this.afterCurrentDate = afterCurrentDate;
+	}
+	
 
 }

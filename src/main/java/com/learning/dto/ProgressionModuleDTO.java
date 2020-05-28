@@ -8,7 +8,7 @@ public class ProgressionModuleDTO extends HistorizedDTO {
 
 	private UserDTO student;
 
-	private ModuleDTO module;
+	private ModuleAffectedDTO module;
 	private Double progressionCour;
 	
 	private Double progressionExamQuiz;
@@ -32,11 +32,11 @@ public class ProgressionModuleDTO extends HistorizedDTO {
 		this.student = student;
 	}
 
-	public ModuleDTO getModule() {
+	public ModuleAffectedDTO getModule() {
 		return module;
 	}
 
-	public void setModule(ModuleDTO module) {
+	public void setModule(ModuleAffectedDTO module) {
 		this.module = module;
 	}
 

@@ -15,14 +15,14 @@ import com.learning.dao.ExamRepositorySearchCriteria;
 import com.learning.dto.ExamDTO;
 import com.learning.dto.UserDTO;
 import com.learning.model.Exam;
-import com.learning.model.Module;
+import com.learning.model.ModuleAffected;
 import com.learning.model.Question;
 import com.learning.model.RoleName;
 import com.learning.model.TypeEnumExam;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.ExamService;
-import com.learning.service.ModuleService;
+import com.learning.service.ModuleAffectedService;
 import com.learning.service.NoteExamService;
 import com.learning.service.QuestionService;
 import com.learning.service.UserService;
@@ -31,7 +31,7 @@ import com.learning.service.UserService;
 public class ExamServiceImpl implements ExamService {
 
 	@Autowired
-	private ModuleService moduleService;
+	private ModuleAffectedService moduleService;
 	@Autowired
 	private ExamRepository examRepository;
 	@Autowired
@@ -51,7 +51,7 @@ public class ExamServiceImpl implements ExamService {
 		if (examDTO.getQuestions() != null) {
 			questionService.saveQuestionsByExam(examDTO.getQuestions(), exam);
 		}
-		if (examDTO.getId() != null)
+		if (examDTO.getId() == null)
 			launchExam(exam);
 		return convertModelToDTO(exam);
 	}
@@ -109,7 +109,7 @@ public class ExamServiceImpl implements ExamService {
 		examDTO.setEndDateTime(exam.getEndDateTime());
 		examDTO.setScale(exam.getScale());
 		examDTO.setLaunched(exam.isLaunched());
-		Module module = exam.getModule();
+		ModuleAffected module = exam.getModule();
 		List<Question> questions = exam.getQuestions();
 		TypeEnumExam type = exam.getType();
 		if (module != null) {
@@ -179,7 +179,7 @@ public class ExamServiceImpl implements ExamService {
 		examDTO.setStartDateTime(exam.getStartDateTime());
 		examDTO.setEndDateTime(exam.getEndDateTime());
 		examDTO.setLaunched(exam.isLaunched());
-		Module module = exam.getModule();
+		ModuleAffected module = exam.getModule();
 
 		if (module != null) {
 			examDTO.setModule(moduleService.convertModelToDTO(exam.getModule()));
@@ -212,7 +212,7 @@ public class ExamServiceImpl implements ExamService {
 	void launchExam(Exam exam) {
 		exam.setLaunched(true);
 		examRepository.save(exam);
-		Module module = exam.getModule();
+		ModuleAffected module = exam.getModule();
 		Long idGroup = moduleService.getGroupByModule(module.getId());
 		List<UserDTO> students = userService.findByGroupAndRole(idGroup, RoleName.ROLE_STUDENT);
 		if (students != null) {

@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.learning.model.base.ConstantBase;
 import com.learning.service.CourService;
 import com.learning.service.ExamService;
-import com.learning.service.ModuleService;
+import com.learning.service.ModuleAffectedService;
 import com.learning.service.NoteExamService;
+import com.learning.service.ProgressionModuleService;
 import com.learning.service.UserService;
 
 @RestController
@@ -23,7 +24,7 @@ public class DashboardResource {
 
 	private static Logger LOGGER = LogManager.getLogger("DashboardResource");
 	@Autowired
-	private ModuleService moduleService;
+	private ModuleAffectedService moduleService;
 
 	@Autowired
 	private ExamService examService;
@@ -36,6 +37,8 @@ public class DashboardResource {
 
 	@Autowired
 	private NoteExamService noteExamService;
+	@Autowired
+	private ProgressionModuleService progressionModuleService;
 
 	@GetMapping("/countModuleByTeacherAndGroupe/{idTeacher}/{idGroup}")
 	public ResponseEntity<?> countModuleByTeacherAndGroupe(@PathVariable Long idTeacher, @PathVariable Long idGroup) {
@@ -84,9 +87,24 @@ public class DashboardResource {
 	}
 
 	@GetMapping("/getAverageGoodAndBadGrades/{idTeacher}/{idGroup}/{idModule}")
-	public ResponseEntity<?> getAverageGoodAndBadGrades(@PathVariable Long idTeacher, @PathVariable Long idGroup,@PathVariable Long idModule) {
+	public ResponseEntity<?> getAverageGoodAndBadGrades(@PathVariable Long idTeacher, @PathVariable Long idGroup,
+			@PathVariable Long idModule) {
 		try {
-			return new ResponseEntity<>(noteExamService.getAverageGoodAndBadGrades(idTeacher, idGroup,idModule), HttpStatus.OK);
+			return new ResponseEntity<>(noteExamService.getAverageGoodAndBadGrades(idTeacher, idGroup, idModule),
+					HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/branch" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
+	@GetMapping("/getAverageSuccessStudent/{idTeacher}/{idGroup}/{idModule}")
+	public ResponseEntity<?> getAverageSuccessStudent(@PathVariable Long idTeacher, @PathVariable Long idGroup,
+			@PathVariable Long idModule) {
+		try {
+			return new ResponseEntity<>(progressionModuleService.getAverageSuccessStudent(idTeacher, idGroup, idModule),
+					HttpStatus.OK);
 		} catch (Exception e) {
 			LOGGER.error("Problem occored in api/branch" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);

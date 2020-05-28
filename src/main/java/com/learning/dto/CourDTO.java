@@ -8,7 +8,7 @@ public class CourDTO extends HistorizedDTO {
 
 	private String content;
 
-	private ModuleDTO module;
+	private ModuleAffectedDTO module;
 
 	private List<ChapitreDTO> chapitres;
 
@@ -47,11 +47,11 @@ public class CourDTO extends HistorizedDTO {
 		this.name = name;
 	}
 
-	public ModuleDTO getModule() {
+	public ModuleAffectedDTO getModule() {
 		return module;
 	}
 
-	public void setModule(ModuleDTO module) {
+	public void setModule(ModuleAffectedDTO module) {
 		this.module = module;
 	}
 

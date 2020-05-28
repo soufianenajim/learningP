@@ -31,7 +31,7 @@ public class Exam extends Historized {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "module_id")
-	private Module module;
+	private ModuleAffected module;
 
 	private TypeEnumExam type;
 	
@@ -72,11 +72,11 @@ public class Exam extends Historized {
 		this.name = name;
 	}
 
-	public Module getModule() {
+	public ModuleAffected getModule() {
 		return module;
 	}
 
-	public void setModule(Module module) {
+	public void setModule(ModuleAffected module) {
 		this.module = module;
 	}
 	

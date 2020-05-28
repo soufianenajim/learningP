@@ -5,52 +5,38 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.learning.dao.ModuleRepository;
-import com.learning.dao.ModuleRepositorySearchCriteria;
 import com.learning.dto.ModuleDTO;
-import com.learning.dto.UserDTO;
-import com.learning.model.Group;
 import com.learning.model.Module;
-import com.learning.model.RoleName;
-import com.learning.model.User;
+import com.learning.model.Organization;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
-import com.learning.service.GroupService;
 import com.learning.service.ModuleService;
-import com.learning.service.ProgressionModuleService;
-import com.learning.service.UserService;
+import com.learning.service.OrganizationService;
 
 @Service
 public class ModuleServiceImpl implements ModuleService {
 
 	@Autowired
 	private ModuleRepository moduleRepository;
-	@Autowired
-	private UserService userService;
-	@Autowired
-	private GroupService groupService;
 
 	@Autowired
-	private ModuleRepositorySearchCriteria moduleRepositorySearchCriteria;
+	private OrganizationService courService;
 
-	@Autowired
-	private ProgressionModuleService progressionModuleService;
-
+	// save or update
 	@Override
 	public ModuleDTO save(ModuleDTO moduleDTO) {
-
 		if (moduleDTO.getId() != null) {
-			if (!existingModuleById(moduleDTO.getId(), moduleDTO.getName(), moduleDTO.getProfessor().getId(),
-					moduleDTO.getGroup().getId()))
+			if (!existingModuleById(moduleDTO.getId(), moduleDTO.getName(), moduleDTO.getOrganization().getId()))
 				return null;
-		} else if (!existingModule(moduleDTO.getName(), moduleDTO.getProfessor().getId(), moduleDTO.getGroup().getId()))
+		} else if (!existingModule(moduleDTO.getName(), moduleDTO.getOrganization().getId()))
 			return null;
-
 		Module module = convertDTOtoModel(moduleDTO);
 		module = moduleRepository.save(module);
-		// get student by level and branch
 		return convertModelToDTO(module);
 	}
 
@@ -73,9 +59,20 @@ public class ModuleServiceImpl implements ModuleService {
 	@Override
 	public PartialList<ModuleDTO> findByCriteres(Demande<ModuleDTO> demande) {
 
-		List<Module> modules = moduleRepositorySearchCriteria.findByCriteres(demande);
-		Long count = moduleRepositorySearchCriteria.countByCriteres(demande);
-		return new PartialList<ModuleDTO>(count, convertEntitiesToDtos(modules));
+		ModuleDTO module = demande.getModel();
+		int page = demande.getPage();
+		int size = demande.getSize();
+		Page<Module> pageModule = null;
+		String name = module.getName();
+		Long idOrganization = module.getOrganization() != null ? module.getOrganization().getId() : null;
+
+		pageModule = idOrganization != null
+				? moduleRepository.findByNameAndOrganization(name, idOrganization, PageRequest.of(page, size))
+				: moduleRepository.findByName(name, PageRequest.of(page, size));
+
+		List<ModuleDTO> list = convertEntitiesToDtos(pageModule.getContent());
+		Long totalElement = pageModule.getTotalElements();
+		return new PartialList<ModuleDTO>(totalElement, list);
 	}
 
 	@Override
@@ -83,21 +80,10 @@ public class ModuleServiceImpl implements ModuleService {
 		Module module = new Module();
 		module.setId(moduleDTO.getId());
 		module.setName(moduleDTO.getName());
-		module.setLaunched(moduleDTO.isLaunched());
-		module.setCoefficient(moduleDTO.getCoefficient());
-		module.setPercentageAbsence(moduleDTO.getPercentageAbsence());
-		module.setPercentageCour(moduleDTO.getPercentageCour());
-		module.setPercentageExam(moduleDTO.getPercentageExam());
-		module.setPercentageQuiz(moduleDTO.getPercentageQuiz());
-		module.setScale(moduleDTO.getScale());
-		if (moduleDTO.getProfessor() != null) {
-			module.setProfessor(userService.convertDTOtoModel(moduleDTO.getProfessor()));
-		}
 
-		if (moduleDTO.getGroup() != null) {
-			module.setGroup(groupService.convertDTOtoModel(moduleDTO.getGroup()));
+		if (moduleDTO.getOrganization() != null) {
+			module.setOrganization(courService.convertDTOtoModel(moduleDTO.getOrganization()));
 		}
-
 		return module;
 	}
 
@@ -106,22 +92,10 @@ public class ModuleServiceImpl implements ModuleService {
 		ModuleDTO moduleDTO = new ModuleDTO();
 		moduleDTO.setId(module.getId());
 		moduleDTO.setName(module.getName());
-		moduleDTO.setLaunched(module.isLaunched());
-		moduleDTO.setCoefficient(module.getCoefficient());
-		moduleDTO.setPercentageAbsence(module.getPercentageAbsence());
-		moduleDTO.setPercentageCour(module.getPercentageCour());
-		moduleDTO.setPercentageExam(module.getPercentageExam());
-		moduleDTO.setPercentageQuiz(module.getPercentageQuiz());
-		moduleDTO.setScale(module.getScale());
-		User user = module.getProfessor();
-		Group group = module.getGroup();
+		Organization cour = module.getOrganization();
+		if (cour != null) {
+			moduleDTO.setOrganization(courService.convertModelToDTO(module.getOrganization()));
 
-		if (user != null) {
-			moduleDTO.setProfessor(userService.convertModelToDTO(module.getProfessor()));
-
-		}
-		if (group != null) {
-			moduleDTO.setGroup(groupService.convertModelToDTO(group));
 		}
 
 		moduleDTO.setCreatedAt(module.getCreatedAt());
@@ -167,101 +141,72 @@ public class ModuleServiceImpl implements ModuleService {
 	}
 
 	@Override
-	public Module convertDTOtoModelWithOutRelation(ModuleDTO moduleDTO) {
+	public Module convertDTOtoModelWithOutOrganization(ModuleDTO moduleDTO) {
 		Module module = new Module();
 		module.setId(moduleDTO.getId());
 		module.setName(moduleDTO.getName());
-
 		return module;
 	}
 
 	@Override
-	public ModuleDTO convertModelToDTOWithOutRelation(Module module) {
+	public ModuleDTO convertModelToDTOWithOutOrganization(Module module) {
 		ModuleDTO moduleDTO = new ModuleDTO();
 		moduleDTO.setId(module.getId());
 		moduleDTO.setName(module.getName());
-		moduleDTO.setCreatedAt(module.getCreatedAt());
-		moduleDTO.setUpdatedAt(module.getUpdatedAt());
-		moduleDTO.setLaunched(module.isLaunched());
-		moduleDTO.setCoefficient(module.getCoefficient());
-		moduleDTO.setPercentageAbsence(module.getPercentageAbsence());
-		moduleDTO.setPercentageCour(module.getPercentageCour());
-		moduleDTO.setPercentageExam(module.getPercentageExam());
-		moduleDTO.setPercentageQuiz(module.getPercentageQuiz());
-		moduleDTO.setScale(module.getScale());
-		User professor = module.getProfessor();
-		if (professor != null) {
-			moduleDTO.setProfessor(userService.convertModelToDTOWithOutRelation(professor));
-		}
 		return moduleDTO;
 	}
 
 	@Override
-	public List<ModuleDTO> convertEntitiesToDtosWithOutRelation(List<Module> modules) {
-		List<ModuleDTO> list = new ArrayList<ModuleDTO>();
-		for (Module module : modules) {
-			list.add(convertModelToDTOWithOutRelation(module));
+	public List<ModuleDTO> convertEntitiesToDtosWithOutOrganization(List<Module> list) {
+		List<ModuleDTO> modules = new ArrayList<>();
+		for (Module module : list) {
+			modules.add(convertModelToDTOWithOutOrganization(module));
 		}
-		return list;
+		return modules;
 	}
 
 	@Override
-	public List<Module> convertDtosToEntitiesWithOutRelation(List<ModuleDTO> modulesDTO) {
-		List<Module> list = new ArrayList<Module>();
-		for (ModuleDTO moduleDTO : modulesDTO) {
-			list.add(convertDTOtoModelWithOutRelation(moduleDTO));
+	public List<Module> convertDtosToEntitiesWithOutOrganization(List<ModuleDTO> list) {
+		List<Module> modules = new ArrayList<>();
+		for (ModuleDTO module : list) {
+			modules.add(convertDTOtoModelWithOutOrganization(module));
 		}
-		return list;
+		return modules;
 	}
 
 	@Override
-	public List<ModuleDTO> findByGroup(Long idGroup) {
+	public void saveModulesByOrganization(List<ModuleDTO> modules, Organization organization) {
+		for (ModuleDTO moduleDTO : modules) {
+			Module module = convertDTOtoModel(moduleDTO);
+			module.setOrganization(organization);
+			moduleRepository.save(module);
 
-		return convertEntitiesToDtosWithOutRelation(moduleRepository.findByGroup(idGroup));
+		}
+
 	}
 
 	@Override
-	public List<ModuleDTO> findByProfessor(Long idProfessor) {
+	public void deleteByOrganizationId(Long id) {
+		moduleRepository.deleteByOrganisation(id);
 
-		return convertEntitiesToDtosWithOutRelation(moduleRepository.findByProfessor(idProfessor));
 	}
 
 	@Override
-	public boolean existingModule(String name, Long idProfessor, Long idGroup) {
-		Module existModule = moduleRepository.findByNameAndProfessorAndGroup(name, idProfessor, idGroup);
+	public List<ModuleDTO> findByOrganization(Long id) {
+
+		return convertEntitiesToDtosWithOutOrganization(moduleRepository.findByOrganization(id));
+	}
+
+	@Override
+	public boolean existingModule(String name, Long idOrganization) {
+		Module existModule = moduleRepository.findByNameAndOrganization(name, idOrganization);
 		return existModule == null || existModule.getId() == null;
 	}
 
 	@Override
-	public boolean existingModuleById(Long id, String name, Long idProfessor, Long idGroup) {
-		Module existModule = moduleRepository.findByNameAndProfessorAndGroup(name, idProfessor, idGroup);
+	public boolean existingModuleById(Long id, String name, Long idOrganization) {
+		Module existModule = moduleRepository.findByNameAndOrganization(name, idOrganization);
 		return existModule == null || existModule.getId().equals(id);
-	}
-
-	@Override
-	public Long getGroupByModule(Long idModule) {
-
-		return moduleRepository.getGroupByModule(idModule);
-	}
-
-	@Override
-	public void calculate(ModuleDTO module) {
-		Long idGroup = module.getGroup().getId();
-		List<UserDTO> students = userService.findByGroupAndRole(idGroup, RoleName.ROLE_STUDENT);
-		progressionModuleService.calculateNoteFinal(module.getId(), students);
-
-	}
-
-	@Override
-	public Long countModuleByTeacherAndGroup(Long idTeacher, Long idGroup) {
-		
-		return idGroup>0?moduleRepository.countModuleByTeacherAndGroup(idTeacher, idGroup):moduleRepository.countModuleByTeacher(idTeacher);
-	}
-
-	@Override
-	public List<ModuleDTO> findByProfessorAndGroup(Long idProfessor, Long idGroup) {
-		
-		return convertEntitiesToDtos(moduleRepository.findByProfessorAndGroup(idProfessor, idGroup));
 	}
 
 }

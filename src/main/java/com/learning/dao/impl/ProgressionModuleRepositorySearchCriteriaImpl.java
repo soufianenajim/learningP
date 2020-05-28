@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import com.learning.dao.ProgressionModuleRepositorySearchCriteria;
-import com.learning.dto.ModuleDTO;
+import com.learning.dto.ModuleAffectedDTO;
 import com.learning.dto.ProgressionModuleDTO;
 import com.learning.dto.UserDTO;
 import com.learning.model.Group;
@@ -77,7 +77,7 @@ public class ProgressionModuleRepositorySearchCriteriaImpl implements Progressio
 		List<Predicate> predicates = new ArrayList<>();
 		ProgressionModuleDTO progressionModuleDTO = demande.getModel();
 		UserDTO student = progressionModuleDTO.getStudent();
-		ModuleDTO module = progressionModuleDTO.getModule();
+		ModuleAffectedDTO module = progressionModuleDTO.getModule();
 		boolean isTeacher = progressionModuleDTO.isTeacher();
 		if (student != null) {
 			if (student.getId() != null) {

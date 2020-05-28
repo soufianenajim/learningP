@@ -13,30 +13,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import com.learning.dao.ModuleRepositorySearchCriteria;
-import com.learning.dto.ModuleDTO;
-import com.learning.model.Module;
+import com.learning.dao.ModuleAffectedRepositorySearchCriteria;
+import com.learning.dto.ModuleAffectedDTO;
+import com.learning.model.ModuleAffected;
 import com.learning.model.base.Demande;
 import com.learning.model.base.SortOrder;
 
 @Repository
-public class ModuleRepositorySearchCriteriaImpl implements ModuleRepositorySearchCriteria {
+public class ModuleAffectedRepositorySearchCriteriaImpl implements ModuleAffectedRepositorySearchCriteria {
 	
 	@Autowired
 	private EntityManager em;
 	
 	private CriteriaBuilder cb = null;
 
-	private Root<Module> module = null;
+	private Root<ModuleAffected> module = null;
 
 	private List<Predicate> predicates = null;
 
 	@Override
-	public List<Module> findByCriteres(Demande<ModuleDTO> demande) {
+	public List<ModuleAffected> findByCriteres(Demande<ModuleAffectedDTO> demande) {
 		cb = em.getCriteriaBuilder();
-		CriteriaQuery<Module> cq = cb.createQuery(Module.class);
+		CriteriaQuery<ModuleAffected> cq = cb.createQuery(ModuleAffected.class);
 
-		module = cq.from(Module.class);
+		module = cq.from(ModuleAffected.class);
 		predicates = getPredicate(demande);
 		int page = demande.getPage();
 		int size = demande.getSize();
@@ -56,11 +56,11 @@ public class ModuleRepositorySearchCriteriaImpl implements ModuleRepositorySearc
 	}
 
 	@Override
-	public Long countByCriteres(Demande<ModuleDTO> demande) {
+	public Long countByCriteres(Demande<ModuleAffectedDTO> demande) {
 		 cb = em.getCriteriaBuilder();
 		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
 
-		module = cq.from(Module.class);
+		module = cq.from(ModuleAffected.class);
 		cq.select(cb.count(module));
 		predicates = getPredicate(demande);
 
@@ -69,9 +69,9 @@ public class ModuleRepositorySearchCriteriaImpl implements ModuleRepositorySearc
 		return em.createQuery(cq).getSingleResult();
 	}
 
-	private List<Predicate> getPredicate(Demande<ModuleDTO> demande) {
+	private List<Predicate> getPredicate(Demande<ModuleAffectedDTO> demande) {
 		List<Predicate> predicates = new ArrayList<>();
-		ModuleDTO moduleDTO = demande.getModel();
+		ModuleAffectedDTO moduleDTO = demande.getModel();
 
 		if (!StringUtils.isEmpty(moduleDTO.getName())) {
 			predicates.add(

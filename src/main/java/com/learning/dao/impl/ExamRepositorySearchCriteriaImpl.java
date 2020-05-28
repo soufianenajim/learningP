@@ -1,5 +1,6 @@
 package com.learning.dao.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,6 +86,10 @@ public class ExamRepositorySearchCriteriaImpl implements ExamRepositorySearchCri
 
 		if (!StringUtils.isEmpty(examDTO.getType())) {
 			predicates.add(cb.equal(exam.<TypeEnum>get("type"), TypeEnumExam.valueOf(examDTO.getType())));
+		}
+		if (examDTO.isAfterCurrentDate()) {
+			LocalDateTime current = LocalDateTime.now();
+			predicates.add(cb.greaterThanOrEqualTo((exam.<LocalDateTime>get("startDateTime")), current));
 		}
 
 		return predicates;

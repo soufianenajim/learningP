@@ -13,13 +13,13 @@ import com.learning.dto.CourDTO;
 import com.learning.dto.UserDTO;
 import com.learning.model.Cour;
 import com.learning.model.Exercices;
-import com.learning.model.Module;
+import com.learning.model.ModuleAffected;
 import com.learning.model.RoleName;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.CourService;
 import com.learning.service.ExercicesService;
-import com.learning.service.ModuleService;
+import com.learning.service.ModuleAffectedService;
 import com.learning.service.ProgressionCourService;
 import com.learning.service.ProgressionModuleService;
 import com.learning.service.UserService;
@@ -30,7 +30,7 @@ public class CourServiceImpl implements CourService {
 	@Autowired
 	private CourRepository courRepository;
 	@Autowired
-	private ModuleService moduleService;
+	private ModuleAffectedService moduleService;
 	@Autowired
 	private UserService userService;
 	@Autowired
@@ -108,7 +108,7 @@ public class CourServiceImpl implements CourService {
 		courDTO.setName(cour.getName());
 		courDTO.setContent(cour.getContent());
 		courDTO.setLaunched(cour.isLaunched());
-		Module module = cour.getModule();
+		ModuleAffected module = cour.getModule();
 
 		if (module != null) {
 			courDTO.setModule(moduleService.convertModelToDTO(cour.getModule()));
@@ -231,7 +231,7 @@ public class CourServiceImpl implements CourService {
 			Cour cour = optional.get();
 			cour.setLaunched(true);
 			courRepository.save(cour);
-			Module module = cour.getModule();
+			ModuleAffected module = cour.getModule();
 			Long idGroup = module.getGroup().getId();
 			List<UserDTO> students = userService.findByGroupAndRole(idGroup, RoleName.ROLE_STUDENT);
 			progressionCourService.saveByCourAndStudents(cour, students);

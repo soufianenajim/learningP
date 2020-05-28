@@ -8,7 +8,7 @@ public class NoteExamDTO extends HistorizedDTO {
 
 	private ExamDTO exam;
 
-	private ModuleDTO module;
+	private ModuleAffectedDTO module;
 
 	private Double score;
 
@@ -64,11 +64,11 @@ public class NoteExamDTO extends HistorizedDTO {
 		this.finished = finished;
 	}
 
-	public ModuleDTO getModule() {
+	public ModuleAffectedDTO getModule() {
 		return module;
 	}
 
-	public void setModule(ModuleDTO module) {
+	public void setModule(ModuleAffectedDTO module) {
 		this.module = module;
 	}
 
