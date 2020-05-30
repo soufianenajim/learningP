@@ -2,6 +2,8 @@ package com.learning.service;
 
 import java.util.List;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.learning.dto.NotificationDTO;
 import com.learning.dto.UserDTO;
 import com.learning.exceptions.BusinessException;
@@ -36,4 +38,6 @@ public interface UserService extends CrudService<User, UserDTO> {
 	List<UserDTO> findByNameContainingByExam(String name,Long idExam);
     
 	Long countStudentByTeacherAndGroup(Long idTeacher,Long idGroup);
+	
+	 UserDetailsImpl getUserPrincipal();
 }

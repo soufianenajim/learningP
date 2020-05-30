@@ -1,5 +1,6 @@
 package com.learning.service.impl;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -12,10 +13,14 @@ import com.learning.dao.ProgressionModuleRepositorySearchCriteria;
 import com.learning.dto.CourDTO;
 import com.learning.dto.ModuleAffectedDTO;
 import com.learning.dto.ProgressionModuleDTO;
+import com.learning.dto.SessionDTO;
 import com.learning.dto.UserDTO;
 import com.learning.model.ModuleAffected;
+import com.learning.model.Organization;
 import com.learning.model.ProgressionModule;
+import com.learning.model.StatutEnum;
 import com.learning.model.TypeEnumExam;
+import com.learning.model.TypeOrganizationEnum;
 import com.learning.model.User;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
@@ -25,6 +30,7 @@ import com.learning.service.ModuleAffectedService;
 import com.learning.service.NoteExamService;
 import com.learning.service.ProgressionCourService;
 import com.learning.service.ProgressionModuleService;
+import com.learning.service.SessionService;
 import com.learning.service.UserService;
 
 @Service
@@ -49,6 +55,9 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 	private NoteExamService noteExamService;
 	@Autowired
 	private ProgressionModuleRepositorySearchCriteria progressionModuleRepositorySearchCriteria;
+
+	@Autowired
+	private SessionService sessionService;
 
 	// save or update
 	@Override
@@ -224,24 +233,34 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 	}
 
 	@Override
-	public void calculateNoteFinal(Long idModule, List<UserDTO> students) {
-
-		for (UserDTO student : students) {
-			calculateNoteFinalByStudent(idModule, student.getId());
+	public void calculateNoteFinal(Long idModule) {
+		List<ProgressionModule> list = findByModuleAndSecondNotSuccess(idModule);
+		if (!list.isEmpty()) {
+			Organization org = list.get(0).getStudent().getOrganization();
+			for (ProgressionModule progressionModule : list) {
+				calculateNoteFinalByStudent(progressionModule, org);
+			}
 		}
 	}
 
-	private void calculateNoteFinalByStudent(Long idModule, Long idStudent) {
+	private void calculateNoteFinalByStudent(ProgressionModule progressionModule, Organization organization) {
+		Long idStudent = progressionModule.getStudent().getId();
+		Long idModule = progressionModule.getModule().getId();
 		Double noteExam = 0.0, noteQuiz = 0.0, noteFinal = 0.0;
-		ProgressionModule progressionModule = progressionModuleRepository.findByModuleAndStudent(idModule, idStudent);
 		List<Double> notesExam = noteExamService.findByUserAndModuleAndType(idStudent, idModule, TypeEnumExam.EXAM);
 		List<Double> notesQuiz = noteExamService.findByUserAndModuleAndType(idStudent, idModule, TypeEnumExam.QUIZ);
 		Double noteCour = progressionModule.getProgressionCour();
 		Double noteAbsence = progressionModule.getProgressionAbsence();
-		Double percentageAbsence = progressionModule.getModule().getPercentageAbsence();
-		Double percentageCour = progressionModule.getModule().getPercentageCour();
-		Double percentageExam = progressionModule.getModule().getPercentageExam();
-		Double percentageQuiz = progressionModule.getModule().getPercentageQuiz();
+		ModuleAffected module = progressionModule.getModule();
+		Double percentageAbsence = module.getPercentageAbsence();
+		Double percentageCour = module.getPercentageCour();
+		Double percentageExam = module.getPercentageExam();
+		Double percentageQuiz = module.getPercentageQuiz();
+		Double thresholdeCatchUp = (progressionModule.getStudent().getOrganization().getThresholdeCatchUp() * 100)
+				/ organization.getScale();
+		Double thresholdeSucccess = (progressionModule.getStudent().getOrganization().getThresholdeSucccess() * 100)
+				/ organization.getScale();
+		boolean firstSuscces = progressionModule.isFirstSuccess();
 
 		if (notesExam != null && notesExam.size() > 0) {
 			for (Double noteE : notesExam) {
@@ -261,28 +280,57 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 
 		noteFinal = (noteAbsence * percentageAbsence + noteCour * percentageCour + noteExam * percentageExam
 				+ noteQuiz * percentageQuiz) / 100;
-		progressionModule.setNoteFinal(noteFinal);
+
+		if (organization.getType().equals(TypeOrganizationEnum.HIGHER_EDUCATION)) {
+			if (progressionModule.getStatut() == null) {
+				boolean success = noteFinal >= thresholdeSucccess;
+				progressionModule.setFirsNote(noteFinal);
+				progressionModule.setFirstSuccess(success);
+				progressionModule.setSecondSuccess(success);
+				progressionModule.setNoteFinal(noteFinal);
+				progressionModule.setStatut(success ? StatutEnum.SUCCESS
+						: noteFinal < thresholdeCatchUp ? StatutEnum.FAILED : StatutEnum.CATCHING_UP);
+			} else if (!firstSuscces && progressionModule.getStatut().equals(StatutEnum.CATCHING_UP)) {
+				progressionModule.setNoteFinal(noteFinal);
+				progressionModule.setSecondSuccess(noteFinal >= thresholdeSucccess);
+				progressionModule.setStatut(noteFinal >= thresholdeSucccess ? StatutEnum.SUCCESS : StatutEnum.FAILED);
+			}
+
+		} else {
+			progressionModule.setStatut(noteFinal >= thresholdeSucccess ? StatutEnum.SUCCESS : StatutEnum.FAILED);
+			progressionModule.setFirsNote(noteFinal);
+			progressionModule.setNoteFinal(noteFinal);
+			progressionModule.setFirstSuccess(noteFinal >= thresholdeSucccess);
+			progressionModule.setSecondSuccess(noteFinal >= thresholdeSucccess);
+		}
+
 		progressionModuleRepository.save(progressionModule);
 
 	}
 
 	@Override
 	public List<Object> getAverageSuccessStudent(Long idTeacher, Long idGroup, Long idModule) {
-		List<Object> list=null;
-		if(idGroup>0&&idModule>0) {
-			list= progressionModuleRepository.countSuccessByTeacherAndGroupAndModule(idTeacher, idGroup,idModule);
+		UserDTO user = userService.findById(idTeacher);
+		LocalDate current = LocalDate.now();
+		SessionDTO sessionDTO = sessionService.findCurrentSessionByOranization(user.getOrganization().getId(), current);
+		List<Object> list = null;
+		if (idGroup > 0 && idModule > 0) {
+			list = progressionModuleRepository.countSuccessByTeacherAndGroupAndModule(idTeacher, idGroup, idModule,sessionDTO.getId());
+		} else if (idGroup > 0) {
+			list = progressionModuleRepository.countSuccessByTeacherAndGroup(idTeacher, idGroup,sessionDTO.getId());
+		} else if (idModule > 0) {
+			list = progressionModuleRepository.countSuccessByTeacherAndModule(idTeacher, idModule,sessionDTO.getId());
+		} else {
+			list = progressionModuleRepository.countSuccessByTeacher(idTeacher,sessionDTO.getId());
 		}
-		else if(idGroup>0) {
-			list=progressionModuleRepository.countSuccessByTeacherAndGroup(idTeacher, idGroup);
-		}
-		else if(idModule>0) {
-			list=progressionModuleRepository.countSuccessByTeacherAndModule(idTeacher, idModule);
-		}
-		else {
-			list=progressionModuleRepository.countSuccessByTeacher(idTeacher);
-		}
-		
+
 		return list;
+	}
+
+	@Override
+	public List<ProgressionModule> findByModuleAndSecondNotSuccess(Long idModule) {
+
+		return progressionModuleRepository.findByModuleAndSecondNotSuccess(idModule);
 	}
 
 }

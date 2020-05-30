@@ -10,10 +10,9 @@ import org.springframework.stereotype.Service;
 import com.learning.dao.ModuleAffectedRepository;
 import com.learning.dao.ModuleAffectedRepositorySearchCriteria;
 import com.learning.dto.ModuleAffectedDTO;
-import com.learning.dto.UserDTO;
 import com.learning.model.Group;
 import com.learning.model.ModuleAffected;
-import com.learning.model.RoleName;
+import com.learning.model.Session;
 import com.learning.model.User;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
@@ -21,6 +20,7 @@ import com.learning.service.GroupService;
 import com.learning.service.ModuleAffectedService;
 import com.learning.service.ModuleService;
 import com.learning.service.ProgressionModuleService;
+import com.learning.service.SessionService;
 import com.learning.service.UserService;
 
 @Service
@@ -40,6 +40,8 @@ public class ModuleAffectedServiceImpl implements ModuleAffectedService {
 	private ProgressionModuleService progressionModuleService;
 	@Autowired
 	private ModuleService moduleService;
+	@Autowired
+	private SessionService sessionService;
 
 	@Override
 	public ModuleAffectedDTO save(ModuleAffectedDTO moduleAffectedDTO) {
@@ -94,6 +96,7 @@ public class ModuleAffectedServiceImpl implements ModuleAffectedService {
 		moduleAffected.setPercentageExam(moduleAffectedDTO.getPercentageExam());
 		moduleAffected.setPercentageQuiz(moduleAffectedDTO.getPercentageQuiz());
 		moduleAffected.setScale(moduleAffectedDTO.getScale());
+
 		if (moduleAffectedDTO.getProfessor() != null) {
 			moduleAffected.setProfessor(userService.convertDTOtoModel(moduleAffectedDTO.getProfessor()));
 		}
@@ -101,10 +104,12 @@ public class ModuleAffectedServiceImpl implements ModuleAffectedService {
 		if (moduleAffectedDTO.getGroup() != null) {
 			moduleAffected.setGroup(groupService.convertDTOtoModel(moduleAffectedDTO.getGroup()));
 		}
-		if(moduleAffectedDTO.getModule()!=null) {
+		if (moduleAffectedDTO.getModule() != null) {
 			moduleAffected.setModule(moduleService.convertDTOtoModel(moduleAffectedDTO.getModule()));
 		}
-
+		if (moduleAffectedDTO.getSession() != null) {
+			moduleAffected.setSession(sessionService.convertDTOtoModel(moduleAffectedDTO.getSession()));
+		}
 		return moduleAffected;
 	}
 
@@ -123,6 +128,7 @@ public class ModuleAffectedServiceImpl implements ModuleAffectedService {
 		User user = moduleAffected.getProfessor();
 		Group group = moduleAffected.getGroup();
 		com.learning.model.Module module = moduleAffected.getModule();
+		Session session = moduleAffected.getSession();
 
 		if (user != null) {
 			moduleAffectedDTO.setProfessor(userService.convertModelToDTO(moduleAffected.getProfessor()));
@@ -134,7 +140,10 @@ public class ModuleAffectedServiceImpl implements ModuleAffectedService {
 		if (module != null) {
 			moduleAffectedDTO.setModule(moduleService.convertModelToDTO(module));
 		}
+		if (session != null) {
 
+			moduleAffectedDTO.setSession(sessionService.convertModelToDTO(session));
+		}
 		moduleAffectedDTO.setCreatedAt(moduleAffected.getCreatedAt());
 		moduleAffectedDTO.setUpdatedAt(moduleAffected.getUpdatedAt());
 		return moduleAffectedDTO;
@@ -259,9 +268,8 @@ public class ModuleAffectedServiceImpl implements ModuleAffectedService {
 
 	@Override
 	public void calculate(ModuleAffectedDTO moduleAffected) {
-		Long idGroup = moduleAffected.getGroup().getId();
-		List<UserDTO> students = userService.findByGroupAndRole(idGroup, RoleName.ROLE_STUDENT);
-		progressionModuleService.calculateNoteFinal(moduleAffected.getId(), students);
+	
+		progressionModuleService.calculateNoteFinal(moduleAffected.getId());
 
 	}
 

@@ -10,6 +10,14 @@ public class OrganizationDTO extends HistorizedDTO {
 
 	private List<LevelDTO> levels;
 
+	private String type;
+
+	private Double thresholdeCatchUp;
+
+	private Double thresholdeSucccess;
+
+	private Double scale;
+
 	public OrganizationDTO() {
 		super();
 	}
@@ -22,7 +30,6 @@ public class OrganizationDTO extends HistorizedDTO {
 		this.name = name;
 	}
 
-	
 	public List<BranchDTO> getBranchs() {
 		return branchs;
 	}
@@ -37,6 +44,39 @@ public class OrganizationDTO extends HistorizedDTO {
 
 	public void setLevels(List<LevelDTO> levels) {
 		this.levels = levels;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public Double getThresholdeCatchUp() {
+		return thresholdeCatchUp;
+	}
+
+	public void setThresholdeCatchUp(Double thresholdeCatchUp) {
+		this.thresholdeCatchUp = thresholdeCatchUp;
+	}
+
+	public Double getThresholdeSucccess() {
+		return thresholdeSucccess;
+	}
+
+	public void setThresholdeSucccess(Double thresholdeSucccess) {
+		this.thresholdeSucccess = thresholdeSucccess;
+	}
+
+	
+	public Double getScale() {
+		return scale;
+	}
+
+	public void setScale(Double scale) {
+		this.scale = scale;
 	}
 
 	@Override

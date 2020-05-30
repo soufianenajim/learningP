@@ -31,6 +31,10 @@ public class ModuleAffected extends Historized {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "module_id")
 	private Module module;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "session_id")
+	private Session session;
 
 	@Column(name = "is_launched", columnDefinition = "boolean default false", nullable = false)
 
@@ -189,10 +193,23 @@ public class ModuleAffected extends Historized {
 		this.module = module;
 	}
 
+	
+	public Session getSession() {
+		return session;
+	}
+
+	public void setSession(Session session) {
+		this.session = session;
+	}
+
 	@Override
 	public String toString() {
-		return "Module [name=" + name + ", user=" + professor + ", group=" + group + ", cours=" + cours + ", exams="
-				+ exams + "]";
+		return "ModuleAffected [name=" + name + ", professor=" + professor + ", group=" + group + ", module=" + module
+				+ ", session=" + session + ", isLaunched=" + isLaunched + ", coefficient=" + coefficient
+				+ ", percentageExam=" + percentageExam + ", percentageQuiz=" + percentageQuiz + ", percentageCour="
+				+ percentageCour + ", percentageAbsence=" + percentageAbsence + ", scale=" + scale + ", cours=" + cours
+				+ ", exams=" + exams + ", progressionModules=" + progressionModules + "]";
 	}
+
 
 }

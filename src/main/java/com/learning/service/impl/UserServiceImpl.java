@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -316,6 +318,16 @@ public class UserServiceImpl implements UserService {
 		} else {
 			return userRepository.countByGroupAndType(idGroup,RoleName.ROLE_STUDENT);
 		}
+	}
+	@Override
+	public UserDetailsImpl getUserPrincipal() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetailsImpl userPrinciPal;
+		if (principal instanceof UserDetailsImpl) {
+			userPrinciPal = ((UserDetailsImpl) principal);
+			return userPrinciPal;
+		}
+		return null;
 	}
 
 }

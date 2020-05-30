@@ -9,17 +9,19 @@ public class ModuleAffectedDTO extends HistorizedDTO {
 	private UserDTO professor;
 
 	private GroupDTO group;
-	
+
 	private ModuleDTO module;
+
+	private SessionDTO session;
 	
 	private boolean launched;
-	
+
 	private List<CourDTO> cours;
 
 	private List<ExamDTO> exams;
-	
+
 	private Long idOrganization;
-	
+
 	private boolean hasExam;
 
 	private double coefficient;
@@ -31,8 +33,9 @@ public class ModuleAffectedDTO extends HistorizedDTO {
 	private double percentageCour;
 
 	private double percentageAbsence;
-	
+
 	private double scale;
+
 	public ModuleAffectedDTO() {
 		super();
 	}
@@ -58,7 +61,6 @@ public class ModuleAffectedDTO extends HistorizedDTO {
 		this.name = name;
 	}
 
-	
 	public UserDTO getProfessor() {
 		return professor;
 	}
@@ -170,9 +172,14 @@ public class ModuleAffectedDTO extends HistorizedDTO {
 	public void setModule(ModuleDTO module) {
 		this.module = module;
 	}
-	
+
+	public SessionDTO getSession() {
+		return session;
+	}
+
+	public void setSession(SessionDTO session) {
+		this.session = session;
+	}
 	
 
-	
-	
 }

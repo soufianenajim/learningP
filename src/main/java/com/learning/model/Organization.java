@@ -11,19 +11,25 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "organization")
-public class Organization extends  Historized {
+public class Organization extends Historized {
 	private static final long serialVersionUID = -8858004000210805400L;
 
 	@Column(name = "name", length = 100)
 	private String name;
 
-	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<Branch> branchs;
-	
-	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+
+	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<Level> levels;
+
+	private TypeOrganizationEnum type;
+
+	private Double thresholdeCatchUp;
+
+	private Double thresholdeSucccess;
 	
-	
+	private Double scale;
 
 	public List<Branch> getBranchs() {
 		return branchs;
@@ -47,6 +53,39 @@ public class Organization extends  Historized {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Double getThresholdeCatchUp() {
+		return thresholdeCatchUp;
+	}
+
+	public void setThresholdeCatchUp(Double thresholdeCatchUp) {
+		this.thresholdeCatchUp = thresholdeCatchUp;
+	}
+
+	public TypeOrganizationEnum getType() {
+		return type;
+	}
+
+	public void setType(TypeOrganizationEnum type) {
+		this.type = type;
+	}
+
+	public Double getThresholdeSucccess() {
+		return thresholdeSucccess;
+	}
+
+	public void setThresholdeSucccess(Double thresholdeSucccess) {
+		this.thresholdeSucccess = thresholdeSucccess;
+	}
+	
+
+	public Double getScale() {
+		return scale;
+	}
+
+	public void setScale(Double scale) {
+		this.scale = scale;
 	}
 
 	@Override

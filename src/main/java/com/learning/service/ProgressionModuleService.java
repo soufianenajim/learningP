@@ -16,8 +16,10 @@ public interface ProgressionModuleService extends CrudService<ProgressionModule,
 
 	void updateProgressionModule(Long idModule, Long idStudent);
 
-	void calculateNoteFinal(Long idModule, List<UserDTO> students);
+	void calculateNoteFinal(Long idModule);
 
 	List<Object> getAverageSuccessStudent(Long idTeacher, Long idGroup, Long idModule);
+
+	List<ProgressionModule> findByModuleAndSecondNotSuccess(Long idModule);
 
 }

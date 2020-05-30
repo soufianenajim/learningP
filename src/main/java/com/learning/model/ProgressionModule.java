@@ -25,10 +25,18 @@ public class ProgressionModule extends Historized {
 
 	private Double progressionCour;
 
-    private Double progressionExamQuiz;
-    @Column(columnDefinition = "double default 100.0")
-    private Double progressionAbsence;
+	private Double progressionExamQuiz;
+	@Column(columnDefinition = "double default 100.0")
+	private Double progressionAbsence;
 
+	private Double firsNote;
+
+	private boolean firstSuccess;
+
+	private StatutEnum statut;
+
+	private boolean secondSuccess;
+	
 	private Double noteFinal;
 
 	public ProgressionModule() {
@@ -60,9 +68,6 @@ public class ProgressionModule extends Historized {
 		this.progressionCour = progressionCour;
 	}
 
-
-
-
 	public Double getNoteFinal() {
 		return noteFinal;
 	}
@@ -87,8 +92,38 @@ public class ProgressionModule extends Historized {
 		this.progressionAbsence = progressionAbsence;
 	}
 
-	
+	public boolean isFirstSuccess() {
+		return firstSuccess;
+	}
 
+	public void setFirstSuccess(boolean firstSuccess) {
+		this.firstSuccess = firstSuccess;
+	}
+
+	public boolean isSecondSuccess() {
+		return secondSuccess;
+	}
+
+	public void setSecondSuccess(boolean secondSuccess) {
+		this.secondSuccess = secondSuccess;
+	}
+
+	public StatutEnum getStatut() {
+		return statut;
+	}
+
+	public void setStatut(StatutEnum statut) {
+		this.statut = statut;
+	}
+
+	public Double getFirsNote() {
+		return firsNote;
+	}
+
+	public void setFirsNote(Double firsNote) {
+		this.firsNote = firsNote;
+	}
+	
 	
 
 }

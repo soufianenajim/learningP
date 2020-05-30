@@ -14,6 +14,7 @@ import com.learning.dto.OrganizationDTO;
 import com.learning.model.Branch;
 import com.learning.model.Level;
 import com.learning.model.Organization;
+import com.learning.model.TypeOrganizationEnum;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.BranchService;
@@ -29,7 +30,6 @@ public class OranizationServiceImpl implements OrganizationService {
 	private BranchService branchService;
 	@Autowired
 	private LevelService levelService;
-
 	// save or update
 	@Override
 	public OrganizationDTO save(OrganizationDTO organizationDTO) {
@@ -81,7 +81,10 @@ public class OranizationServiceImpl implements OrganizationService {
 		Organization organization = new Organization();
 		organization.setId(organizationDTO.getId());
 		organization.setName(organizationDTO.getName());
-
+		organization.setThresholdeCatchUp(organizationDTO.getThresholdeCatchUp());
+		organization.setThresholdeSucccess(organizationDTO.getThresholdeSucccess());
+		organization.setType(TypeOrganizationEnum.valueOf(organizationDTO.getType()));
+		organization.setScale(organizationDTO.getScale());
 		return organization;
 	}
 
@@ -90,6 +93,10 @@ public class OranizationServiceImpl implements OrganizationService {
 		OrganizationDTO organizationDTO = new OrganizationDTO();
 		organizationDTO.setId(organization.getId());
 		organizationDTO.setName(organization.getName());
+		organizationDTO.setThresholdeCatchUp(organization.getThresholdeCatchUp());
+		organizationDTO.setThresholdeSucccess(organization.getThresholdeSucccess());
+		organizationDTO.setType(organization.getType().toString());
+		organizationDTO.setScale(organization.getScale());
 		List<Branch> branchs = organization.getBranchs();
 		List<Level> levels = organization.getLevels();
 		if (branchs != null) {
