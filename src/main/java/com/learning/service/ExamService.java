@@ -19,6 +19,8 @@ public interface ExamService extends CrudService<Exam, ExamDTO> {
 
 	List<ExamDTO> findByUser(Long idUser);
 
-	Long countExamByTeacherAndGroupAndType(Long idTeacher,Long idGroup,String type);
+	Long countExamByTeacherAndGroupAndType(Long idTeacher, Long idGroup, String type);
+
+	void launch(Long idExam);
 
 }

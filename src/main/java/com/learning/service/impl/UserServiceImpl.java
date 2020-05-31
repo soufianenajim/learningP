@@ -23,6 +23,7 @@ import com.learning.model.Group;
 import com.learning.model.Organization;
 import com.learning.model.Role;
 import com.learning.model.RoleName;
+import com.learning.model.StatutEnum;
 import com.learning.model.User;
 import com.learning.model.base.ConstantBase;
 import com.learning.model.base.Demande;
@@ -328,6 +329,12 @@ public class UserServiceImpl implements UserService {
 			return userPrinciPal;
 		}
 		return null;
+	}
+
+	@Override
+	public List<UserDTO> findCatchingUpStudentByModule(Long idModule, StatutEnum statut) {
+	
+		return convertEntitiesToDtosWithOutRelation(userRepository.findCatchingUpStudentByModule(idModule, statut));
 	}
 
 }

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.learning.model.Group;
 import com.learning.model.RoleName;
+import com.learning.model.StatutEnum;
 import com.learning.model.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -37,5 +38,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	
 	@Query("select count(u.id) from User u JOIN u.groups ug where ug.id=?1 and  u.refRole.name=?2 ")
 	Long countByGroupAndType(Long idGroup,RoleName roleName);
+	
+	@Query("select distinct u from  User  u,ProgressionModule pm where u.id=pm.student.id and pm.module.id=?1 and pm.statut=?2")
+	List<User> findCatchingUpStudentByModule(Long idModule,StatutEnum statut);
+	
+	
 
 }

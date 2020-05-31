@@ -32,8 +32,8 @@ public interface ExamRepository extends JpaRepository<Exam, Long> {
 	@Query("SELECT count(e.id) FROM Exam e WHERE  e.module.id = ?1")
 	Long countExamByModule(Long idModule);
 
-	@Query("SELECT distinct e FROM Exam e,NoteExam ne WHERE ne.exam.id=e.id and e.startDateTime>=?1 ")
-	List<Exam> findByUser(LocalDateTime localDateTime);
+	@Query("SELECT distinct e FROM Exam e,NoteExam ne WHERE ne.exam.id=e.id and e.startDateTime>=?1 and ne.user.id=?2 ")
+	List<Exam> findByUser(LocalDateTime localDateTime,Long idUser);
 
 	@Query("SELECT count(e.id) from Exam e where e.module.professor.id=?1 and e.type=?2 ")
 	Long countExamByTeacherAndType(Long idTeacher, TypeEnumExam type);

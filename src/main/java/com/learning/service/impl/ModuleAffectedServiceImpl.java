@@ -142,7 +142,7 @@ public class ModuleAffectedServiceImpl implements ModuleAffectedService {
 		}
 		if (session != null) {
 
-			moduleAffectedDTO.setSession(sessionService.convertModelToDTO(session));
+			moduleAffectedDTO.setSession(sessionService.convertModelToDTOWithOuRelation(session));
 		}
 		moduleAffectedDTO.setCreatedAt(moduleAffected.getCreatedAt());
 		moduleAffectedDTO.setUpdatedAt(moduleAffected.getUpdatedAt());
@@ -210,9 +210,14 @@ public class ModuleAffectedServiceImpl implements ModuleAffectedService {
 		moduleAffectedDTO.setPercentageQuiz(moduleAffected.getPercentageQuiz());
 		moduleAffectedDTO.setScale(moduleAffected.getScale());
 		User professor = moduleAffected.getProfessor();
+		Session session = moduleAffected.getSession();
 		if (professor != null) {
 			moduleAffectedDTO.setProfessor(userService.convertModelToDTOWithOutRelation(professor));
 		}
+		if (session != null) {
+			moduleAffectedDTO.setSession(sessionService.convertModelToDTO(session));
+		}
+
 		return moduleAffectedDTO;
 	}
 
@@ -268,7 +273,7 @@ public class ModuleAffectedServiceImpl implements ModuleAffectedService {
 
 	@Override
 	public void calculate(ModuleAffectedDTO moduleAffected) {
-	
+
 		progressionModuleService.calculateNoteFinal(moduleAffected.getId());
 
 	}

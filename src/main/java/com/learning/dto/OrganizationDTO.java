@@ -2,14 +2,30 @@ package com.learning.dto;
 
 import java.util.List;
 
+import com.learning.model.Country;
+import com.learning.model.Percentage;
+
 public class OrganizationDTO extends HistorizedDTO {
 
 	private String name;
 
-	private List<BranchDTO> branchs;
+	private String adresse;
 
-	private List<LevelDTO> levels;
+	private Country country;
 
+	private Percentage percentage;
+
+	private String phoneNumber;
+
+	private String timeZone;
+
+	private int timeOfBlock;
+
+	private int nbrAttempt;
+
+	private boolean deletable;
+
+	private String logo;
 	private String type;
 
 	private Double thresholdeCatchUp;
@@ -18,17 +34,9 @@ public class OrganizationDTO extends HistorizedDTO {
 
 	private Double scale;
 
-	public OrganizationDTO() {
-		super();
-	}
+	private List<BranchDTO> branchs;
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+	private List<LevelDTO> levels;
 
 	public List<BranchDTO> getBranchs() {
 		return branchs;
@@ -46,12 +54,12 @@ public class OrganizationDTO extends HistorizedDTO {
 		this.levels = levels;
 	}
 
-	public String getType() {
-		return type;
+	public String getName() {
+		return name;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Double getThresholdeCatchUp() {
@@ -62,6 +70,14 @@ public class OrganizationDTO extends HistorizedDTO {
 		this.thresholdeCatchUp = thresholdeCatchUp;
 	}
 
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public Double getThresholdeSucccess() {
 		return thresholdeSucccess;
 	}
@@ -70,7 +86,6 @@ public class OrganizationDTO extends HistorizedDTO {
 		this.thresholdeSucccess = thresholdeSucccess;
 	}
 
-	
 	public Double getScale() {
 		return scale;
 	}
@@ -79,9 +94,81 @@ public class OrganizationDTO extends HistorizedDTO {
 		this.scale = scale;
 	}
 
+	public String getAdresse() {
+		return adresse;
+	}
+
+	public void setAdresse(String adresse) {
+		this.adresse = adresse;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getTimeZone() {
+		return timeZone;
+	}
+
+	public void setTimeZone(String timeZone) {
+		this.timeZone = timeZone;
+	}
+
+	public int getTimeOfBlock() {
+		return timeOfBlock;
+	}
+
+	public void setTimeOfBlock(int timeOfBlock) {
+		this.timeOfBlock = timeOfBlock;
+	}
+
+	public int getNbrAttempt() {
+		return nbrAttempt;
+	}
+
+	public void setNbrAttempt(int nbrAttempt) {
+		this.nbrAttempt = nbrAttempt;
+	}
+
+	public boolean isDeletable() {
+		return deletable;
+	}
+
+	public void setDeletable(boolean deletable) {
+		this.deletable = deletable;
+	}
+
+	public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
+
+	public Country getCountry() {
+		return country;
+	}
+
+	public void setCountry(Country country) {
+		this.country = country;
+	}
+
+	public Percentage getPercentage() {
+		return percentage;
+	}
+
+	public void setPercentage(Percentage percentage) {
+		this.percentage = percentage;
+	}
+
 	@Override
 	public String toString() {
-		return "OrganizationDTO [name=" + name + "]";
+		return "Organization [name=" + name + "]";
 	}
 
 }

@@ -30,6 +30,7 @@ public class OranizationServiceImpl implements OrganizationService {
 	private BranchService branchService;
 	@Autowired
 	private LevelService levelService;
+
 	// save or update
 	@Override
 	public OrganizationDTO save(OrganizationDTO organizationDTO) {
@@ -85,6 +86,17 @@ public class OranizationServiceImpl implements OrganizationService {
 		organization.setThresholdeSucccess(organizationDTO.getThresholdeSucccess());
 		organization.setType(TypeOrganizationEnum.valueOf(organizationDTO.getType()));
 		organization.setScale(organizationDTO.getScale());
+		organization.setAdresse(organizationDTO.getAdresse());
+		organization.setCountry(organizationDTO.getCountry());
+		organization.setPercentage(organizationDTO.getPercentage());
+		organization.setDeletable(organizationDTO.isDeletable());
+		if(organizationDTO.getLogo()!=null) {
+			organization.setLogo(organizationDTO.getLogo());	
+		}
+		organization.setNbrAttempt(organizationDTO.getNbrAttempt());
+		organization.setPhoneNumber(organizationDTO.getPhoneNumber());
+		organization.setTimeOfBlock(organizationDTO.getTimeOfBlock());
+		organization.setTimeZone(organizationDTO.getTimeZone());
 		return organization;
 	}
 
@@ -97,6 +109,15 @@ public class OranizationServiceImpl implements OrganizationService {
 		organizationDTO.setThresholdeSucccess(organization.getThresholdeSucccess());
 		organizationDTO.setType(organization.getType().toString());
 		organizationDTO.setScale(organization.getScale());
+		organizationDTO.setAdresse(organization.getAdresse());
+		organizationDTO.setCountry(organization.getCountry());
+		organizationDTO.setPercentage(organization.getPercentage());
+		organizationDTO.setDeletable(organization.isDeletable());
+		organizationDTO.setLogo(organization.getLogo());
+		organizationDTO.setNbrAttempt(organization.getNbrAttempt());
+		organizationDTO.setPhoneNumber(organization.getPhoneNumber());
+		organizationDTO.setTimeOfBlock(organization.getTimeOfBlock());
+		organizationDTO.setTimeZone(organization.getTimeZone());
 		List<Branch> branchs = organization.getBranchs();
 		List<Level> levels = organization.getLevels();
 		if (branchs != null) {

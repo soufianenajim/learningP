@@ -29,4 +29,6 @@ public interface SessionService extends CrudService<Session, SessionDTO> {
 	boolean existingSessionById(Long id, String name, Long idOrganization);
 
 	SessionDTO findCurrentSessionByOranization(Long idOrg,LocalDate localDate);
+	
+	SessionDTO convertModelToDTOWithOuRelation(Session session);
 }

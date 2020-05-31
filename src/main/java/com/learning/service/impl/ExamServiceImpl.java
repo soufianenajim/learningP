@@ -18,6 +18,7 @@ import com.learning.model.Exam;
 import com.learning.model.ModuleAffected;
 import com.learning.model.Question;
 import com.learning.model.RoleName;
+import com.learning.model.StatutEnum;
 import com.learning.model.TypeEnumExam;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
@@ -51,8 +52,7 @@ public class ExamServiceImpl implements ExamService {
 		if (examDTO.getQuestions() != null) {
 			questionService.saveQuestionsByExam(examDTO.getQuestions(), exam);
 		}
-		if (examDTO.getId() == null)
-			launchExam(exam);
+
 		return convertModelToDTO(exam);
 	}
 
@@ -199,7 +199,7 @@ public class ExamServiceImpl implements ExamService {
 	@Override
 	public List<ExamDTO> findByUser(Long idUser) {
 		LocalDateTime now = LocalDateTime.now();
-		List<Exam> exams = examRepository.findByUser(now);
+		List<Exam> exams = examRepository.findByUser(now,idUser);
 		return convertEnititiesToDTOsWithoutQuestion(exams);
 	}
 
@@ -209,15 +209,28 @@ public class ExamServiceImpl implements ExamService {
 		return list.stream().map(e -> convertModelToDTOWithoutQuestion(e)).collect(Collectors.toList());
 	}
 
-	void launchExam(Exam exam) {
-		exam.setLaunched(true);
-		examRepository.save(exam);
-		ModuleAffected module = exam.getModule();
-		Long idGroup = moduleService.getGroupByModule(module.getId());
-		List<UserDTO> students = userService.findByGroupAndRole(idGroup, RoleName.ROLE_STUDENT);
-		if (students != null) {
-			noteExamService.saveByExamAndStudent(exam, students);
+	@Override
+	public void launch(Long idExam) {
+		Optional<Exam> optional = examRepository.findById(idExam);
+		if (optional.isPresent()) {
+			List<UserDTO> students = null;
+			Exam exam = optional.get();
+			exam.setLaunched(true);
+			examRepository.save(exam);
+			ModuleAffected module = exam.getModule();
+			if (exam.getType().toString().equals(StatutEnum.CATCHING_UP.toString())) {
+				students = userService.findCatchingUpStudentByModule(module.getId(), StatutEnum.CATCHING_UP);
+			} else {
+
+				Long idGroup = moduleService.getGroupByModule(module.getId());
+				students = userService.findByGroupAndRole(idGroup, RoleName.ROLE_STUDENT);
+			}
+
+			if (students != null) {
+				noteExamService.saveByExamAndStudent(exam, students);
+			}
 		}
+
 	}
 
 	@Override

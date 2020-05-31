@@ -2,5 +2,5 @@ package com.learning.model;
 
 public enum TypeEnumExam {
 
-	EXAM, QUIZ;
+	EXAM, QUIZ,CATCHING_UP;
 }

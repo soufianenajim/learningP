@@ -85,5 +85,17 @@ public class ExamResource {
 
 	}
 	
+	@GetMapping("launch" + "/{id}")
+	public ResponseEntity<?> launch(@PathVariable Long id) {
+		try {
+			examService.launch(id);
+			return new ResponseEntity<>(SecurityConstants.convertObjectToJson(ConstantBase.DONE), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+	
 
 }

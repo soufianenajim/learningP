@@ -79,4 +79,5 @@ public class OrganizationResource {
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
 }

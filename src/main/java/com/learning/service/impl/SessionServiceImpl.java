@@ -26,7 +26,7 @@ public class SessionServiceImpl implements SessionService {
 	private SessionRepository sessionRepository;
 
 	@Autowired
-	private OrganizationService courService;
+	private OrganizationService organizationService;
 
 	// save or update
 	@Override
@@ -89,7 +89,7 @@ public class SessionServiceImpl implements SessionService {
 		session.setEndDateCatchUp(sessionDTO.getEndDateCatchUp());
 
 		if (sessionDTO.getOrganization() != null) {
-			session.setOrganization(courService.convertDTOtoModel(sessionDTO.getOrganization()));
+			session.setOrganization(organizationService.convertDTOtoModel(sessionDTO.getOrganization()));
 		}
 		return session;
 	}
@@ -105,9 +105,9 @@ public class SessionServiceImpl implements SessionService {
 		sessionDTO.setEndDateExam(session.getEndDateExam());
 		sessionDTO.setStartDateCatchUp(session.getStartDateCatchUp());
 		sessionDTO.setEndDateCatchUp(session.getEndDateCatchUp());
-		Organization cour = session.getOrganization();
-		if (cour != null) {
-			sessionDTO.setOrganization(courService.convertModelToDTO(session.getOrganization()));
+		Organization organization = session.getOrganization();
+		if (organization != null) {
+			sessionDTO.setOrganization(organizationService.convertModelToDTO(organization));
 
 		}
 
@@ -226,6 +226,20 @@ public class SessionServiceImpl implements SessionService {
 	public SessionDTO findCurrentSessionByOranization(Long idOrg,LocalDate localDate) {
 		
 		return convertModelToDTO(sessionRepository.findCurrentByOrganization(idOrg, localDate));
+	}
+
+	@Override
+	public SessionDTO convertModelToDTOWithOuRelation(Session session) {
+		SessionDTO sessionDTO = new SessionDTO();
+		sessionDTO.setId(session.getId());
+		sessionDTO.setName(session.getName());
+		sessionDTO.setStartDate(session.getStartDate());
+		sessionDTO.setEndDate(session.getEndDate());
+		sessionDTO.setStartDateExam(session.getStartDateExam());
+		sessionDTO.setEndDateExam(session.getEndDateExam());
+		sessionDTO.setStartDateCatchUp(session.getStartDateCatchUp());
+		sessionDTO.setEndDateCatchUp(session.getEndDateCatchUp());
+		return sessionDTO;
 	}
 
 }

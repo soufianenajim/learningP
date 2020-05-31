@@ -6,7 +6,11 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -17,19 +21,43 @@ public class Organization extends Historized {
 	@Column(name = "name", length = 100)
 	private String name;
 
-	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-	private List<Branch> branchs;
+	private String adresse;
 
-	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-	private List<Level> levels;
+	@ManyToOne
+	@JoinColumn(name = "country_id")
+	private Country country;
 
+	private String phoneNumber;
+
+	private String timeZone;
+
+	@Column(name = "time_of_block", columnDefinition = "int default 5")
+	private int timeOfBlock;
+
+	@Column(name = "nbr_attempt", columnDefinition = "int default 3")
+	private int nbrAttempt;
+
+	@Column(updatable = false, columnDefinition = "boolean default true")
+	private boolean deletable;
+	@Lob
+	private String logo;
 	private TypeOrganizationEnum type;
 
 	private Double thresholdeCatchUp;
 
 	private Double thresholdeSucccess;
-	
+
 	private Double scale;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "percentage_id")
+	private Percentage percentage;
+
+	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	private List<Branch> branchs;
+
+	@OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	private List<Level> levels;
 
 	public List<Branch> getBranchs() {
 		return branchs;
@@ -78,7 +106,6 @@ public class Organization extends Historized {
 	public void setThresholdeSucccess(Double thresholdeSucccess) {
 		this.thresholdeSucccess = thresholdeSucccess;
 	}
-	
 
 	public Double getScale() {
 		return scale;
@@ -86,6 +113,79 @@ public class Organization extends Historized {
 
 	public void setScale(Double scale) {
 		this.scale = scale;
+	}
+
+	public String getAdresse() {
+		return adresse;
+	}
+
+	public void setAdresse(String adresse) {
+		this.adresse = adresse;
+	}
+
+	public Country getCountry() {
+		return country;
+	}
+
+	public void setCountry(Country country) {
+		this.country = country;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getTimeZone() {
+		return timeZone;
+	}
+
+	public void setTimeZone(String timeZone) {
+		this.timeZone = timeZone;
+	}
+
+	public int getTimeOfBlock() {
+		return timeOfBlock;
+	}
+
+	public void setTimeOfBlock(int timeOfBlock) {
+		this.timeOfBlock = timeOfBlock;
+	}
+
+	public int getNbrAttempt() {
+		return nbrAttempt;
+	}
+
+	public void setNbrAttempt(int nbrAttempt) {
+		this.nbrAttempt = nbrAttempt;
+	}
+
+	public boolean isDeletable() {
+		return deletable;
+	}
+
+	public void setDeletable(boolean deletable) {
+		this.deletable = deletable;
+	}
+
+	public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
+	
+
+	public Percentage getPercentage() {
+		return percentage;
+	}
+
+	public void setPercentage(Percentage percentage) {
+		this.percentage = percentage;
 	}
 
 	@Override
