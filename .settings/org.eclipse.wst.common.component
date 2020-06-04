@@ -10,6 +10,7 @@
         <wb-resource deploy-path="/" source-path="/src/main/resources"/>
                 
         <wb-resource deploy-path="/" source-path="/target/generated-sources/annotations"/>
+        <wb-resource deploy-path="/" source-path="/uploads"/>
                     
     
     </wb-module>

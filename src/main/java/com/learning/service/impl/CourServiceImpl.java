@@ -1,28 +1,37 @@
 package com.learning.service.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.learning.dao.AttachementFileRepository;
 import com.learning.dao.CourRepository;
 import com.learning.dao.CourRepositorySearchCriteria;
+import com.learning.dto.AttachmentFileDTO;
 import com.learning.dto.CourDTO;
 import com.learning.dto.UserDTO;
+import com.learning.model.AttachmentFile;
 import com.learning.model.Cour;
 import com.learning.model.Exercices;
 import com.learning.model.ModuleAffected;
+import com.learning.model.Organization;
 import com.learning.model.RoleName;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.CourService;
 import com.learning.service.ExercicesService;
 import com.learning.service.ModuleAffectedService;
+import com.learning.service.OrganizationService;
 import com.learning.service.ProgressionCourService;
 import com.learning.service.ProgressionModuleService;
 import com.learning.service.UserService;
+import com.learning.util.UtilClass;
 
 @Service
 public class CourServiceImpl implements CourService {
@@ -43,6 +52,14 @@ public class CourServiceImpl implements CourService {
 	private ProgressionModuleService progressionModuleService;
 	@Autowired
 	private CourRepositorySearchCriteria courRepositorySearchCriteria;
+
+	@Autowired
+	private UtilClass utilClass;
+
+	@Autowired
+	private OrganizationService organizationService;
+	@Autowired
+	private AttachementFileRepository attachementFileRepository;
 
 	// save or update
 	@Override
@@ -108,11 +125,15 @@ public class CourServiceImpl implements CourService {
 		courDTO.setName(cour.getName());
 		courDTO.setContent(cour.getContent());
 		courDTO.setLaunched(cour.isLaunched());
-		ModuleAffected module = cour.getModule();
 
+		ModuleAffected module = cour.getModule();
+		List<AttachmentFile> attachmentFiles = cour.getAttachmentFiles();
 		if (module != null) {
 			courDTO.setModule(moduleService.convertModelToDTO(cour.getModule()));
 
+		}
+		if (attachmentFiles != null) {
+			courDTO.setAttachmentFiles(converEntitiesToDtos(attachmentFiles));
 		}
 
 		courDTO.setCreatedAt(cour.getCreatedAt());
@@ -190,9 +211,13 @@ public class CourServiceImpl implements CourService {
 		courDTO.setId(cour.getId());
 		courDTO.setName(cour.getName());
 		courDTO.setContent(cour.getContent());
+		List<AttachmentFile> attachmentFiles = cour.getAttachmentFiles();
 		List<Exercices> exercices = cour.getExercices();
 		if (exercices != null) {
 			courDTO.setExercices(exercicesService.convertEntitiesToDtos(exercices));
+		}
+		if (attachmentFiles != null) {
+			courDTO.setAttachmentFiles(converEntitiesToDtos(attachmentFiles));
 		}
 		courDTO.setCreatedAt(cour.getCreatedAt());
 		courDTO.setUpdatedAt(cour.getUpdatedAt());
@@ -274,6 +299,77 @@ public class CourServiceImpl implements CourService {
 
 		return idGroup > 0 ? courRepository.countCourByTeacherAndGroup(idTeacher, idGroup)
 				: courRepository.countCourByTeacher(idTeacher);
+	}
+
+	@Override
+	public CourDTO saveWithFile(CourDTO courDTO, List<MultipartFile> files) {
+		if (courDTO.getId() != null) {
+			if (!existingCourById(courDTO.getId(), courDTO.getName(), courDTO.getModule().getId()))
+				return null;
+		} else if (!existingCour(courDTO.getName(), courDTO.getModule().getId()))
+			return null;
+		Cour cour = convertDTOtoModel(courDTO);
+		cour = courRepository.save(cour);
+		Organization organization = cour.getModule().getProfessor() != null
+				&& cour.getModule().getProfessor().getOrganization() != null
+						? cour.getModule().getProfessor().getOrganization()
+						: organizationService.findByModule(cour.getModule().getId());
+		try {
+			List<AttachmentFile> list = new ArrayList<>();
+			for (MultipartFile multipartFile : files) {
+				String fullPath = utilClass.constructPath(cour, multipartFile.getOriginalFilename(), organization);
+				utilClass.fileUploadWithFullPath(multipartFile.getInputStream(), fullPath);
+				if (attachementFileRepository.countByFileNameAndCour(cour.getId(),
+						multipartFile.getOriginalFilename()) == 0) {
+					AttachmentFile attachement = new AttachmentFile(fullPath, multipartFile.getOriginalFilename(),
+							cour);
+					attachementFileRepository.save(attachement);
+				}
+			}
+			cour.setAttachmentFiles(list);
+
+		} catch (Exception e) {
+			throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
+		}
+
+		return convertModelToDTO(cour);
+	}
+
+	@Override
+	public File load(Long id, String nameFile) {
+		AttachmentFile attachmentFile = attachementFileRepository.findByCourAndName(id, nameFile);
+
+		File file = new File(attachmentFile.getAttachmentPath());
+
+		if (file.exists()) {
+			return file;
+		} else {
+			throw new RuntimeException("Could not read the file!");
+		}
+
+	}
+
+	private List<AttachmentFileDTO> converEntitiesToDtos(List<AttachmentFile> list) {
+
+		return list.stream().map(e -> convertModelToDTO(e)).collect(Collectors.toList());
+
+	}
+
+	private AttachmentFileDTO convertModelToDTO(AttachmentFile attachmentFile) {
+
+		return new AttachmentFileDTO(attachmentFile.getId(), attachmentFile.getAttachmentPath(),
+				attachmentFile.getFileName());
+
+	}
+
+	@Override
+	public void deleteAttachment(Long idCour, String name) {
+		AttachmentFile attachmentFile = attachementFileRepository.findByCourAndName(idCour, name);
+
+		File file = new File(attachmentFile.getAttachmentPath());
+		utilClass.deleteFile(file);
+		attachementFileRepository.deleteAttachment(idCour, name);
+
 	}
 
 }

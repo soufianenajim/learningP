@@ -7,6 +7,7 @@ import com.learning.model.Organization;
 
 public interface OrganizationService extends CrudService<Organization, OrganizationDTO> {
 	List<OrganizationDTO> findAll();
+	Organization findByModule(Long idModule);
 
 
 }

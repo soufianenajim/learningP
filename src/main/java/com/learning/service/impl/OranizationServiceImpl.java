@@ -169,4 +169,10 @@ public class OranizationServiceImpl implements OrganizationService {
 		return convertEntitiesToDtos(list);
 	}
 
+	@Override
+	public Organization findByModule(Long idModule) {
+	
+		return organizationRepository.findByModule(idModule);
+	}
+
 }

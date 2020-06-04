@@ -24,7 +24,11 @@ public class Cour extends Historized {
 	@Lob
 	private String content;
 	
-	private boolean isLaunched;
+	private boolean launched;
+	
+	
+	@OneToMany(mappedBy = "cour", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<AttachmentFile> attachmentFiles;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "module_id")
@@ -70,8 +74,6 @@ public class Cour extends Historized {
 		this.module = module;
 	}
 
-
-
 	public String getContent() {
 		return content;
 	}
@@ -79,9 +81,6 @@ public class Cour extends Historized {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	
-
-
 	
 
 	public List<Exercices> getExercices() {
@@ -92,15 +91,24 @@ public class Cour extends Historized {
 		this.exercices = exercices;
 	}
 	
-	
-
-	
 	public boolean isLaunched() {
-		return isLaunched;
+		return launched;
 	}
 
-	public void setLaunched(boolean isLaunched) {
-		this.isLaunched = isLaunched;
+	public void setLaunched(boolean launched) {
+		this.launched = launched;
+	}
+	
+
+	
+	
+
+	public List<AttachmentFile> getAttachmentFiles() {
+		return attachmentFiles;
+	}
+
+	public void setAttachmentFiles(List<AttachmentFile> attachmentFiles) {
+		this.attachmentFiles = attachmentFiles;
 	}
 
 	@Override

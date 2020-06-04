@@ -16,11 +16,15 @@ public class CourDTO extends HistorizedDTO {
 
 	private ExercicesDTO td;
 
-	private boolean isLaunched;
+	private boolean launched;
 	
 	private boolean hasQuiz;
 	
 	private Long idTeacher;
+	
+	
+	
+	private List<AttachmentFileDTO> attachmentFiles;
 
 	public CourDTO() {
 		super();
@@ -87,12 +91,14 @@ public class CourDTO extends HistorizedDTO {
 		this.td = td;
 	}
 
+	
+
 	public boolean isLaunched() {
-		return isLaunched;
+		return launched;
 	}
 
-	public void setLaunched(boolean isLaunched) {
-		this.isLaunched = isLaunched;
+	public void setLaunched(boolean launched) {
+		this.launched = launched;
 	}
 
 	public boolean isHasQuiz() {
@@ -110,6 +116,17 @@ public class CourDTO extends HistorizedDTO {
 	public void setIdTeacher(Long idTeacher) {
 		this.idTeacher = idTeacher;
 	}
+
+	
+	public List<AttachmentFileDTO> getAttachmentFiles() {
+		return attachmentFiles;
+	}
+
+	public void setAttachmentFiles(List<AttachmentFileDTO> attachmentFiles) {
+		this.attachmentFiles = attachmentFiles;
+	}
+	
+	
 	
 
 	

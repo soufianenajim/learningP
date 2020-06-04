@@ -28,10 +28,10 @@ public interface CourRepository extends JpaRepository<Cour, Long> {
 	@Query("SELECT c FROM Cour c WHERE  c.module.id = ?1")
 	List<Cour> findByModule(Long idModule);
 	
-	@Query("SELECT c FROM Cour c WHERE  c.module.id = ?1 and c.isLaunched is false")
+	@Query("SELECT c FROM Cour c WHERE  c.module.id = ?1 and c.launched is false")
 	List<Cour> findByModuleAndNotLaunched(Long idModule);
 	
-	@Query("SELECT c FROM Cour c WHERE  c.module.id = ?1 and c.isLaunched=?2")
+	@Query("SELECT c FROM Cour c WHERE  c.module.id = ?1 and c.launched=?2")
 	List<Cour> findByModuleAndLaunched(Long idModule, boolean launched);
 
 	@Query("SELECT c FROM Cour c WHERE LOWER(c.name) like lower(?1) and c.module.id=?2 ")
