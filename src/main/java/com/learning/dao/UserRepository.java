@@ -33,15 +33,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	List<User> findByNameContainingByExam(String name, Long idExam);
 
 	@Query("select count(u.id) FROM User u JOIN u.groups ug where ug in ?1 and   u.refRole.name=?2 ")
-	Long countStudentByTeacher(List<Group> groups,RoleName roleName);
-	
-	
-	@Query("select count(u.id) from User u JOIN u.groups ug where ug.id=?1 and  u.refRole.name=?2 ")
-	Long countByGroupAndType(Long idGroup,RoleName roleName);
-	
-	@Query("select distinct u from  User  u,ProgressionModule pm where u.id=pm.student.id and pm.module.id=?1 and pm.statut=?2")
-	List<User> findCatchingUpStudentByModule(Long idModule,StatutEnum statut);
-	
-	
+	Long countStudentByTeacher(List<Group> groups, RoleName roleName);
 
+	@Query("select count(u.id) from User u JOIN u.groups ug where ug.id=?1 and  u.refRole.name=?2 ")
+	Long countByGroupAndType(Long idGroup, RoleName roleName);
+
+	@Query("select distinct u from  User  u,ProgressionModule pm where u.id=pm.student.id and pm.module.id=?1 and pm.statut=?2")
+	List<User> findCatchingUpStudentByModule(Long idModule, StatutEnum statut);
+
+	@Query("select distinct u from  User  u where u.organization.id=?1")
+	List<User> findByOrganizaation(Long idOrganization);
 }

@@ -62,7 +62,6 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private ExamService examService;
-	
 
 	@Override
 	public UserDTO saveU(UserDTO userDTO) throws BusinessException {
@@ -316,9 +315,10 @@ public class UserServiceImpl implements UserService {
 			return userRepository.countStudentByTeacher(groupService.convertDtosToEntities(groups),
 					RoleName.ROLE_STUDENT);
 		} else {
-			return userRepository.countByGroupAndType(idGroup,RoleName.ROLE_STUDENT);
+			return userRepository.countByGroupAndType(idGroup, RoleName.ROLE_STUDENT);
 		}
 	}
+
 	@Override
 	public UserDetailsImpl getUserPrincipal() {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -332,8 +332,22 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserDTO> findCatchingUpStudentByModule(Long idModule, StatutEnum statut) {
-	
+
 		return convertEntitiesToDtosWithOutRelation(userRepository.findCatchingUpStudentByModule(idModule, statut));
+	}
+
+	@Override
+	public List<UserDTO> findAllByOrganisation(Long idOrg) {
+
+		return convertEntitiesToDtosWithOutRelation(userRepository.findByOrganizaation(idOrg));
+	}
+
+	@Override
+	public User findUserById(Long id) {
+		Optional<User> optional = userRepository.findById(id);
+
+		return optional.isPresent() ? optional.get() : null;
+
 	}
 
 }

@@ -13,6 +13,8 @@ import com.learning.security.services.UserDetailsImpl;
 public interface UserService extends CrudService<User, UserDTO> {
 
 	List<UserDTO> findAllProfessorByOrganisation(Long idOrg);
+	
+	List<UserDTO> findAllByOrganisation(Long idOrg);
 
 	User convertDTOtoModelWithOutRelation(UserDTO dto);
 
@@ -41,4 +43,6 @@ public interface UserService extends CrudService<User, UserDTO> {
 	 UserDetailsImpl getUserPrincipal();
 	 
 	 List<UserDTO> findCatchingUpStudentByModule(Long idModule,StatutEnum statut);
+	 
+	 User findUserById(Long id);
 }
