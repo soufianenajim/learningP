@@ -315,13 +315,14 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 		SessionDTO sessionDTO = sessionService.findCurrentSessionByOranization(user.getOrganization().getId(), current);
 		List<Object> list = null;
 		if (idGroup > 0 && idModule > 0) {
-			list = progressionModuleRepository.countSuccessByTeacherAndGroupAndModule(idTeacher, idGroup, idModule,sessionDTO.getId());
+			list = progressionModuleRepository.countSuccessByTeacherAndGroupAndModule(idTeacher, idGroup, idModule,
+					sessionDTO.getId());
 		} else if (idGroup > 0) {
-			list = progressionModuleRepository.countSuccessByTeacherAndGroup(idTeacher, idGroup,sessionDTO.getId());
+			list = progressionModuleRepository.countSuccessByTeacherAndGroup(idTeacher, idGroup, sessionDTO.getId());
 		} else if (idModule > 0) {
-			list = progressionModuleRepository.countSuccessByTeacherAndModule(idTeacher, idModule,sessionDTO.getId());
+			list = progressionModuleRepository.countSuccessByTeacherAndModule(idTeacher, idModule, sessionDTO.getId());
 		} else {
-			list = progressionModuleRepository.countSuccessByTeacher(idTeacher,sessionDTO.getId());
+			list = progressionModuleRepository.countSuccessByTeacher(idTeacher, sessionDTO.getId());
 		}
 
 		return list;
@@ -331,6 +332,19 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 	public List<ProgressionModule> findByModuleAndSecondNotSuccess(Long idModule) {
 
 		return progressionModuleRepository.findByModuleAndSecondNotSuccess(idModule);
+	}
+
+	@Override
+	public Long countModuleByStudent(Long idStudent) {
+		Long count = progressionModuleRepository.countModuleByStudent(idStudent);
+		return count != null ? count : 0;
+	}
+
+	@Override
+	public List<ModuleAffectedDTO> getModuleByStudent(Long idStudent) {
+		
+		return moduleService
+				.convertEntitiesToDtosWithOutRelation(progressionModuleRepository.getModuleByStudent(idStudent));
 	}
 
 }

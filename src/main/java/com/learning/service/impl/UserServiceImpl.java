@@ -337,9 +337,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserDTO> findAllByOrganisation(Long idOrg) {
+	public List<UserDTO> findAllByOrganisationWithoutUser(Long idOrg,Long idUser) {
 
-		return convertEntitiesToDtosWithOutRelation(userRepository.findByOrganizaation(idOrg));
+		return convertEntitiesToDtosWithOutRelation(userRepository.findAllByOrganisationWithoutUser(idOrg, idUser));
 	}
 
 	@Override

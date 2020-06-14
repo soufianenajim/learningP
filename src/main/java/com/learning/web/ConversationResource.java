@@ -13,83 +13,57 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.learning.dto.BranchDTO;
+import com.learning.dto.ConversationDTO;
 import com.learning.model.base.ConstantBase;
 import com.learning.model.base.Demande;
 import com.learning.security.SecurityConstants;
-import com.learning.service.BranchService;
+import com.learning.service.ConversationService;
+import com.learning.service.MessageService;
 
 @RestController
-@RequestMapping("/branch")
+@RequestMapping("/conversation")
 public class ConversationResource {
 
-	private static Logger LOGGER = LogManager.getLogger("BranchResource");
+	private static Logger LOGGER = LogManager.getLogger("ConversationResource");
 	@Autowired
-	BranchService branchService;
+	private ConversationService conversationService;
+	@Autowired
+	private MessageService messageService;
 
-	@PostMapping(ConstantBase.CRUD_REST_FIND_BY_CRITERE)
-	public ResponseEntity<?> findByCriteres(@RequestBody Demande<BranchDTO> demande) {
+	@GetMapping("countNotReadMsgs/{idUser1}/{idUser2}")
+	public ResponseEntity<?> countNotReadMsg(@PathVariable Long idUser1, @PathVariable Long idUser2) {
 		try {
-			return new ResponseEntity<>(branchService.findByCriteres(demande), HttpStatus.OK);
+			return new ResponseEntity<>(conversationService.countNotReadMsgByUser1AndUser2(idUser1, idUser2),
+					HttpStatus.OK);
 		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/branch" + ConstantBase.CRUD_REST_FIND_BY_CRITERE + " : {} ", e);
-			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
-	@GetMapping(ConstantBase.CRUD_REST_FIND_BY_ID + "/{id}")
-	public ResponseEntity<?> findById(@PathVariable Long id) {
-		try {
-			return new ResponseEntity<>(branchService.findById(id), HttpStatus.OK);
-		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/branch" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			LOGGER.error("Problem occored in api/conversation" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 	}
 
-	@DeleteMapping(ConstantBase.CRUD_REST_DELETE + "/{id}")
-	public ResponseEntity<?> deleteById(@PathVariable Long id) {
+	@GetMapping("find_Messages/{idUser1}/{idUser2}/{page}")
+	public ResponseEntity<?> findMessages(@PathVariable Long idUser1, @PathVariable Long idUser2,
+			@PathVariable int page) {
 		try {
-			branchService.deleteById(id);
+			return new ResponseEntity<>(messageService.findByUser1AndUser2(idUser1, idUser2,page), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/conversation" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
+	@GetMapping("read/{idUser1}/{idUser2}")
+	public ResponseEntity<?> read(@PathVariable Long idUser1, @PathVariable Long idUser2) {
+		try {
+			conversationService.read(idUser1, idUser2);
 			return new ResponseEntity<>(SecurityConstants.convertObjectToJson(ConstantBase.DONE), HttpStatus.OK);
 		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/branch" + ConstantBase.CRUD_REST_DELETE + " : {} ", e);
+			LOGGER.error("Problem occored in api/conversation" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+
 	}
 
-	@PostMapping(ConstantBase.CRUD_REST_SAVE_OR_UPDATE)
-	public ResponseEntity<?> save(@RequestBody BranchDTO branchDTO) {
-		try {
-
-			BranchDTO branch = branchService.save(branchDTO);
-			if (branch != null) {
-				return new ResponseEntity<>(branch, HttpStatus.CREATED);
-			}
-			return new ResponseEntity<>(HttpStatus.CONFLICT);
-		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/branch" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
-			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
-	@GetMapping(ConstantBase.CRUD_REST_FIND_ALL)
-	public ResponseEntity<?> findAll() {
-		try {
-			return new ResponseEntity<>(branchService.findAll(), HttpStatus.OK);
-		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
-			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-	@GetMapping("find-by-organization/{id}")
-	public ResponseEntity<?> findByOrganization(@PathVariable Long id) {
-		try {
-			return new ResponseEntity<>(branchService.findByOrganization(id), HttpStatus.OK);
-		} catch (Exception e) {
-			LOGGER.error("Problem occored in api/cour" + ConstantBase.CRUD_REST_SAVE_OR_UPDATE + " : {} ", e);
-			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
 }

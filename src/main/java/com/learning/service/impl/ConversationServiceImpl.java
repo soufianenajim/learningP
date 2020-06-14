@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.learning.dao.ConversationRepository;
 import com.learning.dto.ConversationDTO;
 import com.learning.model.Conversation;
-import com.learning.model.Conversation;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
 import com.learning.service.ConversationService;
@@ -87,6 +86,18 @@ public class ConversationServiceImpl implements ConversationService {
 	@Override
 	public Conversation saveConversation(Conversation conversation) {
 	return 	conversationRepository.save(conversation);
+		
+	}
+
+	@Override
+	public int countNotReadMsgByUser1AndUser2(Long idUser1, Long idUser2) {
+		Integer count =conversationRepository.countNotReadMsgByUser1AndUser2(idUser1, idUser2);
+		return count!=null?count:0;
+	}
+
+	@Override
+	public void read(Long idUser1, Long idUser2) {
+		conversationRepository.read(idUser1, idUser2);
 		
 	}
 

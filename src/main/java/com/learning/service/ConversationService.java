@@ -1,9 +1,7 @@
 package com.learning.service;
 
 import com.learning.dto.ConversationDTO;
-import com.learning.dto.MessageDTO;
 import com.learning.model.Conversation;
-import com.learning.model.Message;
 
 public interface ConversationService extends CrudService<Conversation, ConversationDTO> {
 
@@ -11,4 +9,7 @@ public interface ConversationService extends CrudService<Conversation, Conversat
 
 	Conversation saveConversation(Conversation conversation);
 
+	int countNotReadMsgByUser1AndUser2(Long idUser1, Long idUser2);
+
+	void read(Long idUser1, Long idUser2);
 }

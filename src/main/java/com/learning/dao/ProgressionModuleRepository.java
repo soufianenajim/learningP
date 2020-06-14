@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import com.learning.model.ModuleAffected;
 import com.learning.model.ProgressionModule;
 
 public interface ProgressionModuleRepository extends JpaRepository<ProgressionModule, Long> {
@@ -34,4 +35,9 @@ public interface ProgressionModuleRepository extends JpaRepository<ProgressionMo
 	@Query("Select pm from ProgressionModule pm where pm.module.id=?1  and pm.secondSuccess is false")
 	List<ProgressionModule> findByModuleAndSecondNotSuccess(Long idModule);
 
+	@Query("SELECT count(distinct pm) FROM ProgressionModule pm WHERE  pm.student.id=?1  ")
+	Long countModuleByStudent(Long idStudent);
+	
+	@Query("SELECT pm.module FROM ProgressionModule pm WHERE  pm.student.id=?1  ")
+	List<ModuleAffected> getModuleByStudent(Long idStudent);
 }

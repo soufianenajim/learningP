@@ -41,6 +41,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query("select distinct u from  User  u,ProgressionModule pm where u.id=pm.student.id and pm.module.id=?1 and pm.statut=?2")
 	List<User> findCatchingUpStudentByModule(Long idModule, StatutEnum statut);
 
-	@Query("select distinct u from  User  u where u.organization.id=?1")
-	List<User> findByOrganizaation(Long idOrganization);
+	@Query("select distinct u from  User  u where u.organization.id=?1 and u.id!=?2")
+	List<User> findAllByOrganisationWithoutUser(Long idOrg,Long idUser);
 }

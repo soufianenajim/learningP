@@ -16,5 +16,7 @@ public interface NoteExamService extends CrudService<NoteExam, NoteExamDTO> {
 
 	List<Double> findByUserAndModuleAndType(Long idUser, Long idModule, TypeEnumExam type);
 
-	List<Object> getAverageGoodAndBadGrades(Long idTeacher, Long idGroup,Long idModule);
+	List<Object> getAverageGoodAndBadGrades(Long idTeacher, Long idGroup, Long idModule);
+
+	Long countExamByStudentAndModuleAndType(Long idStudent, Long idModule, String type);
 }

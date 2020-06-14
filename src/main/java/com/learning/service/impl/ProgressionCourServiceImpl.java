@@ -36,7 +36,7 @@ public class ProgressionCourServiceImpl implements ProgressionCourService {
 	private CourService courService;
 	@Autowired
 	private ProgressionModuleService progressionModuleService;
-	
+
 	@Autowired
 	private ExercicesService exercicesService;
 
@@ -99,9 +99,8 @@ public class ProgressionCourServiceImpl implements ProgressionCourService {
 		progressionCour.setCourFinished(progressionCourDTO.isCourFinished());
 
 		progressionCour.setTdFinished(progressionCourDTO.isTdFinished());
-	
+
 		progressionCour.setProgression(progressionCourDTO.getProgression());
-	
 
 		if (progressionCourDTO.getCour() != null) {
 			progressionCour.setCour(courService.convertDTOtoModelWithOutModule(progressionCourDTO.getCour()));
@@ -120,14 +119,13 @@ public class ProgressionCourServiceImpl implements ProgressionCourService {
 		progressionCourDTO.setCourFinished(progressionCour.isCourFinished());
 
 		progressionCourDTO.setTdFinished(progressionCour.isTdFinished());
-		
+
 		progressionCourDTO.setProgression(progressionCour.getProgression());
-	
 
 		Cour cour = progressionCour.getCour();
 		User student = progressionCour.getStudent();
 		if (cour != null) {
-			CourDTO courDTO=courService.convertModelToDTOWithOutModule(cour);
+			CourDTO courDTO = courService.convertModelToDTOWithOutModule(cour);
 			courDTO.setHasQuiz(!exercicesService.existingExercice(courDTO.getId(), TypeEnum.QUIZ));
 			progressionCourDTO.setCour(courDTO);
 		}
@@ -171,14 +169,14 @@ public class ProgressionCourServiceImpl implements ProgressionCourService {
 
 	@Override
 	public void saveByCourAndStudents(Cour cour, List<UserDTO> students) {
-		
+
 		for (UserDTO student : students) {
 			ProgressionCour progressionCour = new ProgressionCour();
 			progressionCour.setCour(cour);
 			progressionCour.setStudent(userService.convertDTOtoModel(student));
 			progressionCour.setProgression(0.0);
 			progressionCourRepository.save(progressionCour);
-			
+
 			progressionModuleService.updateProgressionModule(cour.getModule().getId(), student.getId());
 		}
 
@@ -198,11 +196,16 @@ public class ProgressionCourServiceImpl implements ProgressionCourService {
 			progressionCour.setStudent(student);
 			progressionCour.setProgression(0.0);
 			progressionCourRepository.save(progressionCour);
-			
-			
+
 		}
 
-		
+	}
+
+	@Override
+	public Long countCourseByStudentAndModule(Long idStudent, Long idModule) {
+
+		return idModule != 0 ? progressionCourRepository.countCourseByModuleAndStudent(idStudent, idModule)
+				: progressionCourRepository.countCourseByStudent(idStudent);
 	}
 
 }

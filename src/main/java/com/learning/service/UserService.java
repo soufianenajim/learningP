@@ -14,7 +14,7 @@ public interface UserService extends CrudService<User, UserDTO> {
 
 	List<UserDTO> findAllProfessorByOrganisation(Long idOrg);
 	
-	List<UserDTO> findAllByOrganisation(Long idOrg);
+	List<UserDTO> findAllByOrganisationWithoutUser(Long idOrg,Long idUser);
 
 	User convertDTOtoModelWithOutRelation(UserDTO dto);
 

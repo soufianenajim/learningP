@@ -15,6 +15,7 @@ import com.learning.service.CourService;
 import com.learning.service.ExamService;
 import com.learning.service.ModuleAffectedService;
 import com.learning.service.NoteExamService;
+import com.learning.service.ProgressionCourService;
 import com.learning.service.ProgressionModuleService;
 import com.learning.service.UserService;
 
@@ -39,6 +40,8 @@ public class DashboardResource {
 	private NoteExamService noteExamService;
 	@Autowired
 	private ProgressionModuleService progressionModuleService;
+	@Autowired
+	private ProgressionCourService progressionCourService;
 
 	@GetMapping("/countModuleByTeacherAndGroupe/{idTeacher}/{idGroup}")
 	public ResponseEntity<?> countModuleByTeacherAndGroupe(@PathVariable Long idTeacher, @PathVariable Long idGroup) {
@@ -111,5 +114,43 @@ public class DashboardResource {
 		}
 
 	}
+
+	@GetMapping("/countModuleByStudent/{idStudent}")
+	public ResponseEntity<?> countModuleByStudent(@PathVariable Long idStudent) {
+		try {
+			return new ResponseEntity<>(progressionModuleService.countModuleByStudent(idStudent), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/branch" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
+	@GetMapping("/countCourseByStudentAndModule/{idStudent}/{idModule}")
+	public ResponseEntity<?> countCourseByStudentAndModule(@PathVariable Long idStudent, @PathVariable Long idModule) {
+		try {
+			return new ResponseEntity<>(progressionCourService.countCourseByStudentAndModule(idStudent, idModule), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/branch" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+	
+	@GetMapping("/countExamByStudentAndModule/{idStudent}/{idModule}/{type}")
+	public ResponseEntity<?> countExamByStudentAndModule(@PathVariable Long idStudent, @PathVariable Long idModule,
+			@PathVariable String type) {
+		try {
+			return new ResponseEntity<>(noteExamService.countExamByStudentAndModuleAndType(idStudent, idModule, type),
+					HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/branch" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+	
+	
+
 
 }

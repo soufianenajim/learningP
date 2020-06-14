@@ -73,7 +73,17 @@ public class ProgressionModuleResource {
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	@GetMapping("/getModuleByStudent/{idStudent}")
+	public ResponseEntity<?> getModuleByStudent(@PathVariable Long idStudent) {
+		try {
+			return new ResponseEntity<>(progressionModuleService.getModuleByStudent(idStudent),
+					HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/branch" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
+	}
 	
 	
 }

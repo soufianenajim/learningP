@@ -17,6 +17,16 @@ public class MessageDTO extends HistorizedDTO {
 
 	private ConversationDTO conversation;
 
+	public MessageDTO() {
+		super();
+	}
+
+	public MessageDTO(String message, LocalDateTime time) {
+		
+		this.message = message;
+		this.time = time;
+	}
+
 	public String getMessage() {
 		return message;
 	}

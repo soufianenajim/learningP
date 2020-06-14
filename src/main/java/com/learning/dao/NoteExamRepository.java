@@ -25,10 +25,16 @@ public interface NoteExamRepository extends JpaRepository<NoteExam, Long> {
 
 	@Query("Select ne.exam.name ,count(ne.id),sum(case when ne.score >= 50 then 1 else 0 end) from NoteExam ne where ne.exam.module.professor.id=?1 and ne.exam.module.group.id=?2 group by ne.exam.id")
 	List<Object> countSuccessByTeacherAndGroup(Long idTeacher, Long idGroup);
-	
+
 	@Query("Select ne.exam.name ,count(ne.id),sum(case when ne.score >= 50 then 1 else 0 end) from NoteExam ne where ne.exam.module.professor.id=?1 and ne.exam.module.id=?2 group by ne.exam.id")
 	List<Object> countSuccessByTeacherAndModule(Long idTeacher, Long idModule);
-	@Query("Select ne.exam.name ,count(ne.id),sum(case when ne.score >= 50 then 1 else 0 end) from NoteExam ne where ne.exam.module.professor.id=?1 and ne.exam.module.group.id=?2 and ne.exam.module.id=?3 group by ne.exam.id")
-	List<Object> countSuccessByTeacherAndGroupAndModule(Long idTeacher, Long idGroup,Long idModule);
 
+	@Query("Select ne.exam.name ,count(ne.id),sum(case when ne.score >= 50 then 1 else 0 end) from NoteExam ne where ne.exam.module.professor.id=?1 and ne.exam.module.group.id=?2 and ne.exam.module.id=?3 group by ne.exam.id")
+	List<Object> countSuccessByTeacherAndGroupAndModule(Long idTeacher, Long idGroup, Long idModule);
+
+	@Query("Select count(distinct ne) from NoteExam ne where ne.user.id=?1 and ne.exam.type=?2")
+	Long countExamByStudentAndType(Long idStudent, TypeEnumExam type);
+	
+	@Query("Select count(distinct ne) from NoteExam ne where ne.user.id=?1 and ne.exam.module.id=?2 and ne.exam.type=?3")
+	Long countExamByStudentAndModuleType(Long idStudent,Long idModule, TypeEnumExam type);
 }

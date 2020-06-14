@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 @Order(Ordered.HIGHEST_PRECEDENCE + 50)
 public class CrsFilter implements Filter {
 
-	private List<String> allowedOrigins = Arrays.asList("http://192.168.1.6:4200");
+	private List<String> allowedOrigins = Arrays.asList("http://localhost:4200");
 
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
 			throws IOException, ServletException {

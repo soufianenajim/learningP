@@ -179,22 +179,26 @@ public class NoteExamServiceImpl implements NoteExamService {
 	}
 
 	@Override
-	public List<Object> getAverageGoodAndBadGrades(Long idTeacher, Long idGroup,Long idModule) {
-		List<Object> list=null;
-		if(idGroup>0&&idModule>0) {
-			list= noteExamRepository.countSuccessByTeacherAndGroupAndModule(idTeacher, idGroup,idModule);
+	public List<Object> getAverageGoodAndBadGrades(Long idTeacher, Long idGroup, Long idModule) {
+		List<Object> list = null;
+		if (idGroup > 0 && idModule > 0) {
+			list = noteExamRepository.countSuccessByTeacherAndGroupAndModule(idTeacher, idGroup, idModule);
+		} else if (idGroup > 0) {
+			list = noteExamRepository.countSuccessByTeacherAndGroup(idTeacher, idGroup);
+		} else if (idModule > 0) {
+			list = noteExamRepository.countSuccessByTeacherAndModule(idTeacher, idModule);
+		} else {
+			list = noteExamRepository.countSuccessByTeacher(idTeacher);
 		}
-		else if(idGroup>0) {
-			list=noteExamRepository.countSuccessByTeacherAndGroup(idTeacher, idGroup);
-		}
-		else if(idModule>0) {
-			list=noteExamRepository.countSuccessByTeacherAndModule(idTeacher, idModule);
-		}
-		else {
-			list=noteExamRepository.countSuccessByTeacher(idTeacher);
-		}
-		
+
 		return list;
+	}
+
+	@Override
+	public Long countExamByStudentAndModuleAndType(Long idStudent, Long idModule, String type) {
+		TypeEnumExam typeEnum = TypeEnumExam.valueOf(type);
+		return idModule != 0 ? noteExamRepository.countExamByStudentAndModuleType(idStudent, idModule, typeEnum)
+				: noteExamRepository.countExamByStudentAndType(idStudent, typeEnum);
 	}
 
 }

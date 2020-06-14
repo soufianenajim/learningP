@@ -48,10 +48,10 @@ public class UserResource {
 		}
 
 	}
-	@GetMapping("find-by-organization/{id}")
-	public ResponseEntity<?> findByOrganization(@PathVariable Long id) {
+	@GetMapping("find-by-organization/{id}/{idUser}")
+	public ResponseEntity<?> findByOrganization(@PathVariable Long id,@PathVariable Long idUser) {
 		try {
-			return new ResponseEntity<>(userService.findAllByOrganisation(id), HttpStatus.OK);
+			return new ResponseEntity<>(userService.findAllByOrganisationWithoutUser(id,idUser), HttpStatus.OK);
 		} catch (Exception e) {
 			LOGGER.error("Problem occored in api/user" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);

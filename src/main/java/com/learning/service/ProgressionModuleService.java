@@ -22,4 +22,9 @@ public interface ProgressionModuleService extends CrudService<ProgressionModule,
 
 	List<ProgressionModule> findByModuleAndSecondNotSuccess(Long idModule);
 
+	Long countModuleByStudent(Long idStudent);
+	
+	List<ModuleAffectedDTO> getModuleByStudent(Long idStudent);
+	
+	
 }
