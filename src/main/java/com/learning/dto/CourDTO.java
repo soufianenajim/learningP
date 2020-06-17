@@ -22,7 +22,7 @@ public class CourDTO extends HistorizedDTO {
 	
 	private Long idTeacher;
 	
-	
+	private UserDTO student;
 	
 	private List<AttachmentFileDTO> attachmentFiles;
 
@@ -124,6 +124,14 @@ public class CourDTO extends HistorizedDTO {
 
 	public void setAttachmentFiles(List<AttachmentFileDTO> attachmentFiles) {
 		this.attachmentFiles = attachmentFiles;
+	}
+
+	public UserDTO getStudent() {
+		return student;
+	}
+
+	public void setStudent(UserDTO student) {
+		this.student = student;
 	}
 	
 	

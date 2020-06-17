@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -16,6 +17,9 @@ import org.springframework.util.StringUtils;
 import com.learning.dao.CourRepositorySearchCriteria;
 import com.learning.dto.CourDTO;
 import com.learning.model.Cour;
+import com.learning.model.Exam;
+import com.learning.model.NoteExam;
+import com.learning.model.ProgressionCour;
 import com.learning.model.base.Demande;
 import com.learning.model.base.SortOrder;
 
@@ -79,6 +83,16 @@ public class CourRepositorySearchCriteriaImpl implements CourRepositorySearchCri
 
 		if (!StringUtils.isEmpty(courDTO.getModule()) && courDTO.getModule() != null) {
 			predicates.add(cb.equal(cour.<Long>get("module"), courDTO.getModule().getId()));
+		}
+
+		if (!StringUtils.isEmpty(courDTO.getModule()) && courDTO.getModule() != null) {
+			predicates.add(cb.equal(cour.<Long>get("module"), courDTO.getModule().getId()));
+		}
+		if (!StringUtils.isEmpty(courDTO.getStudent()) && courDTO.getStudent() != null) {
+			Join<Cour, ProgressionCour> progressionCour = cour.join("progressionCours");
+
+			
+			predicates.add(cb.equal(progressionCour.<Long>get("student"), courDTO.getStudent().getId()));
 		}
        if(courDTO.getIdTeacher()!=null) {
     	   predicates.add(cb.equal(cour.<Long>get("module").get("professor"), courDTO.getIdTeacher()));

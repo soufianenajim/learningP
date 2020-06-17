@@ -40,6 +40,10 @@ public class Exam extends Historized {
 	
 	private double scale;
 	
+	
+	@OneToMany(mappedBy = "exam", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<NoteExam> noteExams;
+	
 	@OneToMany(mappedBy = "exam", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Question> questions;
 	
@@ -131,6 +135,16 @@ public class Exam extends Historized {
 
 	public void setScale(double scale) {
 		this.scale = scale;
+	}
+	
+	
+
+	public List<NoteExam> getNoteExams() {
+		return noteExams;
+	}
+
+	public void setNoteExams(List<NoteExam> noteExams) {
+		this.noteExams = noteExams;
 	}
 
 	@Override

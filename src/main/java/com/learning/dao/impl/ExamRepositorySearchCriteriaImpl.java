@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -17,8 +18,11 @@ import org.springframework.util.StringUtils;
 import com.learning.dao.ExamRepositorySearchCriteria;
 import com.learning.dto.ExamDTO;
 import com.learning.model.Exam;
+import com.learning.model.Group;
+import com.learning.model.NoteExam;
 import com.learning.model.TypeEnum;
 import com.learning.model.TypeEnumExam;
+import com.learning.model.User;
 import com.learning.model.base.Demande;
 import com.learning.model.base.SortOrder;
 
@@ -82,6 +86,16 @@ public class ExamRepositorySearchCriteriaImpl implements ExamRepositorySearchCri
 
 		if (!StringUtils.isEmpty(examDTO.getModule()) && examDTO.getModule() != null) {
 			predicates.add(cb.equal(exam.<Long>get("module"), examDTO.getModule().getId()));
+		}
+		
+		if (!StringUtils.isEmpty(examDTO.getProfessor()) && examDTO.getProfessor() != null) {
+			predicates.add(cb.equal(exam.<Long>get("module").get("professor"), examDTO.getProfessor().getId()));
+		}
+		if (!StringUtils.isEmpty(examDTO.getStudent()) && examDTO.getStudent() != null) {
+			Join<Exam, NoteExam> noteExam = exam.join("noteExams");
+
+			predicates.add(cb.equal(noteExam.<Long>get("user"),examDTO.getStudent().getId()));
+			
 		}
 
 		if (!StringUtils.isEmpty(examDTO.getType())) {

@@ -25,7 +25,7 @@ public interface ProgressionCourRepository extends JpaRepository<ProgressionCour
 	@Query("SELECT count(distinct pc) FROM ProgressionCour pc WHERE pc.student.id=?1")
 	Long countCourseByStudent(Long idStudent);
 	
-	@Query("SELECT count(distinct pc) FROM ProgressionCour pc WHERE pc.cour.module.id=?1 and  pc.student.id=?2")
+	@Query("SELECT count(distinct pc) FROM ProgressionCour pc WHERE pc.student.id=?1 and  pc.cour.module.id=?2")
 	Long countCourseByModuleAndStudent(Long idStudent,Long idModule);
 	
 }

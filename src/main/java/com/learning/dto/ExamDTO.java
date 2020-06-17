@@ -20,6 +20,10 @@ public class ExamDTO extends HistorizedDTO {
 
 	private boolean afterCurrentDate;
 
+	private UserDTO professor;
+
+	private UserDTO student;
+
 	public ExamDTO() {
 		super();
 	}
@@ -107,6 +111,22 @@ public class ExamDTO extends HistorizedDTO {
 
 	public void setAfterCurrentDate(boolean afterCurrentDate) {
 		this.afterCurrentDate = afterCurrentDate;
+	}
+
+	public UserDTO getProfessor() {
+		return professor;
+	}
+
+	public void setProfessor(UserDTO professor) {
+		this.professor = professor;
+	}
+
+	public UserDTO getStudent() {
+		return student;
+	}
+
+	public void setStudent(UserDTO student) {
+		this.student = student;
 	}
 	
 

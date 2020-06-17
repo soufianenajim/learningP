@@ -35,7 +35,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 			String jwt = parseJwt(request);
            
 			jwt = jwt != null ? jwt
-					: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwcm9mZUBlbWFpbC5jb20iLCJpYXQiOjE1OTIxMzExMDAsImV4cCI6MTU5MjIxNzUwMH0.X9y0MpRO6fiHy9B4M_kRqDJaKZPfp26p1iXFPMOryDizWHHwE-5rFEhYr4j6DDFpkRzfd19MezokHELQVZvDXQ";
+					: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyYWhtYUBnbWFpbC5jb20iLCJpYXQiOjE1OTIzOTE2MjIsImV4cCI6MTU5MjQ3ODAyMn0.OfaMimuuxpMNSK_1x8Ssk3Ga_234BYr1guoezThw7ST7EdkGP4987RleJ2JNKYG3nlIBzoOQm9fro7gAYrLO_g";
 
 			if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
 				String username = jwtUtils.getUserNameFromJwtToken(jwt);
