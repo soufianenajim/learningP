@@ -13,8 +13,8 @@ import com.learning.security.services.UserDetailsImpl;
 public interface UserService extends CrudService<User, UserDTO> {
 
 	List<UserDTO> findAllProfessorByOrganisation(Long idOrg);
-	
-	List<UserDTO> findAllByOrganisationWithoutUser(Long idOrg,Long idUser);
+
+	List<UserDTO> findAllByOrganisationWithoutUser(Long idOrg, Long idUser);
 
 	User convertDTOtoModelWithOutRelation(UserDTO dto);
 
@@ -25,24 +25,26 @@ public interface UserService extends CrudService<User, UserDTO> {
 	List<User> convertDtosToEntitiesWithOutRelation(List<UserDTO> list);
 
 	List<UserDTO> findByLevelAndBranch(Long idLevel, Long idBranch);
-	
-	List<UserDTO> findByGroup(Long idGroup);
-	
-	List<UserDTO> findByGroupAndRole(Long idGroup,RoleName role);
 
-	UserDTO convertFromUserDetailsToDTO(UserDetailsImpl userDetail,String token);
-	
-	 UserDTO saveU(UserDTO userDTO) throws BusinessException;
-	 
-	 NotificationDTO getNotificatonsById(Long id);
-	 
-	List<UserDTO> findByNameContainingByExam(String name,Long idExam);
-    
-	Long countStudentByTeacherAndGroup(Long idTeacher,Long idGroup);
-	
-	 UserDetailsImpl getUserPrincipal();
-	 
-	 List<UserDTO> findCatchingUpStudentByModule(Long idModule,StatutEnum statut);
-	 
-	 User findUserById(Long id);
+	List<UserDTO> findByGroup(Long idGroup);
+
+	List<UserDTO> findByGroupAndRole(Long idGroup, RoleName role);
+
+	UserDTO convertFromUserDetailsToDTO(UserDetailsImpl userDetail, String token);
+
+	UserDTO saveU(UserDTO userDTO) throws BusinessException;
+
+	NotificationDTO getNotificatonsById(Long id);
+
+	List<UserDTO> findByNameContainingByExam(String name, Long idExam);
+
+	Long countStudentByTeacherAndGroup(Long idTeacher, Long idGroup);
+
+	UserDetailsImpl getUserPrincipal();
+
+	List<UserDTO> findCatchingUpStudentByModule(Long idModule, StatutEnum statut);
+
+	User findUserById(Long id);
+
+	Long countUserByOrganizationAndLevelAndBranch(Long idOrg, Long idLevel, Long idBranch, Long idGroup, String type);
 }

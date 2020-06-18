@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.learning.dao.ModuleAffectedRepository;
 import com.learning.dao.ModuleAffectedRepositorySearchCriteria;
+import com.learning.dto.BranchDTO;
+import com.learning.dto.GroupDTO;
 import com.learning.dto.ModuleAffectedDTO;
 import com.learning.model.Group;
 import com.learning.model.ModuleAffected;
@@ -289,6 +291,19 @@ public class ModuleAffectedServiceImpl implements ModuleAffectedService {
 	public List<ModuleAffectedDTO> findByProfessorAndGroup(Long idProfessor, Long idGroup) {
 
 		return convertEntitiesToDtos(moduleAffectedRepository.findByProfessorAndGroup(idProfessor, idGroup));
+	}
+
+	@Override
+	public Long countByOrganizationAndLevelAndBranch(Long idOrg, Long idLevel, Long idBranch, Long idGroup) {
+		Demande<ModuleAffectedDTO> demande = new Demande<>();
+		ModuleAffectedDTO moduleAffected = new ModuleAffectedDTO();
+		moduleAffected.setIdOrganization(idOrg);
+		moduleAffected.setBranchId(idBranch);
+		moduleAffected.setLevelId(idLevel);
+		moduleAffected.setGroup(idGroup!=0?new GroupDTO(idGroup):null);
+		demande.setModel(moduleAffected);
+		Long count  =moduleAffectedRepositorySearchCriteria.countByCriteres(demande);
+		return count;
 	}
 
 }

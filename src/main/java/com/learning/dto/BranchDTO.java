@@ -12,6 +12,13 @@ public class BranchDTO extends HistorizedDTO {
 		super();
 
 	}
+	
+
+	public BranchDTO(Long id) {
+		super(id);
+	
+	}
+
 
 	public String getName() {
 		return name;

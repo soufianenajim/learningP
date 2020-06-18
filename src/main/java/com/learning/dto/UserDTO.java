@@ -13,6 +13,7 @@ public class UserDTO extends HistorizedDTO {
 	private String lastName;
 
 	private String phone;
+	
 	private String token;
 
 	private String tokenDate;
@@ -28,6 +29,12 @@ public class UserDTO extends HistorizedDTO {
 	private OrganizationDTO organization;
 
 	private Long groupId;
+
+	private Long levelId;
+
+	private Long branchId;
+	
+	private String role;
 
 	public UserDTO() {
 		super();
@@ -137,5 +144,30 @@ public class UserDTO extends HistorizedDTO {
 	public void setGroupId(Long groupId) {
 		this.groupId = groupId;
 	}
+
+	public Long getLevelId() {
+		return levelId;
+	}
+
+	public void setLevelId(Long levelId) {
+		this.levelId = levelId;
+	}
+
+	public Long getBranchId() {
+		return branchId;
+	}
+
+	public void setBranchId(Long branchId) {
+		this.branchId = branchId;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+	
 
 }

@@ -86,6 +86,16 @@ public class GroupResource {
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	@GetMapping("findByOrganizationAndLevelAndBranch/{idOrg}/{idLevel}/{idBranch}")
+	public ResponseEntity<?> findByOrganizationAndLevelAndBranch(@PathVariable Long idOrg,@PathVariable Long idLevel,@PathVariable Long idBranch) {
+		try {
+
+			return new ResponseEntity<>(groupService.findByOrganizationAndLevelAndBranch(idOrg, idLevel, idBranch), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/find-by-organization-level-branch : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	@GetMapping("find-by-user/{id}")
 	public ResponseEntity<?> findByUser(@PathVariable Long id) {
 		try {

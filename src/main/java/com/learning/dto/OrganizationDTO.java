@@ -37,6 +37,18 @@ public class OrganizationDTO extends HistorizedDTO {
 	private List<BranchDTO> branchs;
 
 	private List<LevelDTO> levels;
+	
+	
+
+	public OrganizationDTO() {
+		super();
+		
+	}
+
+	public OrganizationDTO(Long id) {
+		super(id);
+		
+	}
 
 	public List<BranchDTO> getBranchs() {
 		return branchs;

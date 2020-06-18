@@ -31,4 +31,7 @@ public interface ModuleAffectedService extends CrudService<ModuleAffected, Modul
 	void calculate(ModuleAffectedDTO module);
 
 	Long countModuleByTeacherAndGroup(Long idTeacher, Long idGroup);
+
+	Long countByOrganizationAndLevelAndBranch( Long idOrg,
+			 Long idLevel,  Long idBranch,Long idGroup);
 }

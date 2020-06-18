@@ -209,4 +209,10 @@ public class BranchServiceImpl implements BranchService {
 		return existBranch == null || existBranch.getId().equals(id);
 	}
 
+	@Override
+	public Long countByOrganization(Long idOrg) {
+	
+		return branchRepository.countByOrganization(idOrg);
+	}
+
 }

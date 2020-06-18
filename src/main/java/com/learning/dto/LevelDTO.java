@@ -7,8 +7,16 @@ public class LevelDTO extends HistorizedDTO {
 
 	private OrganizationDTO organization;
 
+	
+	
+
+
 	public LevelDTO() {
 		super();
+	}
+	public LevelDTO(Long id) {
+		super(id);
+	
 	}
 
 

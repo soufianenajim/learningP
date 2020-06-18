@@ -8,7 +8,6 @@ import com.learning.model.Organization;
 
 public interface LevelService extends CrudService<Level, LevelDTO> {
 	List<LevelDTO> findAll();
-	
 
 	void saveLevelsByOrganization(List<LevelDTO> levels, Organization organization);
 
@@ -19,14 +18,14 @@ public interface LevelService extends CrudService<Level, LevelDTO> {
 	List<LevelDTO> convertEntitiesToDtosWithOutOrganization(List<Level> list);
 
 	List<Level> convertDtosToEntitiesWithOutOrganization(List<LevelDTO> list);
-	
-   void deleteByOrganizationId(Long id);
-	
-   List<LevelDTO> findByOrganization(Long id);
-   
-   boolean existingLevel(String name, Long idOrganization);
 
-	boolean existingLevelById( Long id,String name, Long idOrganization);
-	
+	void deleteByOrganizationId(Long id);
 
+	List<LevelDTO> findByOrganization(Long id);
+
+	boolean existingLevel(String name, Long idOrganization);
+
+	boolean existingLevelById(Long id, String name, Long idOrganization);
+
+	Long countByOrganization(Long idOrg);
 }

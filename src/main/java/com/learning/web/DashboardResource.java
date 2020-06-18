@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.learning.model.base.ConstantBase;
+import com.learning.service.BranchService;
 import com.learning.service.CourService;
 import com.learning.service.ExamService;
+import com.learning.service.GroupService;
+import com.learning.service.LevelService;
 import com.learning.service.ModuleAffectedService;
 import com.learning.service.NoteExamService;
 import com.learning.service.ProgressionCourService;
@@ -42,6 +45,13 @@ public class DashboardResource {
 	private ProgressionModuleService progressionModuleService;
 	@Autowired
 	private ProgressionCourService progressionCourService;
+	@Autowired
+	private BranchService branchService;
+	@Autowired
+	private LevelService levelService;
+
+	@Autowired
+	private GroupService groupService;
 
 	@GetMapping("/countModuleByTeacherAndGroupe/{idTeacher}/{idGroup}")
 	public ResponseEntity<?> countModuleByTeacherAndGroupe(@PathVariable Long idTeacher, @PathVariable Long idGroup) {
@@ -129,14 +139,15 @@ public class DashboardResource {
 	@GetMapping("/countCourseByStudentAndModule/{idStudent}/{idModule}")
 	public ResponseEntity<?> countCourseByStudentAndModule(@PathVariable Long idStudent, @PathVariable Long idModule) {
 		try {
-			return new ResponseEntity<>(progressionCourService.countCourseByStudentAndModule(idStudent, idModule), HttpStatus.OK);
+			return new ResponseEntity<>(progressionCourService.countCourseByStudentAndModule(idStudent, idModule),
+					HttpStatus.OK);
 		} catch (Exception e) {
 			LOGGER.error("Problem occored in api/branch" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 	}
-	
+
 	@GetMapping("/countExamByStudentAndModule/{idStudent}/{idModule}/{type}")
 	public ResponseEntity<?> countExamByStudentAndModule(@PathVariable Long idStudent, @PathVariable Long idModule,
 			@PathVariable String type) {
@@ -149,8 +160,68 @@ public class DashboardResource {
 		}
 
 	}
-	
-	
 
+	@GetMapping("/countUseryOrganizationAndLevelAndBranchAndGroup/{idOrg}/{idLevel}/{idBranch}/{idGroup}/{role}")
+	public ResponseEntity<?> countUserByOrganizationAndLevelAndBranch(@PathVariable Long idOrg,
+			@PathVariable Long idLevel, @PathVariable Long idBranch, @PathVariable Long idGroup,
+			@PathVariable String role) {
+		try {
+			return new ResponseEntity<>(
+					userService.countUserByOrganizationAndLevelAndBranch(idOrg, idLevel, idBranch, idGroup, role),
+					HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/countUseryOrganizationAndLevelAndBranchAndGroup" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
+	@GetMapping("/countModuleyOrganizationAndLevelAndBranchAndGroup/{idOrg}/{idLevel}/{idBranch}/{idGroup}")
+	public ResponseEntity<?> countModuleyOrganizationAndLevelAndBranch(@PathVariable Long idOrg,
+			@PathVariable Long idLevel, @PathVariable Long idBranch, @PathVariable Long idGroup) {
+		try {
+			return new ResponseEntity<>(
+					moduleService.countByOrganizationAndLevelAndBranch(idOrg, idLevel, idBranch, idGroup),
+					HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/countModuleyOrganizationAndLevelAndBranchAndGroup" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
+	@GetMapping("countBranchByOrganization/{idOrg}")
+	public ResponseEntity<?> countBranchByOrganization(@PathVariable Long idOrg) {
+		try {
+			return new ResponseEntity<>(branchService.countByOrganization(idOrg), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/countBranchByOrganization" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
+	@GetMapping("countLevelByOrganization/{idOrg}")
+	public ResponseEntity<?> countLevelByOrganization(@PathVariable Long idOrg) {
+		try {
+			return new ResponseEntity<>(levelService.countByOrganization(idOrg), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/countLevelByOrganization" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
+	@GetMapping("countGroupByOrganizationAndLevelAndBranch/{idOrg}/{idLevel}/{idBranch}")
+	public ResponseEntity<?> countGroupByOrganizationAndLevelAndBranch(@PathVariable Long idOrg,
+			@PathVariable Long idLevel, @PathVariable Long idBranch) {
+		try {
+			return new ResponseEntity<>(groupService.countByOrganizationAndLevelAndBranch(idOrg, idLevel, idBranch), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/countGroupByOrganizationAndLevelAndBranch" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
 
 }

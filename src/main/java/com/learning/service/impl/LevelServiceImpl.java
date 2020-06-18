@@ -209,4 +209,10 @@ public class LevelServiceImpl implements LevelService {
 		return existLevel == null || existLevel.getId().equals(id);
 	}
 
+	@Override
+	public Long countByOrganization(Long idOrg) {
+	
+		return levelRepository.countByOrganization(idOrg);
+	}
+
 }

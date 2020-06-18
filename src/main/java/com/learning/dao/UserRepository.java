@@ -43,4 +43,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	@Query("select distinct u from  User  u where u.organization.id=?1 and u.id!=?2")
 	List<User> findAllByOrganisationWithoutUser(Long idOrg,Long idUser);
+	
+	@Query("select count(u.id) FROM User u where u.organization.id=?1 and   u.refRole.name=?2 ")
+	Long countUserRoleAndOrganization(Long idOrg, RoleName roleName);
 }

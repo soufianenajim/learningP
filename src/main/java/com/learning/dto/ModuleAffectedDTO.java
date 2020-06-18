@@ -13,7 +13,7 @@ public class ModuleAffectedDTO extends HistorizedDTO {
 	private ModuleDTO module;
 
 	private SessionDTO session;
-	
+
 	private boolean launched;
 
 	private List<CourDTO> cours;
@@ -35,6 +35,11 @@ public class ModuleAffectedDTO extends HistorizedDTO {
 	private double percentageAbsence;
 
 	private double scale;
+
+	private Long levelId;
+
+	private Long branchId;
+
 
 	public ModuleAffectedDTO() {
 		super();
@@ -180,6 +185,24 @@ public class ModuleAffectedDTO extends HistorizedDTO {
 	public void setSession(SessionDTO session) {
 		this.session = session;
 	}
+
+	public Long getBranchId() {
+		return branchId;
+	}
+
+	public void setBranchId(Long branchId) {
+		this.branchId = branchId;
+	}
+
+	public Long getLevelId() {
+		return levelId;
+	}
+
+	public void setLevelId(Long levelId) {
+		this.levelId = levelId;
+	}
+
+	
 	
 
 }

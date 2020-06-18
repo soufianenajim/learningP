@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.learning.dao.GroupRepository;
 import com.learning.dao.GroupRepositorySearchCriteria;
+import com.learning.dto.BranchDTO;
 import com.learning.dto.GroupDTO;
+import com.learning.dto.LevelDTO;
 import com.learning.model.Branch;
 import com.learning.model.Group;
 import com.learning.model.Level;
@@ -22,7 +24,6 @@ import com.learning.service.LevelService;
 @Service
 public class GroupServiceImpl implements GroupService {
 
-
 	@Autowired
 	private GroupRepository groupRepository;
 	@Autowired
@@ -34,20 +35,20 @@ public class GroupServiceImpl implements GroupService {
 
 	@Override
 	public GroupDTO save(GroupDTO groupDTO) {
-		if(groupDTO.getId() !=null) {
-			if(!existingGroupById(groupDTO.getId(),groupDTO.getName(), groupDTO.getLevel().getId(),groupDTO.getBranch().getId())) {
+		if (groupDTO.getId() != null) {
+			if (!existingGroupById(groupDTO.getId(), groupDTO.getName(), groupDTO.getLevel().getId(),
+					groupDTO.getBranch().getId())) {
 				return null;
-	
+
 			}
-		
-		}
-		else if(!existingGroup(groupDTO.getName(), groupDTO.getLevel().getId(),groupDTO.getBranch().getId())) {
-				return null;
-	
+
+		} else if (!existingGroup(groupDTO.getName(), groupDTO.getLevel().getId(), groupDTO.getBranch().getId())) {
+			return null;
+
 		}
 		Group group = convertDTOtoModel(groupDTO);
 		group = groupRepository.save(group);
-		
+
 		return convertModelToDTO(group);
 	}
 
@@ -119,7 +120,6 @@ public class GroupServiceImpl implements GroupService {
 	@Override
 	public void deleteById(Long id) {
 		groupRepository.deleteById(id);
-		
 
 	}
 
@@ -144,19 +144,19 @@ public class GroupServiceImpl implements GroupService {
 
 	@Override
 	public List<GroupDTO> findByOrganization(Long idOrganization) {
-		
+
 		return convertEntitiesToDtos(groupRepository.findByOrganization(idOrganization));
 	}
 
 	@Override
 	public boolean existingGroup(String name, Long idLevel, Long idBranch) {
-		Group existGroup = groupRepository.findByNameAndLevelAndBranch(name,idLevel,idBranch);
-		return existGroup == null || existGroup.getId()==null;
+		Group existGroup = groupRepository.findByNameAndLevelAndBranch(name, idLevel, idBranch);
+		return existGroup == null || existGroup.getId() == null;
 	}
 
 	@Override
 	public boolean existingGroupById(Long id, String name, Long idLevel, Long idBranch) {
-		Group existGroup = groupRepository.findByNameAndLevelAndBranch(name,idLevel,idBranch);
+		Group existGroup = groupRepository.findByNameAndLevelAndBranch(name, idLevel, idBranch);
 		return existGroup == null || existGroup.getId().equals(id);
 	}
 
@@ -165,6 +165,30 @@ public class GroupServiceImpl implements GroupService {
 		return convertEntitiesToDtos(groupRepository.findByUser(idUser));
 	}
 
-	
+	@Override
+	public List<GroupDTO> findByOrganizationAndLevelAndBranch(Long idOrganization, Long idLevel, Long idBranch) {
+
+		Demande<GroupDTO> demande = new Demande<>();
+		GroupDTO group = new GroupDTO();
+		group.setLevel(idLevel != 0 ? new LevelDTO(idLevel) : null);
+		group.setBranch(idBranch != 0 ? new BranchDTO(idBranch) : null);
+		group.setOrganizationId(idOrganization);
+		demande.setModel(group);
+		demande.setPage(100);
+		return convertEntitiesToDtos(groupRepositorySearchCriteria.findByCriteres(demande));
+
+	}
+
+	@Override
+	public Long countByOrganizationAndLevelAndBranch(Long idOrg, Long idLevel, Long idBranch) {
+		Demande<GroupDTO> demande = new Demande<>();
+		GroupDTO group = new GroupDTO();
+		group.setLevel(idLevel != 0 ? new LevelDTO(idLevel) : null);
+		group.setBranch(idBranch != 0 ? new BranchDTO(idBranch) : null);
+		group.setOrganizationId(idOrg);
+		demande.setModel(group);
+		demande.setPage(100);
+		return groupRepositorySearchCriteria.countByCriteres(demande);
+	}
 
 }

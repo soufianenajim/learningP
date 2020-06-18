@@ -16,6 +16,7 @@ import com.learning.dto.ExamDTO;
 import com.learning.dto.GroupDTO;
 import com.learning.dto.ModuleAffectedDTO;
 import com.learning.dto.NotificationDTO;
+import com.learning.dto.OrganizationDTO;
 import com.learning.dto.UserDTO;
 import com.learning.exceptions.BusinessException;
 import com.learning.model.Group;
@@ -337,7 +338,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserDTO> findAllByOrganisationWithoutUser(Long idOrg,Long idUser) {
+	public List<UserDTO> findAllByOrganisationWithoutUser(Long idOrg, Long idUser) {
 
 		return convertEntitiesToDtosWithOutRelation(userRepository.findAllByOrganisationWithoutUser(idOrg, idUser));
 	}
@@ -348,6 +349,20 @@ public class UserServiceImpl implements UserService {
 
 		return optional.isPresent() ? optional.get() : null;
 
+	}
+
+	@Override
+	public Long countUserByOrganizationAndLevelAndBranch(Long idOrg, Long idLevel, Long idBranch, Long idGroup,
+			String role) {
+		Demande<UserDTO> demande = new Demande<>();
+		UserDTO user = new UserDTO();
+		user.setOrganization(new OrganizationDTO(idOrg));
+		user.setLevelId(idLevel);
+		user.setBranchId(idBranch);
+		user.setGroupId(idGroup);
+		user.setRole(role);
+		demande.setModel(user);
+		return userRepositorySearchCriteria.countByCriteres(demande);
 	}
 
 }

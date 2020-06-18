@@ -1,14 +1,14 @@
 package com.learning.dto;
+
 public class GroupDTO extends HistorizedDTO {
 
-	
 	private String name;
-	
-	
+
 	private LevelDTO level;
-	
-	
+
 	private BranchDTO branch;
+
+	private Long organizationId;
 
 	public GroupDTO() {
 		super();
@@ -17,6 +17,11 @@ public class GroupDTO extends HistorizedDTO {
 	public GroupDTO(String name) {
 		super();
 		this.name = name;
+	}
+
+	public GroupDTO(Long id) {
+		super(id);
+
 	}
 
 	public Long getId() {
@@ -50,8 +55,13 @@ public class GroupDTO extends HistorizedDTO {
 	public void setBranch(BranchDTO branch) {
 		this.branch = branch;
 	}
-	
 
-	
+	public Long getOrganizationId() {
+		return organizationId;
+	}
+
+	public void setOrganizationId(Long organizationId) {
+		this.organizationId = organizationId;
+	}
 
 }

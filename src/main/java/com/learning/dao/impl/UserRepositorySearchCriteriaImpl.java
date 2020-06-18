@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 import com.learning.dao.UserRepositorySearchCriteria;
 import com.learning.dto.UserDTO;
 import com.learning.model.Group;
+import com.learning.model.RoleName;
 import com.learning.model.User;
 import com.learning.model.base.Demande;
 import com.learning.model.base.SortOrder;
@@ -95,12 +96,24 @@ public class UserRepositorySearchCriteriaImpl implements UserRepositorySearchCri
 		if (!StringUtils.isEmpty(userDTO.getOrganization()) && userDTO.getOrganization() != null) {
 			predicates.add(cb.equal(user.<Long>get("organization"), userDTO.getOrganization().getId()));
 		}
-		if (userDTO.getGroupId() != null) {
+		if(userDTO.getGroupId() != 0 ||userDTO.getLevelId() != 0 || userDTO.getBranchId()!=0) {
 			Join<User, Group> userGroup = user.join("groups");
+			if (userDTO.getGroupId() != 0) {
+				
+				predicates.add(cb.equal(userGroup.<Long>get("id"), userDTO.getGroupId()));
+			}
+			if (userDTO.getLevelId() != 0) {
+				predicates.add(cb.equal(userGroup.<Long>get("level"), userDTO.getLevelId()));
+			}
+			if (userDTO.getBranchId() != 0) {
+				predicates.add(cb.equal(userGroup.<Long>get("branch"), userDTO.getLevelId()));
+			}
 
-			predicates.add(cb.equal(userGroup.<Long>get("id"), userDTO.getGroupId()));
+
 		}
-
+				if (!StringUtils.isEmpty(userDTO.getRole())) {
+			predicates.add(cb.equal(user.<String>get("refRole").get("name"), RoleName.valueOf(userDTO.getRole()) ));
+		}
 		return predicates;
 	}
 

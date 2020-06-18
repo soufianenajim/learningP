@@ -26,4 +26,6 @@ public interface BranchService extends CrudService<Branch, BranchDTO> {
 	boolean existingBranch(String name, Long idOrganization);
 
 	boolean existingBranchById(Long id, String name, Long idOrganization);
+	
+	Long countByOrganization(Long idOrg);
 }

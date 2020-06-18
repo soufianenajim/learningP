@@ -21,10 +21,10 @@ import com.learning.model.base.SortOrder;
 
 @Repository
 public class ModuleAffectedRepositorySearchCriteriaImpl implements ModuleAffectedRepositorySearchCriteria {
-	
+
 	@Autowired
 	private EntityManager em;
-	
+
 	private CriteriaBuilder cb = null;
 
 	private Root<ModuleAffected> module = null;
@@ -57,7 +57,7 @@ public class ModuleAffectedRepositorySearchCriteriaImpl implements ModuleAffecte
 
 	@Override
 	public Long countByCriteres(Demande<ModuleAffectedDTO> demande) {
-		 cb = em.getCriteriaBuilder();
+		cb = em.getCriteriaBuilder();
 		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
 
 		module = cq.from(ModuleAffected.class);
@@ -74,16 +74,28 @@ public class ModuleAffectedRepositorySearchCriteriaImpl implements ModuleAffecte
 		ModuleAffectedDTO moduleDTO = demande.getModel();
 
 		if (!StringUtils.isEmpty(moduleDTO.getName())) {
-			predicates.add(
-					cb.like(cb.lower(module.<String>get("name")), "%" + moduleDTO.getName().toLowerCase() + "%"));
+			predicates
+					.add(cb.like(cb.lower(module.<String>get("name")), "%" + moduleDTO.getName().toLowerCase() + "%"));
 		}
 
 		if (!StringUtils.isEmpty(moduleDTO.getProfessor()) && moduleDTO.getProfessor() != null) {
 			predicates.add(cb.equal(module.<Long>get("professor"), moduleDTO.getProfessor().getId()));
 		}
-		if (!StringUtils.isEmpty(moduleDTO.getIdOrganization()) && moduleDTO.getIdOrganization() != null) {
-			predicates.add(cb.equal(module.<Long>get("group").get("level").get("organization"), moduleDTO.getIdOrganization()));
+		if (!StringUtils.isEmpty(moduleDTO.getGroup()) && moduleDTO.getGroup() != null) {
+			predicates.add(cb.equal(module.<Long>get("group"), moduleDTO.getGroup().getId()));
 		}
+		if (!StringUtils.isEmpty(moduleDTO.getIdOrganization()) && moduleDTO.getIdOrganization() != null) {
+			predicates.add(cb.equal(module.<Long>get("professor").get("organization"),
+					moduleDTO.getIdOrganization()));
+		}
+		if (moduleDTO.getBranchId() != 0) {
+			predicates.add(cb.equal(module.<Long>get("group").get("branch"), moduleDTO.getBranchId()));
+		}
+
+		if (moduleDTO.getLevelId() != 0) {
+			predicates.add(cb.equal(module.<Long>get("group").get("level"), moduleDTO.getLevelId()));
+		}
+		
 
 		return predicates;
 	}
