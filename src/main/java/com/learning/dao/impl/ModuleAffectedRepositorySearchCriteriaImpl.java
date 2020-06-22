@@ -85,17 +85,15 @@ public class ModuleAffectedRepositorySearchCriteriaImpl implements ModuleAffecte
 			predicates.add(cb.equal(module.<Long>get("group"), moduleDTO.getGroup().getId()));
 		}
 		if (!StringUtils.isEmpty(moduleDTO.getIdOrganization()) && moduleDTO.getIdOrganization() != null) {
-			predicates.add(cb.equal(module.<Long>get("professor").get("organization"),
-					moduleDTO.getIdOrganization()));
+			predicates.add(cb.equal(module.<Long>get("professor").get("organization"), moduleDTO.getIdOrganization()));
 		}
-		if (moduleDTO.getBranchId() != 0) {
+		if (moduleDTO.getBranchId() != null && moduleDTO.getBranchId() != 0) {
 			predicates.add(cb.equal(module.<Long>get("group").get("branch"), moduleDTO.getBranchId()));
 		}
 
-		if (moduleDTO.getLevelId() != 0) {
+		if (moduleDTO.getLevelId() != null && moduleDTO.getLevelId() != 0) {
 			predicates.add(cb.equal(module.<Long>get("group").get("level"), moduleDTO.getLevelId()));
 		}
-		
 
 		return predicates;
 	}

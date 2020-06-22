@@ -200,6 +200,16 @@ public class DashboardResource {
 		}
 
 	}
+	@GetMapping("countOnlineUserByOrganization/{idOrg}")
+	public ResponseEntity<?> countOnlineUserByOrganization(@PathVariable Long idOrg) {
+		try {
+			return new ResponseEntity<>(userService.countOnlineUserByOrganization(idOrg), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/countBranchByOrganization" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
 
 	@GetMapping("countLevelByOrganization/{idOrg}")
 	public ResponseEntity<?> countLevelByOrganization(@PathVariable Long idOrg) {
@@ -219,6 +229,21 @@ public class DashboardResource {
 			return new ResponseEntity<>(groupService.countByOrganizationAndLevelAndBranch(idOrg, idLevel, idBranch), HttpStatus.OK);
 		} catch (Exception e) {
 			LOGGER.error("Problem occored in api/countGroupByOrganizationAndLevelAndBranch" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
+			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+	
+	@GetMapping("/getAverageSuccessStudentByOrg/{idOrg}/{idLevel}/{idBranch}/{idGroup}")
+	public ResponseEntity<?> getAverageSuccessStudentByOrg(@PathVariable Long idOrg, @PathVariable Long idLevel,
+			@PathVariable Long idBranch,@PathVariable Long idGroup) {
+		
+		try {
+			return new ResponseEntity<>(
+					progressionModuleService.getAverageSuccessStudentByOrg(idOrg, idLevel, idBranch, idGroup),
+					HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("Problem occored in api/branch" + ConstantBase.CRUD_REST_FIND_BY_ID + " : {} ", e);
 			return new ResponseEntity<>(ConstantBase.SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 

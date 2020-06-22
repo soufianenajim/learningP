@@ -1,5 +1,6 @@
 package com.learning.model;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -7,10 +8,13 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "user")
@@ -57,13 +61,24 @@ public class User extends Historized {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "organization_id")
 	private Organization organization;
-	
+
 	@ManyToMany
-	@JoinTable(
-	  name = "user_group", 
-	  joinColumns = @JoinColumn(name = "user_id"), 
-	  inverseJoinColumns = @JoinColumn(name = "group_id"))
+	@JoinTable(name = "user_group", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "group_id"))
 	List<Group> groups;
+
+	@Column(name = "is_locked", columnDefinition = "boolean default false", nullable = false)
+	private boolean isLocked;
+
+	@Column(name = "is_new", columnDefinition = "boolean default false", nullable = false)
+	private boolean isNew;
+
+
+	@JsonIgnore
+	@Lob
+	private String oldToken;
+
+	@JsonIgnore
+	private LocalDateTime tokenDateCreation;
 
 	public User() {
 		super();
@@ -142,8 +157,6 @@ public class User extends Historized {
 		this.refRole = refRole;
 	}
 
-	
-
 	public Organization getOrganization() {
 		return organization;
 	}
@@ -159,9 +172,6 @@ public class User extends Historized {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	
-
-
 
 	public List<Group> getGroups() {
 		return groups;
@@ -171,12 +181,43 @@ public class User extends Historized {
 		this.groups = groups;
 	}
 
+	public boolean isLocked() {
+		return isLocked;
+	}
+
+	public void setLocked(boolean isLocked) {
+		this.isLocked = isLocked;
+	}
+
+	public boolean isNew() {
+		return isNew;
+	}
+
+	public void setNew(boolean isNew) {
+		this.isNew = isNew;
+	}
+
+	public String getOldToken() {
+		return oldToken;
+	}
+
+	public void setOldToken(String oldToken) {
+		this.oldToken = oldToken;
+	}
+
+	public LocalDateTime getTokenDateCreation() {
+		return tokenDateCreation;
+	}
+
+	public void setTokenDateCreation(LocalDateTime tokenDateCreation) {
+		this.tokenDateCreation = tokenDateCreation;
+	}
+
 	@Override
 	public String toString() {
 		return "User [email=" + email + ", password=" + password + ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", token=" + token + ", tokenDate=" + tokenDate + ", isOnline=" + isOnline + ", isOffline="
-				+ isOffline + ", refRole=" + refRole +  ", organization="
-				+ organization + "]";
+				+ isOffline + ", refRole=" + refRole + ", organization=" + organization + "]";
 	}
 
 }

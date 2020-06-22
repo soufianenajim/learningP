@@ -46,4 +46,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	
 	@Query("select count(u.id) FROM User u where u.organization.id=?1 and   u.refRole.name=?2 ")
 	Long countUserRoleAndOrganization(Long idOrg, RoleName roleName);
+	
+	User findByToken(String token);
+
+	User findByOldToken(String token);
+	
+	@Query("select u.isOnline,count(u.id) from  User  u where u.organization.id=?1 group by u.isOnline")
+	List<Object> countOnlineUserByOrganization(Long idOrg);
 }

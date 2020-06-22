@@ -58,7 +58,9 @@ public class Role extends Historized {
 
 	@Override
 	public String toString() {
-		return "Role [name=" + name + ", toString()=" + super.toString() + "]";
+		return "Role [name=" + name.toString() + ", isClient=" + isClient + "]";
 	}
+
+	
 
 }

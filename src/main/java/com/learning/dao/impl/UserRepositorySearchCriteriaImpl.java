@@ -96,10 +96,11 @@ public class UserRepositorySearchCriteriaImpl implements UserRepositorySearchCri
 		if (!StringUtils.isEmpty(userDTO.getOrganization()) && userDTO.getOrganization() != null) {
 			predicates.add(cb.equal(user.<Long>get("organization"), userDTO.getOrganization().getId()));
 		}
-		if(userDTO.getGroupId() != 0 ||userDTO.getLevelId() != 0 || userDTO.getBranchId()!=0) {
+		if ((!StringUtils.isEmpty(userDTO.getGroupId()) && userDTO.getGroupId() != 0) || (!StringUtils.isEmpty(userDTO.getGroupId())&& userDTO.getLevelId() != 0 )
+				||(!StringUtils.isEmpty(userDTO.getBranchId())&& userDTO.getBranchId() != 0)) {
 			Join<User, Group> userGroup = user.join("groups");
 			if (userDTO.getGroupId() != 0) {
-				
+
 				predicates.add(cb.equal(userGroup.<Long>get("id"), userDTO.getGroupId()));
 			}
 			if (userDTO.getLevelId() != 0) {
@@ -109,10 +110,9 @@ public class UserRepositorySearchCriteriaImpl implements UserRepositorySearchCri
 				predicates.add(cb.equal(userGroup.<Long>get("branch"), userDTO.getLevelId()));
 			}
 
-
 		}
-				if (!StringUtils.isEmpty(userDTO.getRole())) {
-			predicates.add(cb.equal(user.<String>get("refRole").get("name"), RoleName.valueOf(userDTO.getRole()) ));
+		if (!StringUtils.isEmpty(userDTO.getRole())) {
+			predicates.add(cb.equal(user.<String>get("refRole").get("name"), RoleName.valueOf(userDTO.getRole())));
 		}
 		return predicates;
 	}

@@ -342,9 +342,29 @@ public class ProgressionModuleServiceImpl implements ProgressionModuleService {
 
 	@Override
 	public List<ModuleAffectedDTO> getModuleByStudent(Long idStudent) {
-		
+
 		return moduleService
 				.convertEntitiesToDtosWithOutRelation(progressionModuleRepository.getModuleByStudent(idStudent));
+	}
+
+	@Override
+	public List<Object> getAverageSuccessStudentByOrg(Long idOrg, Long idLevel, Long idBranch, Long idGroup) {
+		LocalDate current = LocalDate.now();
+		SessionDTO sessionDTO = sessionService.findCurrentSessionByOranization(idOrg, current);
+		List<Object> list = null;
+		if (idGroup == 0 && idLevel == 0 && idBranch == 0) {
+			list = progressionModuleRepository.countSuccessByOrganization(idOrg, sessionDTO.getId());
+		} else if (idGroup != 0) {
+			list = progressionModuleRepository.countSuccessByGroup(idGroup, sessionDTO.getId());
+		} else if (idLevel != 0) {
+			list = progressionModuleRepository.countSuccessByLevel(idLevel, sessionDTO.getId());
+		} else if (idBranch != 0) {
+			list = progressionModuleRepository.countSuccessByLevel(idBranch, sessionDTO.getId());
+		} else {
+			list = progressionModuleRepository.countSuccessByLevelAndBranch(idLevel, idBranch, sessionDTO.getId());
+		}
+
+		return list;
 	}
 
 }

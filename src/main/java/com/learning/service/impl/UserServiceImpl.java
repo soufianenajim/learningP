@@ -1,11 +1,13 @@
 package com.learning.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +30,6 @@ import com.learning.model.User;
 import com.learning.model.base.ConstantBase;
 import com.learning.model.base.Demande;
 import com.learning.model.base.PartialList;
-import com.learning.security.services.UserDetailsImpl;
 import com.learning.service.ExamService;
 import com.learning.service.GroupService;
 import com.learning.service.ModuleAffectedService;
@@ -160,7 +161,7 @@ public class UserServiceImpl implements UserService {
 		userDTO.setLastName(user.getLastName());
 		userDTO.setEmail(user.getEmail());
 		userDTO.setPhone(user.getPhone());
-		// userDTO.setPassword(user.getPassword());
+		userDTO.setPassword(user.getPassword());
 		Organization organization = user.getOrganization();
 
 		List<Group> groups = user.getGroups();
@@ -268,12 +269,12 @@ public class UserServiceImpl implements UserService {
 		return null;
 	}
 
-	@Override
-	public UserDTO convertFromUserDetailsToDTO(UserDetailsImpl userDetail, String token) {
-		UserDTO userDTO = findById(userDetail.getId());
-		userDTO.setToken(token);
-		return userDTO;
-	}
+//	@Override
+//	public UserDTO convertFromUserDetailsToDTO(UserDetailsImpl userDetail, String token) {
+//		UserDTO userDTO = findById(userDetail.getId());
+//		userDTO.setToken(token);
+//		return userDTO;
+//	}
 
 	@Override
 	public UserDTO save(UserDTO dto) {
@@ -320,16 +321,16 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	@Override
-	public UserDetailsImpl getUserPrincipal() {
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		UserDetailsImpl userPrinciPal;
-		if (principal instanceof UserDetailsImpl) {
-			userPrinciPal = ((UserDetailsImpl) principal);
-			return userPrinciPal;
-		}
-		return null;
-	}
+//	@Override
+//	public UserDetailsImpl getUserPrincipal() {
+//		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//		UserDetailsImpl userPrinciPal;
+//		if (principal instanceof UserDetailsImpl) {
+//			userPrinciPal = ((UserDetailsImpl) principal);
+//			return userPrinciPal;
+//		}
+//		return null;
+//	}
 
 	@Override
 	public List<UserDTO> findCatchingUpStudentByModule(Long idModule, StatutEnum statut) {
@@ -362,7 +363,64 @@ public class UserServiceImpl implements UserService {
 		user.setGroupId(idGroup);
 		user.setRole(role);
 		demande.setModel(user);
-		return userRepositorySearchCriteria.countByCriteres(demande);
+		Long count = userRepositorySearchCriteria.countByCriteres(demande);
+		return count;
+	}
+
+	@Override
+	public User addTokenToUser(String username, String token, String oldToken) {
+		User user = findUser(username);
+		user.setToken(token);
+		user.setOldToken(user.getOldToken() == null ? token : oldToken);
+		user.setTokenDateCreation(LocalDateTime.now());
+		user.setIsOnline(true);
+		user.setIsOffline(false);
+		userRepository.saveAndFlush(user);
+		return user;
+	}
+
+	public User findUser(String email) {
+		Optional<User> optional = userRepository.findByEmail(email);
+		if (optional.isPresent()) {
+			return optional.get();
+		}
+		return null;
+	}
+
+	@Override
+	public User findUserByToken(String token) {
+		return userRepository.findByToken(token);
+	}
+
+	@Override
+	public User findUserByOldToken(String oldToken) {
+		return userRepository.findByOldToken(oldToken);
+	}
+
+	@Override
+	public UserDetails getUserPrincipal() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails userPrinciPal;
+		if (principal instanceof UserDetails) {
+			userPrinciPal = ((UserDetails) principal);
+			return userPrinciPal;
+		}
+		return null;
+	}
+
+	
+	@Override
+	public void logout(String username) {
+		User user = findUser(username);
+		user.setIsOnline(false);
+		user.setIsOffline(true);
+		userRepository.save(user);
+	}
+
+	@Override
+	public List<Object> countOnlineUserByOrganization(Long idOrg) {
+	
+		return userRepository.countOnlineUserByOrganization(idOrg);
 	}
 
 }

@@ -120,6 +120,11 @@
             <artifactId>spring-boot-starter-websocket</artifactId>
             <version>1.5.2.RELEASE</version>
         </dependency>
+        
+        <dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
 		<!-- ./Jackson faster xml dependencies -->
 
 	</dependencies>

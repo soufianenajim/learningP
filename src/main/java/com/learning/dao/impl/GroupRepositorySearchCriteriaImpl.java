@@ -21,10 +21,10 @@ import com.learning.model.base.SortOrder;
 
 @Repository
 public class GroupRepositorySearchCriteriaImpl implements GroupRepositorySearchCriteria {
-	
+
 	@Autowired
 	private EntityManager em;
-	
+
 	private CriteriaBuilder cb = null;
 
 	private Root<Group> group = null;
@@ -57,7 +57,7 @@ public class GroupRepositorySearchCriteriaImpl implements GroupRepositorySearchC
 
 	@Override
 	public Long countByCriteres(Demande<GroupDTO> demande) {
-		 cb = em.getCriteriaBuilder();
+		cb = em.getCriteriaBuilder();
 		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
 
 		group = cq.from(Group.class);
@@ -74,8 +74,7 @@ public class GroupRepositorySearchCriteriaImpl implements GroupRepositorySearchC
 		GroupDTO groupDTO = demande.getModel();
 
 		if (!StringUtils.isEmpty(groupDTO.getName())) {
-			predicates.add(
-					cb.like(cb.lower(group.<String>get("name")), "%" + groupDTO.getName().toLowerCase() + "%"));
+			predicates.add(cb.like(cb.lower(group.<String>get("name")), "%" + groupDTO.getName().toLowerCase() + "%"));
 		}
 
 		if (!StringUtils.isEmpty(groupDTO.getLevel()) && groupDTO.getLevel() != null) {
@@ -84,7 +83,7 @@ public class GroupRepositorySearchCriteriaImpl implements GroupRepositorySearchC
 		if (!StringUtils.isEmpty(groupDTO.getBranch()) && groupDTO.getBranch() != null) {
 			predicates.add(cb.equal(group.<Long>get("branch"), groupDTO.getBranch().getId()));
 		}
-		if(groupDTO.getOrganizationId()!=0) {
+		if (groupDTO.getOrganizationId() != null && groupDTO.getOrganizationId() != 0) {
 			predicates.add(cb.equal(group.<Long>get("level").get("organization"), groupDTO.getOrganizationId()));
 		}
 

@@ -13,7 +13,7 @@ public class UserDTO extends HistorizedDTO {
 	private String lastName;
 
 	private String phone;
-	
+
 	private String token;
 
 	private String tokenDate;
@@ -33,8 +33,9 @@ public class UserDTO extends HistorizedDTO {
 	private Long levelId;
 
 	private Long branchId;
-	
+
 	private String role;
+	private Long numberConnexion;
 
 	public UserDTO() {
 		super();
@@ -168,6 +169,21 @@ public class UserDTO extends HistorizedDTO {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	
 
+	public Long getNumberConnexion() {
+		return numberConnexion;
+	}
+
+	public void setNumberConnexion(Long numberConnexion) {
+		this.numberConnexion = numberConnexion;
+	}
+
+	@Override
+	public String toString() {
+		return "UserDTO [email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", token=" + token
+				+ ", isOnline=" + isOnline + ", isOffline=" + isOffline + ", refRole=" + refRole + ", organization="
+				+ organization + ", groupId=" + groupId + ", levelId=" + levelId + ", branchId=" + branchId + "]";
+	}
+
+	
 }
