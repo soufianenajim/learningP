@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.learning.dao.LevelRepository;
+import com.learning.dto.BranchDTO;
 import com.learning.dto.LevelDTO;
 import com.learning.model.Level;
 import com.learning.model.Organization;
@@ -214,5 +215,7 @@ public class LevelServiceImpl implements LevelService {
 	
 		return levelRepository.countByOrganization(idOrg);
 	}
+
+	
 
 }

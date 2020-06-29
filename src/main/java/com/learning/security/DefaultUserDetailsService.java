@@ -3,7 +3,6 @@ package com.learning.security;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.learning.dao.UserRepository;
-import com.learning.dto.RoleDTO;
-import com.learning.dto.UserDTO;
 import com.learning.model.Role;
 import com.learning.model.User;
 import com.learning.service.UserService;

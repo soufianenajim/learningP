@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learning.dto.UserDTO;
 import com.learning.dto.UserDataVO;
-import com.learning.dto.UserResponseVO;
 import com.learning.exceptions.CustomException;
 import com.learning.model.UserConnexion;
 import com.learning.model.base.ConstantSecurity;
