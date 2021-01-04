@@ -84,6 +84,7 @@ public class OranizationServiceImpl implements OrganizationService {
 		organization.setName(organizationDTO.getName());
 		organization.setThresholdeCatchUp(organizationDTO.getThresholdeCatchUp());
 		organization.setThresholdeSucccess(organizationDTO.getThresholdeSucccess());
+		if(organizationDTO.getType()!=null)
 		organization.setType(TypeOrganizationEnum.valueOf(organizationDTO.getType()));
 		organization.setScale(organizationDTO.getScale());
 		organization.setAdresse(organizationDTO.getAdresse());
@@ -107,6 +108,7 @@ public class OranizationServiceImpl implements OrganizationService {
 		organizationDTO.setName(organization.getName());
 		organizationDTO.setThresholdeCatchUp(organization.getThresholdeCatchUp());
 		organizationDTO.setThresholdeSucccess(organization.getThresholdeSucccess());
+		if(organizationDTO.getType()!=null)
 		organizationDTO.setType(organization.getType().toString());
 		organizationDTO.setScale(organization.getScale());
 		organizationDTO.setAdresse(organization.getAdresse());

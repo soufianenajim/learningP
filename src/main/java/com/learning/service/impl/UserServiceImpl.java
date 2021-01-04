@@ -45,8 +45,9 @@ public class UserServiceImpl implements UserService {
 	UserRepository userRepository;
 	@Autowired
 	RoleRepository roleRepository;
+	
 	@Autowired
-	PasswordEncoder passwordEncoder;
+    PasswordEncoder passwordEncoder;
 
 	@Autowired
 	private RoleService roleService;
@@ -422,5 +423,6 @@ public class UserServiceImpl implements UserService {
 	
 		return userRepository.countOnlineUserByOrganization(idOrg);
 	}
+	
 
 }

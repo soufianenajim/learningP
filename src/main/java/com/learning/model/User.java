@@ -47,11 +47,9 @@ public class User extends Historized {
 	private String tokenDate;
 
 	@Column(name = "IS_ONLINE")
-	@NotNull
 	private Boolean isOnline = false;
 
 	@Column(name = "IS_OFFLINE")
-	@NotNull
 	private Boolean isOffline = false;
 
 	@ManyToOne(fetch = FetchType.LAZY)
