@@ -133,7 +133,6 @@ public class JwtAuthorisationFilter extends OncePerRequestFilter {
 		authorities.add(new SimpleGrantedAuthority(
 				((ArrayList<LinkedHashMap<String, String>>) claims.get("auth")).get(0).get("authority")));
 		 
-		
 		UserDetails userDetails=	org.springframework.security.core.userdetails.User//
 		.withUsername(user)//
 		.password("")
