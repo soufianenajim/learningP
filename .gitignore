@@ -1,6 +1,7 @@
 /.metadata/
+/.idea/
 /.mvn/*
 /.setting/*
 /.sts4-cache/*
-/.target/*
+/target/*
 /.RemoteSystemsTempFiles/*
